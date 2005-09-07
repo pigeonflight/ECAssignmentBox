@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+<body>
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main"
+       tal:define="errors           options/state/getErrors | nothing;
+                   Iterator         python:modules['Products.Archetypes'].IndexIterator;
+                   schematas        here/Schemata;
+                   fieldsets        python:[key for key in schematas.keys() if (key != 'metadata') and (schematas[key].editableFields(here, visible_only=True))];
+                   default_fieldset python:(not schematas or schematas.has_key('default')) and 'default' or fieldsets[0];
+                   fieldset         request/fieldset|options/fieldset|default_fieldset;
+                   fields           python:schematas[fieldset].editableFields(here);
+
+                   tabindex  tabindex | python:Iterator(pos=7000);
+                   memberId  here/Creator;
+                   solved    here/solved;"
+       tal:omit-tag=""
+  >
+    
+    <!-- AssignmentBox-title and user's fullname -->
+    <h1 class="documentFirstHeading"
+        tal:define="portalMember python: here.portal_membership.getMemberById(memberId);"
+        tal:content="python: portalMember.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()"/>
+
+    <div class="field">
+      <span i18n:translate="label_datetime">Delivered at</span>
+      <span tal:content="python: here.toPortalTime(here.getDatetime(), 1)"/>
+    </div>
+
+    <div class="field" tal:condition="here/source">
+      <label for="source" i18n:translate="label_source">Text:</label>
+      <pre id="source" tal:content="here/getSource"/>
+    </div>
+
+
+    <tal:block tal:define="field_macro field_macro | here/widgets/field/macros/view;
+                           mode string:view;
+                           use_label python:1">
+      <div tal:define="field python: here.getField('file')">
+        <span metal:use-macro="field_macro"/>
+      </div>
+    </tal:block>
+
+    <div class="field" tal:condition="here/getAuto_feedback">
+      <label for="auto_feedback" i18n:translate="label_auto_feedback">Auto-feedback:</label>
+      <!--<div class="formHelp" id="help.text">...</div>-->
+      <pre id="auto_feedback" tal:content="here/getAuto_feedback"/>
+    </div>
+    
+    <form name="edit_form"
+          method="post"
+          enctype="multipart/form-data"
+          class="enableUnloadProtection"
+          action=""
+          tal:attributes="action python:here.absolute_url()+'/'+template.id">
+
+      <metal:block define-slot="extra_top" />
+
+      <metal:block define-slot="widgets">
+        <tal:fields repeat="field fields">
+          <tal:nothing tal:define="editable_fields python: ['solved', 'feedback', 'mark']"
+                       tal:condition="python: field.getName() in editable_fields">
+            <metal:fieldMacro use-macro="python:here.widget(field.getName(), mode='edit')" />
+          </tal:nothing>
+        </tal:fields>
+      </metal:block>
+
+      <metal:block define-slot="extra_bottom" />
+
+      <input type="hidden" name="form.submitted" value="1"/>
+
+      <input class="context"
+             tabindex=""
+             type="submit"
+             name="form.button.submit"
+             value="Submit"
+             i18n:attributes="value label_submit;"
+             tal:attributes="tabindex tabindex/next"/>
+
+      <input class="standalone"
+             tabindex=""
+             type="submit"
+             name="form.button.cancel"
+             value="Cancel"
+             i18n:attributes="value label_cancel;"
+             tal:attributes="tabindex tabindex/next"/>
+
+    </form>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

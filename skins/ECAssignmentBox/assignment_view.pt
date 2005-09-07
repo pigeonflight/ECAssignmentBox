@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main"
+       tal:define="Iterator  python: modules['Products.Archetypes'].IndexIterator;
+                   tabindex  python: Iterator();
+                   memberId  here/Creator;
+                   solved    here/solved;"
+
+       tal:condition= "memberId"
+  >
+
+    <div metal:use-macro="here/document_actions/macros/document_actions"/>
+  
+    <!-- print page title -->    
+    <h1 class="documentFirstHeading"
+      tal:condition="python: memberId == member.getId()"
+      tal:content="python: member.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()" />
+
+    <tal:nothing tal:condition="python: memberId != member.getId()">
+    <h1 class="documentFirstHeading"
+      tal:define="portalMember python: here.portal_membership.getMemberById(memberId);"
+      tal:content="python: portalMember.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()" />
+    </tal:nothing>
+
+    <!-- print all relevant fields -->
+    <div class="field">
+      <span i18n:translate="label_datetime">Delivered at</span>
+      <span tal:content="python: here.toPortalTime(here.getDatetime(), 1)"/>
+    </div>
+
+    <div class="field" tal:condition="here/source">
+      <label for="source" i18n:translate="label_source">Source:</label>
+      <pre id="source" tal:content="here/getSource"/>
+    </div>
+
+    <div class="field" tal:condition="here/auto_feedback">
+      <span style="color:green;font-size:150%" tal:condition="python: solved" i18n:translate="msg_solved">&#x2714;</span>
+      <span style="color:red;font-size:150%" tal:condition="python: not solved" i18n:translate="msg_not_solved">&#x2718;</span>
+      <label for="auto_feedback" i18n:translate="label_auto_feedback">Auto-feedback:</label>
+      <pre id="auto_feedback" tal:content="here/getAuto_feedback"/>
+    </div>
+
+
+    <tal:block tal:define="field_macro field_macro|here/widgets/field/macros/view;
+                           mode string:view;
+                           use_label python:1">
+      <div tal:define="field python: here.getField('file')">
+        <span metal:use-macro="field_macro"/>
+      </div>
+    </tal:block>
+
+    <div class="field" tal:condition="here/getFeedback">
+      <label for="feedback" i18n:translate="label_feedback">Feedback:</label>
+      <div id="feedback" tal:content="structure here/getFeedback"/>
+    </div>
+
+    <div class="field" tal:condition="here/getMark">
+      <span i18n:translate="msg_marked_with">Your assignment was marked:</span>
+      <strong tal:content="here/getMark"/>
+    </div>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

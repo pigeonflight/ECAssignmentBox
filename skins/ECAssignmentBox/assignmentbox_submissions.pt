@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+  
+    <h1 class="documentFirstHeading" i18n:translate="label_submissions">Submissions</h1>
+
+    <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
+                     default_types python:('ECAssignment', 'ECAssignmentQC');
+                     types         types | here/show_content_types | default_types;
+                     raw_items     python: here.contentValues(filter={'portal_type': types });
+                     items         python: auth_filter(raw_items, skip='View');"
+         tal:condition="items">
+      
+      <table class="listing">
+        <thead>
+          <tr>
+            <th i18n:translate="label_date">Date</th>
+            <th i18n:translate="label_user">User</th>
+            <th i18n:translate="label_state">State</th>
+            <th i18n:translate="label_solved">Solved</th>
+            <th i18n:translate="label_mark">Mark</th>
+            <th i18n:translate="label_actions">Actions</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tal:block tal:repeat="item items">
+          <tr tal:define="oddrow              repeat/item/odd;
+                          item_type           item/portal_type;
+                          item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
+                          item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
+                          item_wf_state_class python:'state-' + putils.normalizeString(item_wf_state);"
+              tal:attributes="class python: test(oddrow, 'odd', 'even')">
+
+            <td>
+              <span tal:replace="python: here.toPortalTime(item.getDatetime(), 1)" />
+            </td>
+
+            <td>
+              <span tal:condition="python: item.Creator() == member.getId()"
+                    tal:content="python: member.getProperty('fullname', '')" />
+
+              <tal:nothing tal:condition="python: item.Creator() != member.getId()">
+              <span tal:define="portalMember python: here.portal_membership.getMemberById(item.Creator());">
+                <span tal:replace="python: portalMember.getProperty('fullname', '')"/>
+                (<span tal:replace="python: portalMember.getProperty('employeeNumber', '')"/>)
+              </span>
+              </tal:nothing>
+            </td>
+
+            <td>
+              <span i18n:translate=""
+                    tal:condition="item_state_title"
+                    tal:content="item_state_title"
+                    tal:attributes="class item_wf_state_class" />
+              <span tal:condition="not: item_state_title">&nbsp;</span>
+            </td>
+
+            <td>
+              <span style="color:green" tal:condition="python: (item_wf_state == 'marked') and item.solved" i18n:translate="label_solved">&#x2714;</span>
+              <span style="color:red" tal:condition="python: (item_wf_state == 'marked') and (not item.getSolved())" i18n:translate="label_not_solved">&#x2718;</span>
+            </td>            
+
+            <td>
+              <span tal:condition="python: (item_wf_state == 'marked') and (item.getMark())"
+                    tal:content="item/mark"/>
+            </td>            
+
+            <td>
+              <a href="item_url" 
+                 tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
+                 i18n:translate="label_action_view">[View]</a>
+
+              <tal:block tal:define="permission python: modules['AccessControl'].getSecurityManager().checkPermission;
+                                     isReviewer python: bool(permission('Review portal content', here));"
+                         tal:condition="python: isReviewer">
+              <a href="item_url" 
+                 tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('edit'))"
+                 i18n:translate="label_action_edit">[Edit]</a>
+              </tal:block>
+
+              <a href="item_url" 
+                 tal:attributes="href python: '%s/at_download/file' % (item.getId(),)"
+                 i18n:translate="label_action_download">[Download]</a>
+            </td>
+          </tr>
+          </tal:block>
+        </tbody>
+      </table>
+    </div>
+      
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

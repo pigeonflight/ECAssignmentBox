@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+
+    <div metal:use-macro="here/document_actions/macros/document_actions"/>
+  
+    <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
+
+    <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
+                     default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
+                     types         types | here/show_content_types | default_types;
+                     raw_items     python: here.contentValues(filter={'portal_type': types});
+                     items         python: auth_filter(raw_items, skip='View');"
+         tal:condition="items">
+      
+      <tal:block tal:repeat="item items">
+
+        <h1 class="documentFirstHeading" tal:content="item/title_or_id"/>
+      
+        <div class="documentDescription"
+           tal:content="structure item/getDescription"
+           tal:condition="item/getDescription"/>
+
+        <div class="field" tal:content="structure item/getAssignment_text"/>
+    
+        <hr/>
+
+      </tal:block>
+
+    </div>
+      
+    <div metal:use-macro="here/document_byline/macros/byline"/>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

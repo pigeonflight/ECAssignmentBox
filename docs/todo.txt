@@ -1,0 +1,9 @@
+2005-09-08:
+- Möglichkeit Benotung abzuschalten
+
+2005-09-13: 
+- Möglichkeit zur Veröffentlichung der Musterlösung nach Ablauf der Einreichung
+- Upload der Musterlösung und Ablage als eigenes Objekt im Folder?
+- Freigabe? sharing?
+
+

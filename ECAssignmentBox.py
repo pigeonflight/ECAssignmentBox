@@ -20,7 +20,7 @@ AssignmentBoxSchema = Schema((
         'description',
         searchable = True,
         default_content_type = 'text/plain',
-        default_output_type = 'text/html',
+        default_output_type = 'text/plain',
         widget = TextAreaWidget(
             label = "Description",
             label_msgid = "label_description",

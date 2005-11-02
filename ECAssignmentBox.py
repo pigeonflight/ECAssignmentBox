@@ -96,6 +96,26 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         else:
             return True
 
+    def getAssignmentsSummary(self):
+        """Return a dictionary, keyed by student name, with
+        information about the assignments submitted to an
+        AssignmentBox (an array containing the date/time, the workflow
+        status and the grade."""
+        items = self.contentValues(filter={'portal_type':
+                                           self.allowed_content_types})
+        wtool = self.portal_workflow
+        summary = {}
+
+        for item in items:
+            creator = item.Creator()
+            date = item.getDatetime()
+            if (creator not in summary) or (summary[creator][0] < date):
+                summary[creator] = [date,
+                                    wtool.getInfoFor(item, 'review_state', ''),
+                                    item.getMark()]
+
+        return summary
+
     actions =  (
         {
         'action':      "string:$object_url/assignmentbox_view",

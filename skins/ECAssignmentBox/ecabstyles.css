@@ -1,0 +1,15 @@
+.state-submitted {
+    color: gray;
+}
+.state-pending {
+    color: orange;
+}
+.state-accepted {
+    color: rgb(0, 134, 139);
+}
+.state-rejected {
+    color: rgb(255,  99,  71);
+}
+.state-graded {
+    color: green;
+}

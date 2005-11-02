@@ -89,6 +89,7 @@ if msg == '':
     qca.setFilename(filename , key='file')
     
     qca.editMetadata(title=id)
+    qca.editMetadata(language='') # '' means "language-neutral"
 
     # evaluate only in case of ECAssignmentQC
     if contextType == EC_ASSIGNMENT_BOX_QC_META_TYPE:

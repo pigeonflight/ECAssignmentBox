@@ -3,6 +3,10 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="eduComponents">
 <body>
+<metal:block fill-slot="css_slot">
+  <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
+</metal:block>
+
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main"
        tal:define="errors           options/state/getErrors | nothing;
@@ -12,10 +16,9 @@
                    default_fieldset python:(not schematas or schematas.has_key('default')) and 'default' or fieldsets[0];
                    fieldset         request/fieldset|options/fieldset|default_fieldset;
                    fields           python:schematas[fieldset].editableFields(here);
-
-                   tabindex  tabindex | python:Iterator(pos=7000);
-                   memberId  here/Creator;
-                   solved    here/solved;"
+                   tabindex         tabindex | python:Iterator(pos=7000);
+                   memberId         here/Creator;
+                   auto_feedback    here/auto_feedback|nothing;"
        tal:omit-tag=""
   >
     
@@ -43,10 +46,10 @@
       </div>
     </tal:block>
 
-    <div class="field" tal:condition="here/getAuto_feedback">
+    <div class="field" tal:condition="auto_feedback">
       <label for="auto_feedback" i18n:translate="label_auto_feedback">Auto-feedback:</label>
       <!--<div class="formHelp" id="help.text">...</div>-->
-      <pre id="auto_feedback" tal:content="here/getAuto_feedback"/>
+      <pre id="auto_feedback" tal:content="auto_feedback"/>
     </div>
     
     <form name="edit_form"
@@ -60,7 +63,7 @@
 
       <metal:block define-slot="widgets">
         <tal:fields repeat="field fields">
-          <tal:nothing tal:define="editable_fields python: ['solved', 'feedback', 'mark']"
+          <tal:nothing tal:define="editable_fields python: ['feedback', 'mark']"
                        tal:condition="python: field.getName() in editable_fields">
             <metal:fieldMacro use-macro="python:here.widget(field.getName(), mode='edit')" />
           </tal:nothing>

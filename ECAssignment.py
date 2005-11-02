@@ -85,18 +85,6 @@ AssignmentSchema = localBaseSchema + Schema((
         ),
     ),
 
-    BooleanField(
-        'solved',
-        searchable = True,
-        widget=BooleanWidget(
-            label = 'Solved',
-            label_msgid = 'label_solved',
-            description = 'The solved flag for this assignment.',
-            description_msgid = 'help_solved',
-            i18n_domain = I18N_DOMAIN
-        ),
-    ),
-
     TextField(
         'auto_feedback',
         searchable = True,
@@ -131,8 +119,8 @@ AssignmentSchema = localBaseSchema + Schema((
         'mark',
         searchable = True,
         widget=StringWidget(
-            label = 'Mark',
-            description = "The mark awarded for this assignment.",
+            label = 'Grade',
+            description = "The grade awarded for this assignment.",
             i18n_domain = I18N_DOMAIN,
         ),
     ),
@@ -148,7 +136,8 @@ class ECAssignment(BaseContent):
     schema = AssignmentSchema
     meta_type = "ECAssignment"
     archetype_name = "Assignment"
-    content_icon = "sheet-16.png" 
+    content_icon = "sheet-16.png"
+    global_allow = False
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
     def index_html(self, REQUEST, RESPONSE):

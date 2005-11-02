@@ -20,13 +20,15 @@ def setupAssignment_workflow(wf):
     """Assignment Workflow definition"""
 
     wf.setProperties(title='Assignment workflow [EC]')
-    for s in ['marked', 
+    for s in ['graded',
+              'accepted', 'rejected',
               'pending', 
               'submitted']:
         wf.states.addState(s)
 
     for t in ['review',
-              'mark',
+              'accept', 'reject',
+              'grade',
               'retract']:
         wf.transitions.addTransition(t)
 
@@ -55,8 +57,10 @@ def setupAssignment_workflow(wf):
                         'Manager'])
     sdef.setPermission('Modify portal content',
                        0,
-                       ['Manager',
-                        'Reviewer'])
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'
+                        ])
     sdef.setPermission('View',
                        0,
                        ['Owner',
@@ -69,48 +73,94 @@ def setupAssignment_workflow(wf):
 
     sdef = wf.states['pending']
     sdef.setProperties(title="""Pending""",
-                       transitions=('mark',))
+                       transitions=('accept', 'reject', 'grade'))
     sdef.setPermission('Access contents information',
                        0,
-                       ['Manager',
+                       ['Owner',
                         'Reviewer'
-                        'Owner'])
+                        'Manager'])
     sdef.setPermission('Modify portal content',
                        0,
-                       ['Manager'])
+                       ['Reviewer',
+                        'Manager'])
     sdef.setPermission('View',
                        0,
-                       ['Manager',
+                       ['Owner',
                         'Reviewer',
-                        'Owner'])
+                        'Manager'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
                         'Manager'])
 
-    sdef = wf.states['marked']
-    sdef.setProperties(title="""Marked""",
+    sdef = wf.states['graded']
+    sdef.setProperties(title="""Graded""",
                        transitions=('retract',))
     sdef.setPermission('Access contents information',
                        0,
-                       ['Manager',
-                        'Reviewer'
-                        'Owner'])
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
     sdef.setPermission('Modify portal content',
                        0,
-                       ['Manager'])
+                       ['Reviewer',
+                        'Manager'])
     sdef.setPermission('View',
                        0,
-                       ['Manager',
+                       ['Owner',
                         'Reviewer',
-                        'Owner'])
+                        'Manager'])
+    sdef.setPermission('List folder contents',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+
+    sdef = wf.states['accepted']
+    sdef.setProperties(title="""Accepted""",
+                       transitions=('retract', 'grade'))
+    sdef.setPermission('Access contents information',
+                       0,
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
+    sdef.setPermission('Modify portal content',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+    sdef.setPermission('View',
+                       0,
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
+    sdef.setPermission('List folder contents',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+
+    sdef = wf.states['rejected']
+    sdef.setProperties(title="""Rejected""",
+                       transitions=('retract',))
+    sdef.setPermission('Access contents information',
+                       0,
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
+    sdef.setPermission('Modify portal content',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+    sdef.setPermission('View',
+                       0,
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
                         'Manager'])
 
     tdef = wf.transitions['review']
-    tdef.setProperties(title="""Assignment is locked and can not be deleted by the submitter""",
+    tdef.setProperties(title="""Assignment is locked and cannot be deleted by the submitter""",
                        new_state_id="""pending""",
                        trigger_type=1,
                        script_name="""""",
@@ -121,20 +171,44 @@ def setupAssignment_workflow(wf):
                        props={'guard_permissions': 'Review portal content'},
                        )
 
-    tdef = wf.transitions['mark']
-    tdef.setProperties(title="""Reviewer releases marks for assignment""",
-                       new_state_id="""marked""",
+    tdef = wf.transitions['accept']
+    tdef.setProperties(title="""Reviewer accepts the assignment""",
+                       new_state_id="""accepted""",
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
-                       actbox_name="""Mark""",
+                       actbox_name="""Accept""",
+                       actbox_url="""""",
+                       actbox_category="""workflow""",
+                       props={'guard_permissions': 'Review portal content'},
+                       )
+
+    tdef = wf.transitions['reject']
+    tdef.setProperties(title="""Reviewer rejects the assignment""",
+                       new_state_id="""rejected""",
+                       trigger_type=1,
+                       script_name="""""",
+                       after_script_name="""""",
+                       actbox_name="""Reject""",
+                       actbox_url="""""",
+                       actbox_category="""workflow""",
+                       props={'guard_permissions': 'Review portal content'},
+                       )
+
+    tdef = wf.transitions['grade']
+    tdef.setProperties(title="""Reviewer grades the assignment""",
+                       new_state_id="""graded""",
+                       trigger_type=1,
+                       script_name="""""",
+                       after_script_name="""""",
+                       actbox_name="""Grade""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
                        props={'guard_permissions': 'Review portal content'},
                        )
 
     tdef = wf.transitions['retract']
-    tdef.setProperties(title="""Reviewer makes marks private""",
+    tdef.setProperties(title="""Assignment is reset to initial state""",
                        new_state_id="""submitted""",
                        trigger_type=1,
                        script_name="""""",

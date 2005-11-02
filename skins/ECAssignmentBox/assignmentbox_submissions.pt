@@ -2,7 +2,11 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="eduComponents">
+
 <body>
+<metal:block fill-slot="css_slot">
+  <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
+</metal:block>
 
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main">
@@ -11,7 +15,7 @@
         Document actions (print, sendto etc)
     </div>
   
-    <h1 class="documentFirstHeading" i18n:translate="label_submissions">Submissions</h1>
+    <h1 class="documentFirstHeading" i18n:translate="label_submissions">Submitted Assignments</h1>
 
     <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
                      default_types python:('ECAssignment', 'ECAssignmentQC');
@@ -26,8 +30,7 @@
             <th i18n:translate="label_date">Date</th>
             <th i18n:translate="label_user">User</th>
             <th i18n:translate="label_state">State</th>
-            <th i18n:translate="label_solved">Solved</th>
-            <th i18n:translate="label_mark">Mark</th>
+            <th i18n:translate="label_mark">Grade</th>
             <th i18n:translate="label_actions">Actions</th>
           </tr>
         </thead>
@@ -66,12 +69,7 @@
             </td>
 
             <td>
-              <span style="color:green" tal:condition="python: (item_wf_state == 'marked') and item.solved" i18n:translate="label_solved">&#x2714;</span>
-              <span style="color:red" tal:condition="python: (item_wf_state == 'marked') and (not item.getSolved())" i18n:translate="label_not_solved">&#x2718;</span>
-            </td>            
-
-            <td>
-              <span tal:condition="python: (item_wf_state == 'marked') and (item.getMark())"
+              <span tal:condition="python: (item_wf_state == 'graded') and (item.getMark())"
                     tal:content="item/mark"/>
             </td>            
 

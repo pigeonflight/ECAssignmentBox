@@ -74,7 +74,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
     allowed_content_types = [ECAssignment.meta_type]
     meta_type = "ECAssignmentBox"
     archetype_name = "AssignmentBox"
-    content_icon = "box-16.png"            
+    content_icon = "box-16.png"
 
     security.declarePublic('hasExpired')
     def hasExpired(self):

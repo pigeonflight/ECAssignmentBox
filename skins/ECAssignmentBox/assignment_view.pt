@@ -3,13 +3,16 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="eduComponents">
 <body>
+<metal:block fill-slot="css_slot">
+  <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
+</metal:block>
 
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main"
-       tal:define="Iterator  python: modules['Products.Archetypes'].IndexIterator;
-                   tabindex  python: Iterator();
-                   memberId  here/Creator;
-                   solved    here/solved;"
+       tal:define="Iterator      python: modules['Products.Archetypes'].IndexIterator;
+                   tabindex      python: Iterator();
+                   memberId      here/Creator;
+                   auto_feedback here/auto_feedback|nothing;"
 
        tal:condition= "memberId"
   >
@@ -38,11 +41,9 @@
       <pre id="source" tal:content="here/getSource"/>
     </div>
 
-    <div class="field" tal:condition="here/auto_feedback">
-      <span style="color:green;font-size:150%" tal:condition="python: solved" i18n:translate="msg_solved">&#x2714;</span>
-      <span style="color:red;font-size:150%" tal:condition="python: not solved" i18n:translate="msg_not_solved">&#x2718;</span>
+    <div class="field" tal:condition="auto_feedback">
       <label for="auto_feedback" i18n:translate="label_auto_feedback">Auto-feedback:</label>
-      <pre id="auto_feedback" tal:content="here/getAuto_feedback"/>
+      <pre id="auto_feedback" tal:content="auto_feedback"/>
     </div>
 
 
@@ -60,7 +61,7 @@
     </div>
 
     <div class="field" tal:condition="here/getMark">
-      <span i18n:translate="msg_marked_with">Your assignment was marked:</span>
+      <span i18n:translate="msg_marked_with">Your assignment was graded:</span>
       <strong tal:content="here/getMark"/>
     </div>
 

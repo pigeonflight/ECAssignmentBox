@@ -72,7 +72,7 @@ if msg == '':
 
     # create the assignment object
     context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
-    qca = getattr(context, id, None)
+    qca = getattr(context, id)
 
     qca.setField('source', source)
     #qca.setField('user_id', memberId)

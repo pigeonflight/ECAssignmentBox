@@ -23,7 +23,7 @@
      tal:condition="python: here.getSubmission_period_end() and
                             isEffective and not hasExpired">
      <span i18n:translate="submission_period_ends">
-      Submission Period Ends: </span>
+      Submission period ends: </span>
      <span tal:content="python:
       here.toPortalTime(here.getSubmission_period_end(), True)"/>
     </div>

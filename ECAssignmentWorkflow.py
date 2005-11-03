@@ -49,7 +49,7 @@ def setupAssignment_workflow(wf):
 
     sdef = wf.states['submitted']
     sdef.setProperties(title="""Submitted""",
-                       transitions=('review', 'accept'))
+                       transitions=('review', 'accept', 'reject'))
     sdef.setPermission('Access contents information',
                        0,
                        ['Owner',

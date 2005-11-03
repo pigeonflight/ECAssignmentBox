@@ -73,8 +73,8 @@ AssignmentBoxSchema = Schema((
         #default=CEILING_DATE,
         widget = CalendarWidget(
             label = "End of Submission Period",
-            description = ("Date after which assignments are no longer "
-                           "possible"),
+            description = ("Date after which assignments can no longer "
+                           "be submitted"),
             label_msgid = "label_submission_period_end",
             description_msgid = "help_submission_period_end",
             i18n_domain = I18N_DOMAIN

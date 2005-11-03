@@ -15,7 +15,7 @@
         Document actions (print, sendto etc)
     </div>
   
-    <h1 class="documentFirstHeading" i18n:translate="label_submissions">Submitted Assignments</h1>
+    <h1 class="documentFirstHeading" tal:content="here/title"/>
 
     <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
                      default_types python:('ECAssignment', 'ECAssignmentQC');

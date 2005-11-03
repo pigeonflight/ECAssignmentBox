@@ -33,31 +33,62 @@ AssignmentBoxSchema = Schema((
 
     TextField(
         'assignment_text',
-        default_output_type='text/html',
-        default_content_type='text/structured',
-        allowable_content_types=('text/plain', 'text/structured', 'text/html',) ,
+        default_output_type = 'text/html',
+        default_content_type = 'text/structured',
+        allowable_content_types = ('text/plain', 'text/structured',
+                                   'text/html',) ,
         widget=RichWidget(
-            label='Assignment text',
-            label_msgid='label_assignment_text',
-            description='Enter text and hints for the assignment.',
-            description_msgid='help_assignment_text',
+            label = 'Assignment text',
+            label_msgid = 'label_assignment_text',
+            description = 'Enter text and hints for the assignment.',
+            description_msgid = 'help_assignment_text',
             i18n_domain = I18N_DOMAIN,
             rows=12,
         ),
     ),
+
+    DateTimeField(
+        'submission_period_start',
+        #mutator = 'setEffectiveDate',
+        languageIndependent = True,
+        #default=FLOOR_DATE,
+        widget = CalendarWidget(
+            label = "Start of Submission Period",
+            description = ("Date after which students are allowed to "
+                           "submit their assignments"),
+            label_msgid = "label_submission_period_start",
+            description_msgid = "help_submission_period_start",
+            i18n_domain = I18N_DOMAIN
+        ),
+    ),
     
+    DateTimeField(
+        'submission_period_end',
+        #mutator = 'setExpirationDate',
+        languageIndependent = True,
+        #default=CEILING_DATE,
+        widget = CalendarWidget(
+            label = "End of Submission Period",
+            description = ("Date after which assignments are no longer "
+                           "possible"),
+            label_msgid = "label_submission_period_end",
+            description_msgid = "help_submission_period_end",
+            i18n_domain = I18N_DOMAIN
+        ),
+    ),
+
     BooleanField(
         'mark_assigned',
         searchable = True,
         widget=BooleanWidget(
             label = 'Mark assigned',
             label_msgid = 'label_mark_assigned',
-            description = 'Indicate whether or not marks are assigned for the assignment.',
+            description = ('Indicate whether or not marks are assigned '
+                           'for the assignment.'),
             description_msgid = 'help_mark_assigned',
             i18n_domain = I18N_DOMAIN
         ),
     ),
-
 ))
 
 class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
@@ -79,7 +110,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
     security.declarePublic('hasExpired')
     def hasExpired(self):
         now = DateTime()
-        expiration_date = self.getExpirationDate()
+        expiration_date = self.getSubmission_period_end()
         
         if((expiration_date == None) or (expiration_date > now)):
             return False
@@ -89,7 +120,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
     security.declarePublic('isEffective')
     def isEffective(self):
         now = DateTime()
-        effective_date = self.getEffectiveDate()
+        effective_date = self.getSubmission_period_start()
 
         if((effective_date != None) and (effective_date > now)):
             return False

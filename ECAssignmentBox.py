@@ -13,7 +13,12 @@ from Products.CMFCore import CMFCorePermissions
 from Products.ECAssignmentBox.config import I18N_DOMAIN
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 
-
+TEXT_TYPES = (
+    'text/structured',
+    'text/x-rst',
+    'text/html',
+    'text/plain',
+    )
 
 AssignmentBoxSchema = Schema((
     TextField(
@@ -35,8 +40,7 @@ AssignmentBoxSchema = Schema((
         'assignment_text',
         default_output_type = 'text/html',
         default_content_type = 'text/structured',
-        allowable_content_types = ('text/plain', 'text/structured',
-                                   'text/html',) ,
+        allowable_content_types = TEXT_TYPES,
         widget=RichWidget(
             label = 'Assignment text',
             label_msgid = 'label_assignment_text',

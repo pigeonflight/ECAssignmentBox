@@ -2,101 +2,112 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="eduComponents">
-<body>
-<metal:block fill-slot="css_slot">
-  <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
-</metal:block>
+ <body>
+  <metal:block fill-slot="css_slot">
+   <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
+  </metal:block>
 
-<metal:main fill-slot="main">
-  <tal:main-macro metal:define-macro="main"
-       tal:define="Iterator     python: modules['Products.Archetypes'].IndexIterator;
-                   tabindex     python: Iterator();
-                   memberId     python: member.getId();
-                   hasExpired   here/hasExpired;
-                   isEffective  here/isEffective;">
+  <metal:main fill-slot="main">
+   <tal:main-macro metal:define-macro="main"
+    tal:define="Iterator python: modules['Products.Archetypes'].IndexIterator;
+		tabindex     python: Iterator();
+		memberId     python: member.getId();
+		hasExpired   here/hasExpired;
+		isEffective  here/isEffective;">
 
     <div metal:use-macro="here/document_actions/macros/document_actions"/>
-  
+    
     <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
-      
+
+    <div class="documentByLine"
+     tal:condition="python: here.getSubmission_period_end() and
+                            isEffective and not hasExpired">
+     <span i18n:translate="submission_period_ends">
+      Submission Period Ends: </span>
+     <span tal:content="python:
+      here.toPortalTime(here.getSubmission_period_end(), True)"/>
+    </div>
+
     <div class="documentDescription"
-       tal:content="structure here/getDescription"
-       tal:condition="here/getDescription"/>
+     tal:content="structure here/getDescription"
+     tal:condition="here/getDescription"/>
 
     <div class="field" tal:content="structure here/getAssignment_text"/>
     
     <hr/>
 
     <form action=""
-          name="assignment_add"
-          method="post"
-          enctype="multipart/form-data"
-          tal:attributes="action string:${here/absolute_url}/assignment_add"
-          tal:condition="python: not hasExpired and isEffective">
+     name="assignment_add"
+     method="post"
+     enctype="multipart/form-data"
+     tal:attributes="action string:${here/absolute_url}/assignment_add"
+     tal:condition="python: not hasExpired and isEffective">
 
-      <!-- text field -->
-      <div class="field">
-        <label for="source" i18n:translate="label_answer">Answer</label>
-        <div class="formHelp" 
-             i18n:translate="help_answer">
-          Enter your answer for this assignment
-        </div>
-        <textarea cols="30"
-                  rows="12"
-                  wrap="off"
-                  name="source"
-                  tabindex=""
-                  tal:attributes="tabindex tabindex/next;"></textarea>
+     <!-- text field -->
+     <div class="field">
+      <label for="source" i18n:translate="label_answer">Answer</label>
+      <div class="formHelp" 
+       i18n:translate="help_answer">
+       Enter your answer for this assignment
       </div>
+      <textarea cols="30"
+       rows="12"
+       wrap="off"
+       name="source"
+       tabindex=""
+       tal:attributes="tabindex tabindex/next;"></textarea>
+     </div>
 
-      <!-- upload file button -->
-      <div class="field">
-        <label for="file" i18n:translate="upload_file_label">File</label>
-        <div class="formHelp" 
-             i18n:translate="help_upload_file">
-          or upload a file (existing content will be replaced).
-        </div>
-        <input type="file"
-               name="file"
-               size="25"
-               tabindex=""
-               tal:attributes="tabindex tabindex/next;"
-        />
+     <!-- upload file button -->
+     <div class="field">
+      <label for="file" i18n:translate="upload_file_label">File</label>
+      <div class="formHelp" 
+       i18n:translate="help_upload_file">
+       or upload a file (existing content will be replaced).
       </div>
+      <input type="file"
+       name="file"
+       size="25"
+       tabindex=""
+       tal:attributes="tabindex tabindex/next;"
+       />
+     </div>
 
-      <!-- submit button -->
-      <div class="formControls">
-        <input class="context"
-               tabindex=""
-               type="submit"
-               value="Submit"
-               name="choice"
-               tal:attributes="tabindex tabindex/next;"
-               i18n:attributes="value"
-        />
-      </div>
+     <!-- submit button -->
+     <div class="formControls">
+      <input class="context"
+       tabindex=""
+       type="submit"
+       value="Submit"
+       name="choice"
+       tal:attributes="tabindex tabindex/next;"
+       i18n:attributes="value"
+       />
+     </div>
 
-      <!-- Hidden Fields -->
-      <input type="hidden" name="memberId" tal:attributes="value memberId"/>          
-  
-    </form>
-        
+     <!-- Hidden Fields -->
+    <input type="hidden" name="memberId" tal:attributes="value memberId"/>          
+    
+   </form>
+    
     <div class="field">
-      <b tal:condition="hasExpired" i18n:translate="submission_periode_expired">
-          The submission period has expired.
-      </b>
+     <b tal:condition="hasExpired"
+        i18n:translate="submission_period_expired">
+      The submission period has expired.
+     </b>
     </div>
-  
-    <b tal:condition="not: isEffective" i18n:translate="submission_periode_not_effective">
-        The submission period is not effective.
+    
+    <b tal:condition="not: isEffective"
+       i18n:translate="submission_period_not_effective">
+     The submission period is not effective.
     </b>
 
     <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
+     Get the byline - contains details about author and modification date.
     </div>
 
-  </tal:main-macro>
-</metal:main>
+   </tal:main-macro>
+  </metal:main>
 
-</body>
+ </body>
 </html>

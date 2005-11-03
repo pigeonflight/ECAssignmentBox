@@ -182,20 +182,20 @@ msgstr ""
 
 
 #: .\skins\ECAssignmentBox\assignmentbox_view.pt
-#. <b i18n:translate="submission_periode_expired" tal:condition="hasExpired">
+#. <b i18n:translate="submission_period_expired" tal:condition="hasExpired">
 #.           The submission period has expired.
 #. </b>
 # Original: "The submission period has expired."
-msgid "submission_periode_expired"
+msgid "submission_period_expired"
 msgstr "Der Zeitraum für Einreichungen ist abgelaufen."
 
 
 #: .\skins\ECAssignmentBox\assignmentbox_view.pt
-#. <b i18n:translate="submission_periode_not_effective" tal:condition="not: isEffective">
+#. <b i18n:translate="submission_period_not_effective" tal:condition="not: isEffective">
 #.         The submission period is not effective.
 #. </b>
 # Original: "The submission period is not effective."
-msgid "submission_periode_not_effective"
+msgid "submission_period_not_effective"
 msgstr "Einreichungen sind noch nicht möglich."
 
 

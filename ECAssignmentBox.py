@@ -138,10 +138,10 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
             return True
 
     def getAssignmentsSummary(self):
-        """Return a dictionary, keyed by student name, with
-        information about the assignments submitted to an
-        AssignmentBox (an array containing the date/time, the workflow
-        status and the grade."""
+        """Return a dictionary, keyed by username, with information
+        about the assignments submitted to an AssignmentBox (an array
+        containing the date/time, the workflow status, the grade, the
+        student's full name, and a URL for the assignment)."""
         items = self.contentValues(filter={'portal_type':
                                            self.allowed_content_types})
         wtool = self.portal_workflow
@@ -154,9 +154,11 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
             if (current_user.checkPermission('View', item)):
                 if (creator not in summary) or (summary[creator][0] < date):
                     summary[creator] = [date,
-                                        wtool.getInfoFor(item, 'review_state', ''),
+                                        wtool.getInfoFor(item, 'review_state',
+                                                         ''),
                                         item.getMark(),
-                                        self.portal_membership.getMemberById(creator).getProperty('fullname', ''),]
+                                        self.portal_membership.getMemberById(creator).getProperty('fullname', ''),
+                                        item.reference_url(),]
 
         return summary
 

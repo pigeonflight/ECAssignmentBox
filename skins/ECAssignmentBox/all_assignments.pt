@@ -31,7 +31,12 @@
      tal:condition="items">
      
     <tal:block tal:repeat="item items">
-     <h2 tal:content="item/title"/>
+     <h2>
+      <a href="item_url"
+       tal:attributes="href python: '%s/%s' % (item.getId(),
+                            item.getTypeInfo().getActionById('view'))"
+       tal:content="item/title"/>
+     </h2>
 
      <table class="listing">
       <thead>
@@ -46,13 +51,20 @@
       
       <tbody tal:define="summary item/getAssignmentsSummary;">
        <tal:block tal:repeat="student summary">
-	<tr tal:define="oddrow repeat/student/odd;"
+	<tr tal:define="oddrow         repeat/student/odd;
+	                wf_state_class python: 'state-' + putils.normalizeString(summary[student][1]);"
 	    tal:attributes="class python: test(oddrow, 'odd', 'even')">
 	 <td><span tal:content="python: here.toPortalTime(summary[student][0], True)"/></td>
 	 <td><span tal:content="python: summary[student][3]"/></td>
-	 <td><span tal:content="python: summary[student][1]"/></td>
+	 <td><span
+	   tal:content="python: summary[student][1]"
+	   tal:attributes="class wf_state_class"/></td>
 	 <td><span tal:content="python: summary[student][2]"/></td>
-	 <td>todo</td>
+	 <td>
+<a href="item_url"
+	   tal:attributes="href python: summary[student][4]"
+	   i18n:translate="label_action_view">[View]</a>
+	 </td>
 	</tr>
        </tal:block>
       </tbody>

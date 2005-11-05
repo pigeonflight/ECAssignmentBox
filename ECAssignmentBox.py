@@ -10,15 +10,8 @@ from DateTime import DateTime
 from Products.Archetypes.atapi import *
 from Products.CMFCore import CMFCorePermissions
 
-from Products.ECAssignmentBox.config import I18N_DOMAIN
+from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
-
-TEXT_TYPES = (
-    'text/structured',
-    'text/x-rst',
-    'text/html',
-    'text/plain',
-    )
 
 AssignmentBoxSchema = Schema((
     TextField(
@@ -111,6 +104,19 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
     archetype_name = "AssignmentBox"
     content_icon = "box-16.png"
 
+    security.declarePrivate('manage_afterAdd')
+    def manage_afterAdd(self, item, container):
+        BaseFolder.manage_afterAdd(self, item, container)
+        OrderedBaseFolder.manage_afterAdd(self, item, container)
+        # Add local role 'Reviewer' for the creator so that the
+        # creator can change the workflow status of submissions
+        # without having to be Manager
+        creator = self.Creator()
+        roles = list(self.get_local_roles_for_userid(creator))
+        if 'Reviewer' not in roles:
+            roles.append('Reviewer')
+            self.manage_setLocalRoles(creator, roles)
+
     security.declarePublic('hasExpired')
     def hasExpired(self):
         now = DateTime()
@@ -139,15 +145,18 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         items = self.contentValues(filter={'portal_type':
                                            self.allowed_content_types})
         wtool = self.portal_workflow
+        current_user = self.portal_membership.getAuthenticatedMember()
         summary = {}
-
+        
         for item in items:
             creator = item.Creator()
             date = item.getDatetime()
-            if (creator not in summary) or (summary[creator][0] < date):
-                summary[creator] = [date,
-                                    wtool.getInfoFor(item, 'review_state', ''),
-                                    item.getMark()]
+            if (current_user.checkPermission('View', item)):
+                if (creator not in summary) or (summary[creator][0] < date):
+                    summary[creator] = [date,
+                                        wtool.getInfoFor(item, 'review_state', ''),
+                                        item.getMark(),
+                                        self.portal_membership.getMemberById(creator).getProperty('fullname', ''),]
 
         return summary
 

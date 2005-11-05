@@ -19,3 +19,10 @@ ICONMAP = {'application/pdf' : 'pdf.gif',
            'image'           : 'image_icon.gif'}
 
 ADD_CONTENT_PERMISSION = AddPortalContent
+
+TEXT_TYPES = (
+    'text/structured',
+    'text/x-rst',
+    'text/html',
+    'text/plain',
+    )

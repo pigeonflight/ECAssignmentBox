@@ -17,15 +17,13 @@
                    fieldset         request/fieldset|options/fieldset|default_fieldset;
                    fields           python:schematas[fieldset].editableFields(here);
                    tabindex         tabindex | python:Iterator(pos=7000);
-                   memberId         here/Creator;
                    auto_feedback    here/auto_feedback|nothing;"
        tal:omit-tag=""
   >
     
     <!-- AssignmentBox-title and user's fullname -->
     <h1 class="documentFirstHeading"
-        tal:define="portalMember python: here.portal_membership.getMemberById(memberId);"
-        tal:content="python: portalMember.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()"/>
+      tal:content="python: here.getCreatorFullName() + ' - ' + here.aq_parent.title_or_id()" />
 
     <div class="field">
       <span i18n:translate="label_datetime">Delivered at</span>

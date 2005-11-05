@@ -139,13 +139,13 @@ class ECAssignment(BaseContent):
     content_icon = "sheet-16.png"
     global_allow = False
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
-        """
-        Display the image, with or without standard_html_[header|footer],
-        as appropriate.
-        """
-        return self.file.index_html(REQUEST, RESPONSE)
+#     security.declareProtected(CMFCorePermissions.View, 'index_html')
+#     def index_html(self, REQUEST, RESPONSE):
+#         """
+#         Display the image, with or without standard_html_[header|footer],
+#         as appropriate.
+#         """
+#         return self.file.index_html(REQUEST, RESPONSE)
 
     #security.declarePublic('setField')
     def setField(self, name, value, **kw):
@@ -153,6 +153,10 @@ class ECAssignment(BaseContent):
         field = self.getField(name)
         field.set(self, value, **kw)
 
+    def getCreatorFullName(self):
+        creator_id = self.Creator()
+        creator = self.portal_membership.getMemberById(creator_id)
+        return creator.getProperty('fullname', '')
    
     actions = (
         {

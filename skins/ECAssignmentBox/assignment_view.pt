@@ -11,24 +11,14 @@
   <tal:main-macro metal:define-macro="main"
        tal:define="Iterator      python: modules['Products.Archetypes'].IndexIterator;
                    tabindex      python: Iterator();
-                   memberId      here/Creator;
                    auto_feedback here/auto_feedback|nothing;"
-
-       tal:condition= "memberId"
   >
 
     <div metal:use-macro="here/document_actions/macros/document_actions"/>
   
     <!-- print page title -->    
     <h1 class="documentFirstHeading"
-      tal:condition="python: memberId == member.getId()"
-      tal:content="python: member.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()" />
-
-    <tal:nothing tal:condition="python: memberId != member.getId()">
-    <h1 class="documentFirstHeading"
-      tal:define="portalMember python: here.portal_membership.getMemberById(memberId);"
-      tal:content="python: portalMember.getProperty('fullname', '') + ' - ' + here.aq_parent.title_or_id()" />
-    </tal:nothing>
+      tal:content="python: here.getCreatorFullName() + ' - ' + here.aq_parent.title_or_id()" />
 
     <!-- print all relevant fields -->
     <div class="field">

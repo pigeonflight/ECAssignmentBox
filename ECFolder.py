@@ -14,20 +14,20 @@ from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
 from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
 
 LocalSchema = Schema((
-#     TextField(
-#         'description',
-#         searchable = True,
-#         default_content_type = 'text/plain',
-#         default_output_type = 'text/plain',
-#         widget = TextAreaWidget(
-#             label = "Description",
-#             label_msgid = "label_description",
-#             description = "Enter a brief description of the assignment.",
-#             description_msgid = "help_description",
-#             i18n_domain = I18N_DOMAIN,
-#             rows = 5,
-#         ),
-#     ),
+    TextField(
+        'description',
+        searchable = True,
+        default_content_type = 'text/plain',
+        default_output_type = 'text/plain',
+        widget = TextAreaWidget(
+            label = "Description",
+            label_msgid = "label_description",
+            description = "Enter a brief description of the folder.",
+            description_msgid = "help_description",
+            i18n_domain = I18N_DOMAIN,
+            rows = 5,
+        ),
+    ),
 
 ))
 
@@ -40,7 +40,7 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
 
     _at_rename_after_creation = True
 
-    #schema = BaseFolder.schema + LocalSchema
+    schema = BaseFolder.schema + LocalSchema
     filter_content_types = False
     allowed_content_types = []
     meta_type = "ECFolder"

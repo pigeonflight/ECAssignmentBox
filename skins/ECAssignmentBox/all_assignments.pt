@@ -31,12 +31,12 @@
      tal:condition="items">
      
     <tal:block tal:repeat="item items">
-     <h2>
+     <h3>
       <a href="item_url"
        tal:attributes="href python: '%s/%s' % (item.getId(),
                             item.getTypeInfo().getActionById('view'))"
        tal:content="item/title"/>
-     </h2>
+     </h3>
 
      <table class="listing">
       <thead>

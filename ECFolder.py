@@ -69,12 +69,17 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
 
     actions =  (
         {
+        'action':      "string:$object_url/view_all_boxes",
+        'id':          'view',
+        'name':        'View',
+        'permissions': (permissions.View,),
+        },
+
+        {
         'action':      "string:$object_url/all_assignments",
-        #'category':    "object",
         'id':          'all_assignments',
         'name':        'All Assignments',
         'permissions': (permissions.View,),
-        #'condition'  : 'python:1'
         },
 
     )

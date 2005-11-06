@@ -20,8 +20,7 @@
     <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
 
     <div class="documentByLine"
-     tal:condition="python: here.getSubmission_period_end() and
-                            isEffective and not hasExpired">
+     tal:condition="python: here.submission_period_end and here.isEffective() and not here.hasExpired()">
      <span i18n:translate="submission_period_ends">
       Submission period ends: </span>
      <span tal:content="python:

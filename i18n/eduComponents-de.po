@@ -206,3 +206,5 @@ msgstr "Einreichungen sind noch nicht möglich."
 msgid "upload_file_label"
 msgstr "Datei"
 
+msgid "label_work_on"
+msgstr "Diese Aufgabe bearbeiten"

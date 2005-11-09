@@ -164,7 +164,9 @@ class ECAssignment(BaseContent):
     def getAsPlainText(self):
         """Return the file contents as plain text.
         Cf. <http://www.bozzi.it/plone/>,
-        <http://plone.org/Members/syt/PortalTransforms/user_manual>"""
+        <http://plone.org/Members/syt/PortalTransforms/user_manual>;
+        see also portal_transforms in the ZMI for available
+        transformations."""
         ptTool = getToolByName(self, 'portal_transforms')
         f = self.getField('file')
         source = ''
@@ -173,7 +175,7 @@ class ECAssignment(BaseContent):
             mt = self.getContentType('file')
             
             try:
-                result = ptTool.convertTo('text/plain', str(f.get(self)),
+                result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
                                           mimetype=mt)
             except TransformException:
                 result = ''

@@ -8,6 +8,9 @@
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import CMFCorePermissions
+# The following two imports are for getAsPlainText()
+from Products.CMFCore.utils import getToolByName
+from Products.PortalTransforms.utils import TransformException
 from config import ICONMAP, I18N_DOMAIN
 from urllib import quote
 import os
@@ -157,7 +160,32 @@ class ECAssignment(BaseContent):
         creator_id = self.Creator()
         creator = self.portal_membership.getMemberById(creator_id)
         return creator.getProperty('fullname', '')
-   
+
+    def getAsPlainText(self):
+        """Return the file contents as plain text.
+        Cf. <http://www.bozzi.it/plone/>,
+        <http://plone.org/Members/syt/PortalTransforms/user_manual>"""
+        ptTool = getToolByName(self, 'portal_transforms')
+        f = self.getField('file')
+        source = ''
+
+        if f:
+            mt = self.getContentType('file')
+            
+            try:
+                result = ptTool.convertTo('text/plain', str(f.get(self)),
+                                          mimetype=mt)
+            except TransformException:
+                result = ''
+            
+            if result:
+                return result.getData()
+            
+            if re.match("text/", mt):
+                return f.get(self)
+            else:
+                return None
+
     actions = (
         {
         'action':      "string:${object_url}/assignment_view",

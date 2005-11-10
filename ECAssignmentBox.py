@@ -122,7 +122,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         now = DateTime()
         expiration_date = self.getSubmission_period_end()
         
-        if((expiration_date == None) or (expiration_date > now)):
+        if ((expiration_date == None) or (expiration_date > now)):
             return False
         else:
             return True
@@ -132,34 +132,34 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         now = DateTime()
         effective_date = self.getSubmission_period_start()
 
-        if((effective_date != None) and (effective_date > now)):
+        if ((effective_date != None) and (effective_date > now)):
             return False
         else:
             return True
 
     def getAssignmentsSummary(self):
-        """Return a dictionary, keyed by username, with information
-        about the assignments submitted to an AssignmentBox (an array
-        containing the date/time, the workflow status, the grade, the
-        student's full name, and a URL for the assignment)."""
+        """Return a list of tuples with information about the
+        assignments submitted to the AssignmentBox.  The tuples
+        contain: The user ID, the date/time, the workflow status, the
+        grade, the student's full name, and a URL for the assignment)."""
+
         items = self.contentValues(filter={'portal_type':
                                            self.allowed_content_types})
         wtool = self.portal_workflow
         current_user = self.portal_membership.getAuthenticatedMember()
-        summary = {}
+        summary = []
         
         for item in items:
             creator = item.Creator()
             date = item.getDatetime()
-            if (current_user.checkPermission('View', item)):
-                if (creator not in summary) or (summary[creator][0] < date):
-                    summary[creator] = [date,
-                                        wtool.getInfoFor(item, 'review_state',
-                                                         ''),
-                                        item.getMark(),
-                                        self.portal_membership.getMemberById(creator).getProperty('fullname', ''),
-                                        item.reference_url(),]
 
+            if (current_user.checkPermission('View', item)):
+                    summary.append((creator, date,
+                                    wtool.getInfoFor(item, 'review_state', ''),
+                                    item.getMark(),
+                                    self.portal_membership.getMemberById(creator).getProperty('fullname', ''),
+                                    item.reference_url(),))
+        
         return summary
 
     actions =  (

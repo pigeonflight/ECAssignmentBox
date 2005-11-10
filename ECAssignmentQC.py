@@ -8,6 +8,9 @@
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import CMFCorePermissions
+# The following two imports are for getAsPlainText()
+from Products.CMFCore.utils import getToolByName
+from Products.PortalTransforms.utils import TransformException
 from config import ICONMAP, I18N_DOMAIN
 from urllib import quote
 import os
@@ -55,9 +58,9 @@ AssignmentSchema = localBaseSchema + Schema((
         searchable = True,
         default_output_type = 'text/structured',
         widget = ComputedWidget(
-            label = 'Text',
-            label_msgid = 'label_source',
-            description = 'The text for this assignment.',
+            label = 'Answer',
+            label_msgid = 'label_answer',
+            description = 'The answer for this assignment.',
             description_msgid = 'help_source',
             i18n_domain = I18N_DOMAIN,
         ),
@@ -67,7 +70,7 @@ AssignmentSchema = localBaseSchema + Schema((
         'file',
         searchable = True,
         widget = FileWidget(
-            description = "The download able file containing this assignment.",
+            description = "The uploaded file containing this assignment.",
             description_msgid = "help_file",
             label= "File",
             label_msgid = "label_file",
@@ -121,8 +124,8 @@ AssignmentSchema = localBaseSchema + Schema((
         'mark',
         searchable = True,
         widget=StringWidget(
-            label = 'Mark',
-            description = "The mark awarded for this assignment.",
+            label = 'Grade',
+            description = "The grade awarded for this assignment.",
             i18n_domain = I18N_DOMAIN,
         ),
     ),
@@ -139,21 +142,54 @@ class ECAssignmentQC(BaseContent):
     meta_type = "ECAssignmentQC"
     archetype_name = "Assignment (Haskell QuickCheck)"
     content_icon = "sheet-16.png" 
+    global_allow = False
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
-        """
-        Display the image, with or without standard_html_[header|footer],
-        as appropriate.
-        """
-        return self.file.index_html(REQUEST, RESPONSE)
+#     security.declareProtected(CMFCorePermissions.View, 'index_html')
+#     def index_html(self, REQUEST, RESPONSE):
+#         """
+#         Display the image, with or without standard_html_[header|footer],
+#         as appropriate.
+#         """
+#         return self.file.index_html(REQUEST, RESPONSE)
 
     #security.declarePublic('setField')
     def setField(self, name, value, **kw):
         """TODO: add useful comments"""
         field = self.getField(name)
         field.set(self, value, **kw)
-     
+
+    def getCreatorFullName(self):
+        creator_id = self.Creator()
+        creator = self.portal_membership.getMemberById(creator_id)
+        return creator.getProperty('fullname', '')
+
+    def getAsPlainText(self):
+        """Return the file contents as plain text.
+        Cf. <http://www.bozzi.it/plone/>,
+        <http://plone.org/Members/syt/PortalTransforms/user_manual>;
+        see also portal_transforms in the ZMI for available
+        transformations."""
+        ptTool = getToolByName(self, 'portal_transforms')
+        f = self.getField('file')
+        source = ''
+
+        if f:
+            mt = self.getContentType('file')
+            
+            try:
+                result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
+                                          mimetype=mt)
+            except TransformException:
+                result = ''
+            
+            if result:
+                return result.getData()
+            
+            if re.match("text/", mt):
+                return f.get(self)
+            else:
+                return None
+
     security.declarePublic('evaluate')
     def evaluate(self, modelSource, propertySource):
         """TODO: add some usefull comments"""
@@ -255,8 +291,8 @@ class ECAssignmentQC(BaseContent):
         self.setSolved((len(solvedProperties) == len(propertyNames)))
         
         # set state to pending
-        wtool = self.portal_workflow
-        wtool.doActionFor(self, 'review')
+        #wtool = self.portal_workflow
+        #wtool.doActionFor(self, 'review')
 
         # 6. delete files on jail
         os.remove(mSFileName)
@@ -305,7 +341,7 @@ class ECAssignmentQC(BaseContent):
 
     actions = (
         {
-        'action':      "string:$object_url/assignment_view",
+        'action':      "string:${object_url}/assignment_view",
         'category':    "object",
         'id':          'view',
         'name':        'View',
@@ -314,7 +350,7 @@ class ECAssignmentQC(BaseContent):
         },
 
         {
-        'action':      "string:$object_url/assignment_edit",
+        'action':      "string:${object_url}/assignment_edit",
         'category':    "object",
         'id':          'edit',
         'name':        'Edit',
@@ -331,6 +367,8 @@ def uuid(*args):
     """
     Generates a universally unique Id. 
     Any arguments only create more randomness.
+    
+    @params *args
     """
     t = long(time.time() * 1000)
     r = long(random.random()*100000000000000000L)
@@ -345,7 +383,12 @@ def uuid(*args):
     return data
 
 def unique(seq, idfun=None):
-    """Returns a list with no duplicate items."""
+    """
+    Returns a list with no duplicate items.
+    
+    @param seq A Sequenz of elements maybe including some duplicte items.
+    @return A list without duplicate items.
+    """
     if idfun is None:
         def idfun(x): return x
 

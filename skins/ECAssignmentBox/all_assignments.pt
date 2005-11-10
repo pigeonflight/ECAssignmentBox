@@ -25,14 +25,15 @@
      auth_filter   nocall: modules/ZTUtils/LazyFilter;
      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
      types         types | here/show_content_types | default_types;
-     raw_items python: here.contentValues(filter={'portal_type': types});
-     items     python: auth_filter(raw_items, skip='View');"
+     raw_items     python: here.contentValues(filter={'portal_type': types});
+     items         python: auth_filter(raw_items, skip='View');"
      tal:condition="items">
      
     <tal:block tal:repeat="item items">
      <h3>
       <a href="item_url"
-       tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
+       tal:attributes="
+       href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
        tal:content="item/title"/>
      </h3>
 
@@ -46,21 +47,27 @@
 	<th i18n:translate="label_actions">Actions</th>
        </tr>
       </thead>
-      
+
       <tbody tal:define="summary item/getAssignmentsSummary;">
-       <tal:block tal:repeat="student summary">
-	<tr tal:define="oddrow         repeat/student/odd;
-	                wf_state_class python: 'state-' + putils.normalizeString(summary[student][1]);"
-	    tal:attributes="class python: test(oddrow, 'odd', 'even')">
-	 <td><span tal:content="python: here.toPortalTime(summary[student][0], True)"/></td>
-	 <td><span tal:content="python: summary[student][3]"/></td>
-	 <td><span
-	   tal:content="python: summary[student][1]"
-	   tal:attributes="class wf_state_class"/></td>
-	 <td><span tal:content="python: summary[student][2]"/></td>
+       <tal:block tal:repeat="s summary">
+	<tr tal:define="
+	 oddrow         repeat/s/odd;
+	 wf_state_class python: 'state-' + putils.normalizeString(s[2]);"
+	 tal:attributes="class python: test(oddrow, 'odd', 'even')">
+	 <td tal:content="python: here.toPortalTime(s[1], True)"/>
 	 <td>
-<a href="item_url"
-	   tal:attributes="href python: summary[student][4]"
+	  <span tal:content="python: s[4]"/>
+	 </td>
+	 <td>
+	  <span tal:content="python: s[2]"
+	   tal:attributes="class wf_state_class"/>
+	 </td>
+	 <td>
+	  <span tal:content="python: s[3]"/>
+	 </td>
+	 <td>
+	  <a href="item_url"
+	   tal:attributes="href python: s[5]"
 	   i18n:translate="label_action_view">[View]</a>
 	 </td>
 	</tr>
@@ -68,10 +75,6 @@
       </tbody>
      </table>
     </tal:block>
-
-
-
-
    </div>
 
    </tal:main-macro>

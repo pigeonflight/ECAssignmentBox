@@ -80,13 +80,14 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
             students['_boxes'] = [0 for i in range(n_states)]
 
         for box in boxes:
-            students['_boxes'][0] += 1
-            boxsummary = box.getAssignmentsSummary()
+            if wtool.getInfoFor(box, 'review_state', '') == 'published':
+                students['_boxes'][0] += 1
+                boxsummary = box.getAssignmentsSummary()
             
-            for assignment in boxsummary:
-                if assignment.Creator() not in students:
-                    students[assignment.Creator()] = [0 for i in range(n_states)]
-                students[assignment.Creator()][wf_states.index(wtool.getInfoFor(assignment, 'review_state', ''))] += 1
+                for assignment in boxsummary:
+                    if assignment.Creator() not in students:
+                        students[assignment.Creator()] = [0 for i in range(n_states)]
+                        students[assignment.Creator()][wf_states.index(wtool.getInfoFor(assignment, 'review_state', ''))] += 1
 
         return students
 

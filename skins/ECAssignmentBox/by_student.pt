@@ -20,11 +20,12 @@
     <h1 class="documentFirstHeading"
      i18n:translate="label_submissions">Students</h1>
 
+    <!--
     <div tal:define="items here/collect" tal:repeat="item items">
      <p tal:content="python: item + ': ' + str(items[item])"/>
     </div>
+    -->
 
-    <!-- XXX -->
     <table class="listing">
      <thead>
       <tr>

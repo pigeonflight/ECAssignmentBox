@@ -20,7 +20,6 @@
     <h1 class="documentFirstHeading"
      i18n:translate="label_submissions">Submissions</h1>
 
-
     <div tal:define="
      auth_filter   nocall: modules/ZTUtils/LazyFilter;
      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
@@ -48,31 +47,88 @@
        </tr>
       </thead>
 
-      <tbody tal:define="summary item/getAssignmentsSummary;">
-       <tal:block tal:repeat="s summary">
-	<tr tal:define="
-	 oddrow         repeat/s/odd;
-	 wf_state_class python: 'state-' + putils.normalizeString(s[2]);"
+<!--       <tbody tal:define="summary item/getAssignmentsSummary;"> -->
+<!--        <tal:block tal:repeat="s summary"> -->
+<!-- 	<tr tal:define=" -->
+<!-- 	 oddrow         repeat/s/odd; -->
+<!-- 	 wf_state_class python: 'state-' + putils.normalizeString(s[2]);" -->
+<!-- 	 tal:attributes="class python: test(oddrow, 'odd', 'even')"> -->
+<!-- 	 <td tal:content="python: here.toPortalTime(s[1], True)"/> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: s[4]"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: s[2]" -->
+<!-- 	   tal:attributes="class wf_state_class"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: s[3]"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <a href="item_url" -->
+<!-- 	   tal:attributes="href python: s[5]" -->
+<!-- 	   i18n:translate="label_action_view">[View]</a> -->
+<!-- 	 </td> -->
+<!-- 	</tr> -->
+<!--        </tal:block> -->
+<!--       </tbody> -->
+
+<!--       <tbody tal:define="summary item/getAssignmentsSummary;"> -->
+<!--        <tal:block tal:repeat="student summary"> -->
+<!-- 	<tr> -->
+<!-- 	 <td tal:content="python: summary"></td> -->
+<!-- 	</tr> -->
+<!-- 	<tr tal:define=" -->
+<!-- 	 oddrow         repeat/student/odd; -->
+<!-- 	 wf_state_class python: 'state-' + putils.normalizeString(summary[student][1]);" -->
+<!-- 	 tal:attributes="class python: test(oddrow, 'odd', 'even')"> -->
+<!-- 	 <td tal:content="python: here.toPortalTime(summary[student][0], True)"/> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: summary[student][3]"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: summary[student][1]" -->
+<!-- 	   tal:attributes="class wf_state_class"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <span tal:content="python: summary[student][2]"/> -->
+<!-- 	 </td> -->
+<!-- 	 <td> -->
+<!-- 	  <a href="item_url" -->
+<!-- 	   tal:attributes="href python: summary[student][4]" -->
+<!-- 	   i18n:translate="label_action_view">[View]</a> -->
+<!-- 	 </td> -->
+<!-- 	</tr> -->
+<!--        </tal:block> -->
+<!--       </tbody> -->
+
+      <tbody tal:define="summary item/getAssignmentsSummary;
+       mtool here/portal_membership;
+       wtool here/portal_workflow;">
+       <tal:block tal:repeat="assignment summary">
+	<tr tal:define="creator python: mtool.getMemberById(assignment.Creator());
+	 oddrow repeat/assignment/odd;
+	 wf_state_class python: 'state-' + putils.normalizeString(wtool.getInfoFor(assignment, 'review_state', ''));"
 	 tal:attributes="class python: test(oddrow, 'odd', 'even')">
-	 <td tal:content="python: here.toPortalTime(s[1], True)"/>
-	 <td>
-	  <span tal:content="python: s[4]"/>
+	 <td tal:content="python: here.toPortalTime(assignment.getDatetime(), True)"/>
+	 <td tal:content="python: here.sortable_name(creator)">
 	 </td>
 	 <td>
-	  <span tal:content="python: s[2]"
+	  <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"
 	   tal:attributes="class wf_state_class"/>
 	 </td>
 	 <td>
-	  <span tal:content="python: s[3]"/>
+	  <span tal:content="python: assignment.getMark()"/>
 	 </td>
 	 <td>
 	  <a href="item_url"
-	   tal:attributes="href python: s[5]"
+	   tal:attributes="href python: assignment.reference_url()"
 	   i18n:translate="label_action_view">[View]</a>
 	 </td>
 	</tr>
        </tal:block>
       </tbody>
+
      </table>
     </tal:block>
    </div>

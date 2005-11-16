@@ -15,19 +15,20 @@ __version__   = '$Revision$'
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, TRIGGER_USER_ACTION, TRIGGER_WORKFLOW_METHOD
 
 def setupAssignment_workflow(wf):
     """Assignment Workflow definition"""
 
     wf.setProperties(title='Assignment workflow [EC]')
     for s in ['graded',
-              'accepted', 'rejected',
+              'accepted', 'rejected', 'superseded',
               'pending', 
               'submitted']:
         wf.states.addState(s)
 
     for t in ['review',
-              'accept', 'reject',
+              'accept', 'reject', 'supersede',
               'grade',
               'retract']:
         wf.transitions.addTransition(t)
@@ -49,7 +50,7 @@ def setupAssignment_workflow(wf):
 
     sdef = wf.states['submitted']
     sdef.setProperties(title="""Submitted""",
-                       transitions=('review', 'accept', 'reject'))
+                       transitions=('review', 'accept', 'reject', 'supersede'))
     sdef.setPermission('Access contents information',
                        0,
                        ['Owner',
@@ -57,7 +58,7 @@ def setupAssignment_workflow(wf):
                         'Manager'])
     sdef.setPermission('Modify portal content',
                        0,
-                       ['Owner',
+                       [#'Owner',
                         'Reviewer',
                         'Manager'
                         ])
@@ -137,6 +138,28 @@ def setupAssignment_workflow(wf):
                        ['Reviewer',
                         'Manager'])
 
+    sdef = wf.states['superseded']
+    sdef.setProperties(title="""Superseded""",
+                       transitions=('retract',))
+    sdef.setPermission('Access contents information',
+                       0,
+                       [#'Owner',
+                        'Reviewer',
+                        'Manager'])
+    sdef.setPermission('Modify portal content',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+    sdef.setPermission('View',
+                       0,
+                       ['Owner',
+                        'Reviewer',
+                        'Manager'])
+    sdef.setPermission('List folder contents',
+                       0,
+                       ['Reviewer',
+                        'Manager'])
+
     sdef = wf.states['rejected']
     sdef.setProperties(title="""Rejected""",
                        transitions=('retract',))
@@ -193,6 +216,18 @@ def setupAssignment_workflow(wf):
                        actbox_url="""""",
                        actbox_category="""workflow""",
                        props={'guard_permissions': 'Review portal content'},
+                       )
+
+    tdef = wf.transitions['supersede']
+    tdef.setProperties(title="""Replace assignment with a newer submission""",
+                       new_state_id="""superseded""",
+                       trigger_type=1,
+                       script_name="""""",
+                       after_script_name="""""",
+                       actbox_name="""Supersede""",
+                       actbox_url="""""",
+                       actbox_category="""workflow""",
+                       props={'guard_roles': 'Owner'},
                        )
 
     tdef = wf.transitions['grade']

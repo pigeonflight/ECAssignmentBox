@@ -47,27 +47,106 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
     archetype_name = "ECFolder"
     content_icon = "folder-box-16.png"
 
-    def getAssignmentsSummary(self):
-        """Return a dictionary, keyed by student name, with
-        information about the assignments submitted to an
-        AssignmentBox (an array containing the date/time, the workflow
-        status and the grade."""
-        items = self.contentValues(filter={'portal_type':
-                                           self.allowed_content_types})
+    def collect(self):
+        folders = self.contentValues(filter={'portal_type': ('ECFolder')})
+        students = self.summarizeByStudent()
+
         wtool = self.portal_workflow
-        summary = {}
+        students['_wfstates'] = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+        
+        for folder in folders:
+            sum = folder.summarizeByStudent()
+            for student in sum.keys():
+                if student in students:
+                    i = 0
+                    for i in range(len(sum[student]) - 1):
+                        students[student][i] += sum[student][i]
+                else:
+                    students[student] = sum[student]
+                
+            
+        return students
+        
 
-        for item in items:
-            creator = item.Creator()
-            date = item.getDatetime()
-            if (creator not in summary) or (summary[creator][0] < date):
-                summary[creator] = [date,
-                                    wtool.getInfoFor(item, 'review_state', ''),
-                                    item.getMark()]
+#     def summarizeByStudent(self):
+#         boxes = self.contentValues(filter={'portal_type':
+#                                            ('ECAssignmentBox',
+#                                             'ECAssignmentBoxQC')})
+#         students = {}
+#         wtool = self.portal_workflow
+#         #students['pseudo'] = wtool.getWorkflowById('ec_assignment_workflow').states.items() #keys().index('pending')
+#         #students['___'] = ['%d boxes' % len(boxes),
+#         #                   wtool.getWorkflowById('ec_assignment_workflow').states.keys()]
+#         wf_states = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+#         n_states = len(wf_states)
+        
+#         if '_boxes' not in students:
+#             students['_boxes'] = [0 for i in range(n_states)]
 
-        return summary
+#         for box in boxes:
+#             students['_boxes'][0] += 1
+#             boxsummary = box.getAssignmentsSummary()
 
-    actions =  (
+#             #             for assignment in boxsummary:
+#             #                 if assignment[0] not in students:
+#             #                     students[assignment[0]] = 0
+#             #                 if assignment[2] == 'accepted':
+#             #                     students[assignment[0]] = students[assignment[0]] + 1
+#             for assignment in boxsummary:
+#                 if assignment[0] not in students:
+#                     students[assignment[0]] = [0 for i in range(n_states)]
+#                 students[assignment[0]][wf_states.index(assignment[2])] += 1
+
+#         return students
+
+#     def summarizeByStudent(self):
+#         boxes = self.contentValues(filter={'portal_type':
+#                                            ('ECAssignmentBox',
+#                                             'ECAssignmentBoxQC')})
+#         students = {}
+#         wtool = self.portal_workflow
+#         wf_states = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+#         n_states = len(wf_states)
+        
+#         if '_boxes' not in students:
+#             students['_boxes'] = [0 for i in range(n_states)]
+
+#         for box in boxes:
+#             students['_boxes'][0] += 1
+#             boxsummary = box.getAssignmentsSummary()
+            
+#             for student in boxsummary.keys():
+#                 if student not in students:
+#                     students[boxsummary[student]] = [0 for i in range(n_states)]
+#                 students[student][wf_states.index(boxsummary[student][1])] += 1
+
+#         return students
+
+    def summarizeByStudent(self):
+        boxes = self.contentValues(filter={'portal_type':
+                                           ('ECAssignmentBox',
+                                            'ECAssignmentBoxQC')})
+        students = {}
+        wtool = self.portal_workflow
+        wf_states = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+        n_states = len(wf_states)
+        
+        if '_boxes' not in students:
+            students['_boxes'] = [0 for i in range(n_states)]
+
+        for box in boxes:
+            students['_boxes'][0] += 1
+            boxsummary = box.getAssignmentsSummary()
+            
+            for assignment in boxsummary:
+                if assignment.Creator() not in students:
+                    students[assignment.Creator()] = [0 for i in range(n_states)]
+                students[assignment.Creator()][wf_states.index(wtool.getInfoFor(assignment, 'review_state', ''))] += 1
+
+        return students
+
+
+    actions = (
         {
         'action':      "string:$object_url/view_all_boxes",
         'id':          'view',
@@ -82,6 +161,12 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
         'permissions': (permissions.View,),
         },
 
+        {
+        'action':      "string:$object_url/by_student",
+        'id':          'by_student',
+        'name':        'By Student',
+        'permissions': (permissions.View,),
+        },
     )
 
 registerType(ECFolder)

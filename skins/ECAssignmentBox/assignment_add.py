@@ -39,8 +39,16 @@ elif context.hasExpired():
         domain  = I18N_DOMAIN,\
         default = 'The submission period has expired. Your submission was rejected.')
 
+# are there already submissions which cannot be superseded?
+elif not context.canResubmit():
+    msg = context.translate(
+        msgid   = 'submission_cannot_supersede',
+        domain  = I18N_DOMAIN,
+        default = 'Your submission was rejected: '
+        'An earlier submission is under review or has already been accepted.')
+
 # try to read file
-else:
+if msg == '':
     try:
         sstr = file.filename.read()
     except:

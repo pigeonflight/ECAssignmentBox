@@ -13,14 +13,15 @@
 		tabindex     python: Iterator();
 		memberId     python: member.getId();
 		hasExpired   here/hasExpired;
-		isEffective  here/isEffective;">
+		isEffective  here/isEffective;
+		canResubmit  here/canResubmit">
 
     <div metal:use-macro="here/document_actions/macros/document_actions"/>
     
     <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
 
     <div class="documentByLine"
-     tal:condition="python: here.submission_period_end and here.isEffective() and not here.hasExpired()">
+     tal:condition="python: here.submission_period_end and isEffective and not hasExpired">
      <span i18n:translate="submission_period_ends">
       Submission period ends: </span>
      <span tal:content="python:
@@ -40,7 +41,7 @@
      method="post"
      enctype="multipart/form-data"
      tal:attributes="action string:${here/absolute_url}/assignment_add"
-     tal:condition="python: not hasExpired and isEffective">
+     tal:condition="python: not hasExpired and isEffective and canResubmit">
 
      <!-- text field -->
      <div class="field">
@@ -99,6 +100,12 @@
     <b tal:condition="not: isEffective"
        i18n:translate="submission_period_not_effective">
      The submission period is not effective.
+    </b>
+
+    <b tal:condition="not: canResubmit"
+       i18n:translate="submission_cannot_resubmit">
+     Submission not permitted: An earlier submission is under review
+     or has already been accepted.
     </b>
 
     <div metal:use-macro="here/document_byline/macros/byline">

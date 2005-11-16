@@ -20,11 +20,9 @@
     <h1 class="documentFirstHeading"
      i18n:translate="label_submissions">Students</h1>
 
-    <!--
     <div tal:define="items here/collect" tal:repeat="item items">
      <p tal:content="python: item + ': ' + str(items[item])"/>
     </div>
-    -->
 
     <table class="listing">
      <thead>
@@ -49,7 +47,7 @@
 	<td tal:content="python: here.sortable_name(creator)"/>
        <tal:block tal:define="sums python: items[student]" tal:repeat="state sums">
 	<td><span tal:content="state"/>
-	 (<span tal:content="python: round(float(state)/items['_boxes'][0] * 100, 2)"/> %)</td>
+	 (<span tal:content="python: round(float(state)/items['_boxes'][0] * 100, 2)"/>&nbsp;%)</td>
        </tal:block> 
       </tr>
       </tal:block>

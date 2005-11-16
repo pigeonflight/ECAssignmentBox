@@ -162,13 +162,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         
         for item in items:
             if (current_user.checkPermission('View', item)):
-                x = self.contentValues(filter = {'Creator': item.Creator()})
-                if len(x) > 1:
-                    x.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
-                    summary.append(x[0])
-                else:
-                    summary.append(item)
-        
+                summary.append(item)
         return summary
 
     actions =  (

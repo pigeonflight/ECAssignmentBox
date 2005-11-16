@@ -46,8 +46,7 @@
 	creator python: mtool.getMemberById(student);"
 	tal:attributes="class python: test(oddrow, 'odd', 'even')"
 	>
-	<td tal:define="fullname python: creator.getProperty('fullname', '')"
-	 tal:content="python: here.sortable_name(creator)"/>
+	<td tal:content="python: here.sortable_name(creator)"/>
        <tal:block tal:define="sums python: items[student]" tal:repeat="state sums">
 	<td><span tal:content="state"/>
 	 (<span tal:content="python: round(float(state)/items['_boxes'][0] * 100, 2)"/> %)</td>

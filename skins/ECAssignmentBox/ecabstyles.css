@@ -1,5 +1,5 @@
 .state-submitted {
-    color: gray;
+    color: rgb(77, 77, 77);
 }
 .state-pending {
     color: orange;
@@ -9,6 +9,9 @@
 }
 .state-rejected {
     color: rgb(255,  99,  71);
+}
+.state-superseded {
+    color: gray;
 }
 .state-graded {
     color: green;

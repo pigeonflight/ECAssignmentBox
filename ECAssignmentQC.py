@@ -144,6 +144,18 @@ class ECAssignmentQC(BaseContent):
     content_icon = "sheet-16.png" 
     global_allow = False
 
+    security.declarePrivate('manage_afterAdd')
+    def manage_afterAdd(self, item, container):
+        BaseContent.manage_afterAdd(self, item, container)
+        
+        wtool = self.portal_workflow
+        assignments = self.contentValues(filter = {'Creator': item.Creator()})
+        if assignments:
+            for a in assignments:
+                wf = wtool.getWorkflowsFor(a)[0]
+                if wf.isActionSupported(a, 'supersede'):
+                    wtool.doActionFor(a, 'supersede', comment='superseded')
+
 #     security.declareProtected(CMFCorePermissions.View, 'index_html')
 #     def index_html(self, REQUEST, RESPONSE):
 #         """

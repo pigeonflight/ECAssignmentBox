@@ -101,7 +101,17 @@ if msg == '':
 
     # evaluate only in case of ECAssignmentQC
     if contextType == EC_ASSIGNMENT_BOX_QC_META_TYPE:
-        result = qca.evaluate(context.getModel_solution(), context.getQc_property())
+        result = qca.evaluate(
+            context.getModel_solution(), 
+            context.getQc_property(),
+            context.getSpoolerConnection(),
+            context.getCheckerBackend())
+        
+        # set next workflow state automatic
+        # FIXME: This doesn't work
+        #wtool = context.portal_workflow
+        #wtool.doActionFor(qca, 'review')
+
     else:
         result = None
 

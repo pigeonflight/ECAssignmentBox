@@ -181,8 +181,8 @@ class ECAssignment(BaseContent):
             if fullname.find(' ') == -1:
                 return fullname
 
-        sn = fullname[fullname.rfind(' '):]
-        givenName= fullname[0:fullname.find(' ')]
+            sn = fullname[fullname.rfind(' '):]
+            givenName = fullname[0:fullname.find(' ')]
 
         return sn + ', ' + givenName
 

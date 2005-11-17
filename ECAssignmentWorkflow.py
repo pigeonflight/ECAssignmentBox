@@ -74,7 +74,7 @@ def setupAssignment_workflow(wf):
 
     sdef = wf.states['pending']
     sdef.setProperties(title="""Pending""",
-                       transitions=('accept', 'reject', 'grade'))
+                       transitions=('accept', 'reject', 'grade', 'retract'))
     sdef.setPermission('Access contents information',
                        0,
                        ['Owner',

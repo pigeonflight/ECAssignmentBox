@@ -171,7 +171,20 @@ class ECAssignment(BaseContent):
     def getCreatorFullName(self):
         creator_id = self.Creator()
         creator = self.portal_membership.getMemberById(creator_id)
-        return creator.getProperty('fullname', '')
+
+        try:
+            sn        = creator.getProperty('sn')
+            givenName = creator.getProperty('givenName')
+        except:
+            fullname = creator.getProperty('fullname', '')
+
+            if fullname.find(' ') == -1:
+                return fullname
+
+        sn = fullname[fullname.rfind(' '):]
+        givenName= fullname[0:fullname.find(' ')]
+
+        return sn + ', ' + givenName
 
     def getAsPlainText(self):
         """Return the file contents as plain text.

@@ -95,18 +95,18 @@
         i18n:translate="submission_period_expired">
       The submission period has expired.
      </b>
-    </div>
     
-    <b tal:condition="not: isEffective"
-       i18n:translate="submission_period_not_effective">
-     The submission period is not effective.
-    </b>
+     <b tal:condition="not: isEffective"
+        i18n:translate="submission_period_not_effective">
+      The submission period is not effective.
+     </b>
 
-    <b tal:condition="not: canResubmit"
-       i18n:translate="submission_cannot_resubmit">
-     Submission not permitted: An earlier submission is under review
-     or has already been accepted.
-    </b>
+     <b tal:condition="python: (not canResubmit) and (not hasExpired)"
+        i18n:translate="submission_cannot_resubmit">
+      Submission not permitted: An earlier submission is under review
+      or has already been accepted.
+     </b>
+    </div>
 
     <div metal:use-macro="here/document_byline/macros/byline">
      Get the byline - contains details about author and modification date.

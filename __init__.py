@@ -27,7 +27,7 @@ registerDirectory(SKINS_DIR, GLOBALS)
 def initialize(context):
     # Import Types here to register them
     #import ECAssignmentBox, ECAssignmentBoxQC, ECAssignment, ECAssignmentQC
-    import ECFolder, ECAssignmentBox, ECAssignmentBoxQC
+    import ECFolder, ECAssignmentBox, ECAssignmentBoxQC, ECSpoolerConnection
 
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),

@@ -38,22 +38,28 @@
       </tr>
      </thead>
 
-     <tbody tal:define="items here/collect; mtool here/portal_membership;
+     <tbody tal:define="items here/collect;
       sorted_items python: sequence.sort(items);">
       <tal:block tal:repeat="student sorted_items">
        <tr tal:condition="python: not student.startswith('_')"
-	tal:define="oddrow repeat/student/odd;
-	creator python: mtool.getMemberById(student);"
-	tal:attributes="class python: test(oddrow, 'odd', 'even')"
+	   tal:define="oddrow repeat/student/odd;"
+	   tal:attributes="class python: test(oddrow, 'odd', 'even')"
 	>
-	<td tal:content="python: here.sortable_name(creator)"/>
-       <tal:block tal:define="sums python: items[student]" tal:repeat="state sums">
-	<td><span tal:content="state"/>
+	<td
+	 tal:content="python: items[student][-1]"/>
+
+       <tal:block
+	tal:define="sums python: items[student]"
+	tal:repeat="state python: sums[0:-1]">
+	<td>
+	 <span tal:content="state"/>
 	 (<span tal:content="python: round(float(state)/items['_boxes'][0] * 100, 2)"/>&nbsp;%)</td>
        </tal:block> 
       </tr>
+
       </tal:block>
      </tbody>
+    </table>
    </tal:main-macro>
   </metal:main>
 

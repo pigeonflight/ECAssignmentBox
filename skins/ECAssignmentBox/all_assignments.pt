@@ -51,15 +51,13 @@
        </thead>
 
        <tbody tal:define="summary item/getAssignmentsSummary;
-	mtool here/portal_membership;
 	wtool here/portal_workflow;">
 	<tal:block tal:repeat="assignment summary">
-	 <tr tal:define="creator python: mtool.getMemberById(assignment.Creator());
-	  oddrow repeat/assignment/odd;
+	 <tr tal:define="oddrow repeat/assignment/odd;
 	  wf_state_class python: 'state-' + putils.normalizeString(wtool.getInfoFor(assignment, 'review_state', ''));"
 	  tal:attributes="class python: test(oddrow, 'odd', 'even')">
 	  <td tal:content="python: here.toPortalTime(assignment.getDatetime(), True)"/>
-	  <td tal:content="python: here.sortable_name(creator)">
+	  <td tal:content="python: assignment.getCreatorFullName()">
 	  </td>
 	  <td>
 	   <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"

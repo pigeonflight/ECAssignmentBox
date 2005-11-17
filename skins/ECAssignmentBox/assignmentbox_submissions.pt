@@ -22,8 +22,7 @@
      default_types python:('ECAssignment', 'ECAssignmentQC');
      types         types | here/show_content_types | default_types;
      raw_items     python: here.contentValues(filter={'portal_type': types });
-     items         python: auth_filter(raw_items, skip='View');
-     mtool         here/portal_membership;"
+     items         python: auth_filter(raw_items, skip='View');"
      tal:condition="items">
      
      <table class="listing">
@@ -39,8 +38,7 @@
       
       <tbody>
        <tal:block tal:repeat="item items">
-	<tr tal:define="creator             python: mtool.getMemberById(item.Creator());
-	                oddrow              repeat/item/odd;
+	<tr tal:define="oddrow              repeat/item/odd;
 	                item_type           item/portal_type;
 	                item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
 	                item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
@@ -51,7 +49,7 @@
 	  <span tal:replace="python: here.toPortalTime(item.getDatetime(), 1)" />
 	 </td>
 
-	 <td tal:content="python: here.sortable_name(creator)"/>
+	 <td tal:content="python: item.getCreatorFullName()"/>
 
 	 <td>
 	  <span i18n:translate=""

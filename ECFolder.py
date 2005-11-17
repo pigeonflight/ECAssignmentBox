@@ -72,6 +72,7 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
                                            ('ECAssignmentBox',
                                             'ECAssignmentBoxQC')})
         students = {}
+        mtool = self.portal_membership
         wtool = self.portal_workflow
         wf_states = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
         n_states = len(wf_states)
@@ -86,9 +87,15 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
             
                 for assignment in boxsummary:
                     if assignment.Creator() not in students:
-                        students[assignment.Creator()] = [0 for i in range(n_states)]
+                        students[assignment.Creator()] = [0 for i
+                                                          in range(n_states)]
+                        # Store the full name here because it's
+                        # difficult to get from a page template
+                        students[assignment.Creator()].append(
+                            assignment.getCreatorFullName())
                     
-                    students[assignment.Creator()][wf_states.index(wtool.getInfoFor(assignment, 'review_state', ''))] += 1
+                    students[assignment.Creator()][wf_states.index(
+                        wtool.getInfoFor(assignment, 'review_state', ''))] += 1
 
         return students
 

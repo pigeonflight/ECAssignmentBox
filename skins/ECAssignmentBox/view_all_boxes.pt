@@ -21,39 +21,60 @@
          tal:condition="here/getDescription"/>
 
      <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
-                      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
+                      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC', 'ECFolder');
                       types         types | here/show_content_types | default_types;
                       raw_items     python: here.contentValues(filter={'portal_type': types });
-                      items         python: auth_filter(raw_items, skip='View');"
-
+                      items         python: auth_filter(raw_items, skip='View');
+     use_view_action site_properties/typesUseViewActionInListings;"
        tal:condition="items"
      >
      
      <p/>
      
      <tal:block tal:repeat="item items">
-       <div tal:define="item_wf_state item/review_state | python: wtool.getInfoFor(item, 'review_state', '');"
-	        tal:condition="python: (item_wf_state == 'published')">
+     <div tal:define="item_wf_state item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
+                      item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+                      item_url item/getURL|item/absolute_url;
+		      item_id item/getId|item/id;
+		      item_title_or_id item/pretty_title_or_id;
+		      item_description item/Description;
+		      item_type item/portal_type;
+		      item_type_class python: 'contenttype-' + normalizeString(item_type);"
+          tal:condition="python: (item_wf_state == 'published')">
      	
-       <h3 tal:content="item/title_or_id"/>
-      
-       <div class="documentByLine"
-         tal:condition="python: item.submission_period_end and item.isEffective() and not item.hasExpired()">
-         <span i18n:translate="submission_period_ends">
-           Submission period ends: 
-         </span>
-         <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
-       </div>
+      <h3>
+       <span tal:attributes="class item_type_class"
+	tal:condition="python:item_type != 'Link'">
+	<a href="#" 
+	  tal:attributes="href python:test(item_type in use_view_action, item_url+'/view', item_url+'/');
+	                  class string:$item_wf_state_class visualIconPadding"
+	  tal:content="item_title_or_id">
+	 Item Title
+	</a>
+       </span>
+      </h3>
+
+      <tal:block tal:condition="python: item_type != 'ECFolder'">
+      <div class="documentByLine"
+       tal:condition="python: item.submission_period_end and item.isEffective() and not item.hasExpired()">
+       <span i18n:translate="submission_period_ends">
+	Submission period ends: 
+       </span>
+       <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
+      </div>
+     </tal:block>
       
        <div class="documentDescription"
-         tal:content="structure item/getDescription"
-         tal:condition="item/getDescription"/>
-      
+         tal:content="structure item_description"
+         tal:condition="item_description"/>
+
+      <tal:block tal:condition="python: item_type != 'ECFolder'">      
        <div class="field" tal:content="structure item/getAssignment_text"/>
       
        <p>▶ <a href="/view" tal:attributes="href item/absolute_url" i18n:translate="label_work_on">
          Work on this assignment</a>
        </p>
+     </tal:block>
 
        <hr/>
        </div>

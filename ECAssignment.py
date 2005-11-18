@@ -18,6 +18,7 @@ import re
 import tempfile
 import time, random, md5, socket
 
+import util
 
 # resourcestring
 REGEX_FAILED = '(?m)Falsifiable, after (\d+) tests?:\n(.*)'
@@ -169,23 +170,8 @@ class ECAssignment(BaseContent):
         field.set(self, value, **kw)
 
     def getCreatorFullName(self):
-        creator_id = self.Creator()
-        creator = self.portal_membership.getMemberById(creator_id)
-
-        try:
-            sn        = creator.getProperty('sn')
-            givenName = creator.getProperty('givenName')
-        except:
-            fullname = creator.getProperty('fullname', '')
-
-            if fullname.find(' ') == -1:
-                return fullname
-
-            sn = fullname[fullname.rfind(' '):]
-            givenName = fullname[0:fullname.find(' ')]
-
-        return sn + ', ' + givenName
-
+        return util.getFullNameById(self, self.Creator())
+    
     def getAsPlainText(self):
         """Return the file contents as plain text.
         Cf. <http://www.bozzi.it/plone/>,

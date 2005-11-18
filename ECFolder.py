@@ -13,6 +13,8 @@ from Products.CMFCore import permissions
 from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
 from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
 
+import util
+
 LocalSchema = Schema((
     TextField(
         'description',
@@ -47,58 +49,81 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
     archetype_name = "ECFolder"
     content_icon = "folder-box-16.png"
 
-    def collect(self):
-        folders = self.contentValues(filter={'portal_type': ('ECFolder')})
-        students = self.summarizeByStudent()
-
+    def summarize(self, published=True):
         wtool = self.portal_workflow
-        students['_wfstates'] = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
-        
-        for folder in folders:
-            sum = folder.summarizeByStudent()
-            for student in sum.keys():
-                if student in students:
-                    i = 0
-                    for i in range(len(sum[student]) - 1):
-                        students[student][i] += sum[student][i]
-                else:
-                    students[student] = sum[student]
-                
-            
-        return students
-
-    def summarizeByStudent(self):
-        boxes = self.contentValues(filter={'portal_type':
+        items = self.contentValues(filter={'portal_type':
                                            ('ECAssignmentBox',
-                                            'ECAssignmentBoxQC')})
-        students = {}
-        mtool = self.portal_membership
-        wtool = self.portal_workflow
-        wf_states = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+                                            'ECAssignmentBoxQC',
+                                            'ECFolder')})
+        wf_states = self.getWfStates()
         n_states = len(wf_states)
+        students = {}
         
-        if '_boxes' not in students:
-            students['_boxes'] = [0 for i in range(n_states)]
+        for item in items:
+            if published:
+                review_state = wtool.getInfoFor(item, 'review_state')
+                if review_state not in ('published'):
+                    continue
+            if item.portal_type == 'ECFolder':
+                sum = item.summarize(published)
 
-        for box in boxes:
-            if wtool.getInfoFor(box, 'review_state', '') == 'published':
-                students['_boxes'][0] += 1
-                boxsummary = box.getAssignmentsSummary()
-            
+                for student in sum.keys():
+                    if student in students:
+                        i = 0
+                        for i in range(len(sum[student]) - 1):
+                            students[student][i] += sum[student][i]
+                    else:
+                        students[student] = sum[student]
+            else:
+                boxsummary = item.getAssignmentsSummary()
+                
                 for assignment in boxsummary:
                     if assignment.Creator() not in students:
                         students[assignment.Creator()] = [0 for i
                                                           in range(n_states)]
-                        # Store the full name here because it's
-                        # difficult to get from a page template
-                        students[assignment.Creator()].append(
-                            assignment.getCreatorFullName())
-                    
                     students[assignment.Creator()][wf_states.index(
                         wtool.getInfoFor(assignment, 'review_state', ''))] += 1
-
+        
         return students
+    
+    def rework(self, dict):
+        array = []
+        mtool = self.portal_membership
 
+        for key in dict:
+            array.append((key, util.getFullNameById(self, key), dict[key]))
+            
+        array.sort(lambda a, b: cmp(a[1], b[1]))
+        return array
+
+    def getWfStates(self):
+        wtool = self.portal_workflow
+        return wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+
+    def countContainedBoxes(self, published=True):
+        """Count the assignment boxes contained in this folder and its
+        subfolders.  By default, only published boxes and folders are
+        considered.  Set published=False to count all boxes.
+        """
+        n_boxes = 0
+        wtool = self.portal_workflow
+        items = self.contentValues(filter={'portal_type':
+                                           ('ECAssignmentBox',
+                                            'ECAssignmentBoxQC',
+                                            'ECFolder')})
+        for item in items:
+            if published:
+                review_state = wtool.getInfoFor(item, 'review_state')
+                if review_state not in ('published'):
+                    continue
+            if item.portal_type == 'ECFolder':
+                n_boxes += item.countContainedBoxes(published)
+            else:
+                n_boxes += 1
+        
+        return n_boxes
+
+    ###########################################################################
 
     actions = (
         {

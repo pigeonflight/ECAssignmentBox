@@ -10,7 +10,8 @@
    <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
   </metal:block>
 
-  <metal:main fill-slot="main">
+  <metal:main fill-slot="main"
+   tal:define="n_boxes python: here.countContainedBoxes()">
    <tal:main-macro metal:define-macro="main">
 
     <div metal:use-macro="here/document_actions/macros/document_actions">
@@ -20,8 +21,18 @@
     <h1 class="documentFirstHeading"
      i18n:translate="label_submissions">Students</h1>
 
+    <p i18n:translate="label_n_boxes">Published assignment boxes inside this
+     folder: <span tal:replace="n_boxes"/></p>
+
     <!--
-    <div tal:define="items here/collect" tal:repeat="item items">
+    <div tal:define="dict python: here.summarize();
+     items python: here.rework(dict)">
+     <tal:block tal:repeat="item items">
+     <p tal:content="python: item"/>
+     </tal:block>
+    </div>
+
+    <div tal:define="items here/summarize" tal:repeat="item items">
      <p tal:content="python: item + ': ' + str(items[item])"/>
     </div>
     -->
@@ -30,30 +41,26 @@
      <thead>
       <tr>
        <th i18n:translate="label_user">User</th>
-       <tal:block tal:define="items here/collect;"
-	tal:repeat="state python: items['_wfstates']">
+       <tal:block tal:repeat="state python: here.getWfStates()">
 	<th tal:content="state"
 	 tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
        </tal:block>
       </tr>
      </thead>
 
-     <tbody tal:define="items here/collect;
-      sorted_items python: sequence.sort(items);">
-      <tal:block tal:repeat="student sorted_items">
-       <tr tal:condition="python: not student.startswith('_')"
-	   tal:define="oddrow repeat/student/odd;"
+     <tbody tal:define="items python: here.rework(here.summarize());">
+      <tal:block tal:repeat="student items">
+       <tr tal:define="oddrow repeat/student/odd;"
 	   tal:attributes="class python: test(oddrow, 'odd', 'even')"
 	>
 	<td
-	 tal:content="python: items[student][-1]"/>
+	 tal:content="python: student[1]"/>
 
-       <tal:block
-	tal:define="sums python: items[student]"
-	tal:repeat="state python: sums[0:-1]">
+       <tal:block tal:repeat="state python: student[2]">
 	<td>
 	 <span tal:content="state"/>
-	 (<span tal:content="python: round(float(state)/items['_boxes'][0] * 100, 2)"/>&nbsp;%)</td>
+	 (<span tal:content="python: round(float(state)/n_boxes * 100,
+	 2)"/>&nbsp;%)</td>
        </tal:block> 
       </tr>
 

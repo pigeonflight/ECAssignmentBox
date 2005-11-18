@@ -22,7 +22,7 @@
 
     <div tal:define="
      auth_filter   nocall: modules/ZTUtils/LazyFilter;
-     default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
+     default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC', 'ECFolder');
      types         types | here/show_content_types | default_types;
      raw_items     python: here.contentValues(filter={'portal_type': types});
      items         python: auth_filter(raw_items, skip='View');"
@@ -32,12 +32,82 @@
      <div tal:define="item_wf_state item/review_state | python: wtool.getInfoFor(item, 'review_state', '');"
       tal:condition="python: (item_wf_state == 'published')">
 
+     <tal:block tal:condition="python: item.portal_type == 'ECFolder'">
       <h3>
+       <a href="item_url"
+	tal:attributes="
+	href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('all_assignments'))"
+	tal:content="item/title"/>
+      </h3>
+
+      <div tal:define="
+       auth_filter   nocall: modules/ZTUtils/LazyFilter;
+       default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC');
+       types         types | here/show_content_types | default_types;
+       raw_items     python: item.contentValues(filter={'portal_type': types});
+       subitems      python: auth_filter(raw_items, skip='View');">
+      <tal:block tal:condition="subitems" tal:repeat="subitem subitems">
+       <div tal:define="item_wf_state subitem/review_state | python: wtool.getInfoFor(subitem, 'review_state', '');"
+	tal:condition="python: (item_wf_state == 'published')">
+
+       <h4>
+	<a href="item_url"
+	 tal:attributes="
+	 href python: '%s/%s' % (subitem.absolute_url(), subitem.getTypeInfo().getActionById('view'))"
+	 tal:content="subitem/title"/>
+       </h4>
+
+      <table class="listing">
+       <thead>
+	<tr>
+	 <th i18n:translate="label_date">Date</th>
+	 <th i18n:translate="label_user">User</th>
+	 <th i18n:translate="label_state">State</th>
+	 <th i18n:translate="label_mark">Grade</th>
+	 <th i18n:translate="label_actions">Actions</th>
+	</tr>
+       </thead>
+
+       <tbody tal:define="summary subitem/getAssignmentsSummary;
+	wtool here/portal_workflow;">
+	<tal:block tal:repeat="assignment summary">
+	 <tr tal:define="oddrow repeat/assignment/odd;
+	  wf_state_class python: 'state-' + putils.normalizeString(wtool.getInfoFor(assignment, 'review_state', ''));"
+	  tal:attributes="class python: test(oddrow, 'odd', 'even')">
+	  <td tal:content="python: here.toPortalTime(assignment.getDatetime(), True)"/>
+	  <td tal:content="python: assignment.getCreatorFullName()">
+	  </td>
+	  <td>
+	   <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"
+	    tal:attributes="class wf_state_class"/>
+	  </td>
+	  <td>
+	   <span tal:content="python: assignment.getMark()"/>
+	  </td>
+	  <td>
+	   <a href="item_url"
+	    tal:attributes="href python: assignment.reference_url()"
+	    i18n:translate="label_action_view">[View]</a>
+	  </td>
+	 </tr>
+	</tal:block>
+       </tbody>
+
+      </table>
+     </div>
+       
+       </tal:block>
+      </div>
+      <hr/>
+     </tal:block>
+
+     <tal:block tal:condition="python: item.portal_type != 'ECFolder'">
+      <h4>
        <a href="item_url"
 	tal:attributes="
 	href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
 	tal:content="item/title"/>
-      </h3>
+      </h4>
 
       <table class="listing">
        <thead>
@@ -76,6 +146,10 @@
        </tbody>
 
       </table>
+
+     </tal:block>
+
+
      </div>
     </tal:block>
    </div>

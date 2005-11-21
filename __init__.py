@@ -26,8 +26,10 @@ registerDirectory(SKINS_DIR, GLOBALS)
 
 def initialize(context):
     # Import Types here to register them
-    #import ECAssignmentBox, ECAssignmentBoxQC, ECAssignment, ECAssignmentQC
     import ECFolder, ECAssignmentBox, ECAssignmentBoxQC, ECSpoolerConnection
+
+    from AccessControl import ModuleSecurityInfo
+    from AccessControl import allow_module, allow_class, allow_type
 
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),
@@ -41,3 +43,14 @@ def initialize(context):
         fti                = ftis,
         ).initialize(context)
 
+    # Tools
+    import ECABTool
+    from Products.CMFPlone.utils import ToolInit
+
+    tools = (ECABTool.ECABTool,)
+    
+    ToolInit(PROJECTNAME + ' Tool',
+             tools = tools,
+             product_name = PROJECTNAME,
+             icon = 'tool.png'
+             ).initialize(context)

@@ -1,0 +1,23 @@
+/* <dtml-with base_properties> (do not remove this :) 
+   <dtml-call "REQUEST.set('portal_url', portal_url())"> (not this either :) */
+
+.state-submitted {
+    color: rgb(77, 77, 77);
+}
+.state-pending {
+    color: orange;
+}
+.state-accepted {
+    color: rgb(0, 134, 139);
+}
+.state-rejected {
+    color: rgb(255,  99,  71);
+}
+.state-superseded {
+    color: gray;
+}
+.state-graded {
+    color: green;
+}
+
+/* </dtml-with> */

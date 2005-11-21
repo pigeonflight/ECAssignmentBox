@@ -23,8 +23,19 @@ def install(self):
     install_workflow(self, out)
     
     print >> out, "Successfully installed %s." % PROJECTNAME
-    return out.getvalue()
 
+    # continue with my custom tool
+    if hasattr(self, 'ecab_utils'):
+        self.manage_delObjects(['ecab_utils'])
+        out.write('Deleting old ecab_utils; make sure you repeat customizations.')
+    addTool = self.manage_addProduct[PROJECTNAME].manage_addTool
+    addTool(TOOL_META)
+    # set title of tool:
+    tool = getToolByName(self, TOOL_NAME)
+    tool.title = TOOL_TITLE
+    print >> out, "Added ecab_utils to the portal root folder.\n"
+
+    return out.getvalue()
 
 def install_workflow(self, out):
     wf_tool = getToolByName(self, 'portal_workflow')

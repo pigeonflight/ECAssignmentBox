@@ -7,7 +7,7 @@
 
  <body>
   <metal:block fill-slot="css_slot">
-   <link rel="stylesheet" type="text/css" href="ecabstyles.css"/>
+   <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
   </metal:block>
 
   <metal:main fill-slot="main"
@@ -53,8 +53,10 @@
        <tr tal:define="oddrow repeat/student/odd;"
 	   tal:attributes="class python: test(oddrow, 'odd', 'even')"
 	>
-	<td
-	 tal:content="python: student[1]"/>
+	<td>
+	 <a tal:content="python: student[1]"
+	  tal:attributes="href python: 'all_assignments?userName=%s' % student[0]"></a>
+	</td>
 
        <tal:block tal:repeat="state python: student[2]">
 	<td>

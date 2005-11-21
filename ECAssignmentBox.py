@@ -152,7 +152,7 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         
         return True
 
-    def getAssignmentsSummary(self):
+    def getAssignmentsSummary(self, id=None):
         items = self.contentValues(filter={'portal_type':
                                            self.allowed_content_types})
         items.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
@@ -162,6 +162,8 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         
         for item in items:
             if (current_user.checkPermission('View', item)):
+                if id and item.Creator() != id:
+                    continue
                 summary.append(item)
         return summary
 

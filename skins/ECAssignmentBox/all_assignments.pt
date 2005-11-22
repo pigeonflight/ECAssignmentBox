@@ -20,9 +20,10 @@
     <div tal:define="
      global ecab_utils nocall:portal/ecab_utils;
      userName      request/userName|nothing;
-     getHomeUrl nocall:mtool/getHomeUrl;
+     getHomeUrl    nocall:mtool/getHomeUrl;
      getPersonalPortrait nocall:mtool/getPersonalPortrait;
-     email python:request.get('email', member.getProperty('email',''));
+     searchMembers nocall: mtool/searchMembers;
+     email         python:request.get('email', member.getProperty('email',''));
      auth_filter   nocall: modules/ZTUtils/LazyFilter;
      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC', 'ECFolder');
      types         types | here/show_content_types | default_types;
@@ -57,8 +58,8 @@
 
        <div>
 	<p><b>Name:</b> <span tal:content="python: ecab_utils.getFullNameById(userName)"/></p>
-	<p><b>E-Mail:</b> <a tal:attributes="href string: mailto:${email}"
-	  tal:content="email"/></p>
+	<p><b>E-Mail:</b> <a tal:attributes="href python: searchMembers('id', userName)[0]['email']"
+	  tal:content="python: searchMembers('id', userName)[0]['email']"/></p>
        </div>
 
        <div class="visualClear"/>

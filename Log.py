@@ -29,11 +29,17 @@ class MyLog:
     _DEFAULT_DATETIME_FORMAT = "%Y-%m-%d %X"
 
     # Default Constructor
-    def __init__(self, level=LOG_INFO, stdFile=_DEFAULT_STD_LOG_FILE, errorFile=_DEFAULT_ERROR_LOG_FILE):
+    def __init__(self, level=LOG_INFO, stdFile=_DEFAULT_STD_LOG_FILE, errorFile=_DEFAULT_ERROR_LOG_FILE, path=None):
         self.level = level
         self.stdFile = stdFile
         self.errorFile = errorFile
         self.datetimeFormat = self._DEFAULT_DATETIME_FORMAT
+        
+        if not path:
+            self.path = os.path.dirname(__file__)
+        else:
+            self.path = path
+
 
     # Public Methods
     def info(self, msg):
@@ -67,7 +73,7 @@ class MyLog:
         #2005-04-13 18:35:00.000 [DEBUG] - 
         prefix = self._datetime() + " " + level
         
-        file = open(os.path.dirname(__file__) + '/' + fileName, "a")
+        file = open(self.path + '/' + fileName, "a")
         file.write(prefix)
         try:
             #file.write(msg.encode('utf-8'))

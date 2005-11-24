@@ -20,8 +20,10 @@
          tal:content="structure here/getDescription"
          tal:condition="here/getDescription"/>
 
-     <div tal:define="auth_filter   nocall: modules/ZTUtils/LazyFilter;
-                      default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC', 'ECFolder');
+     <div tal:define="
+          global ecab_utils nocall:portal/ecab_utils;
+          auth_filter   nocall: modules/ZTUtils/LazyFilter;
+                      default_types here/allowed_content_types;
                       types         types | here/show_content_types | default_types;
                       raw_items     python: here.contentValues(filter={'portal_type': types });
                       items         python: auth_filter(raw_items, skip='View');
@@ -42,7 +44,6 @@
 		      item_type_class python: 'contenttype-' + normalizeString(item_type);"
           tal:condition="python: (item_wf_state == 'published')">
      	
-      <h3>
        <span tal:attributes="class item_type_class"
 	tal:condition="python:item_type != 'Link'">
 	<a href="#" 
@@ -52,9 +53,8 @@
 	 Item Title
 	</a>
        </span>
-      </h3>
 
-      <tal:block tal:condition="python: item_type != 'ECFolder'">
+      <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">
       <div class="documentByLine"
        tal:condition="python: item.submission_period_end and item.isEffective() and not item.hasExpired()">
        <span i18n:translate="submission_period_ends">
@@ -68,10 +68,10 @@
          tal:content="structure item_description"
          tal:condition="item_description"/>
 
-      <tal:block tal:condition="python: item_type != 'ECFolder'">      
+      <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">      
        <div class="field" tal:content="structure item/getAssignment_text"/>
       
-       <p>▶ <a href="/view" tal:attributes="href item/absolute_url" i18n:translate="label_work_on">
+       <p>&#x25B6; <a href="/view" tal:attributes="href item/absolute_url" i18n:translate="label_work_on">
          Work on this assignment</a>
        </p>
      </tal:block>

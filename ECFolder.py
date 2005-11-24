@@ -51,10 +51,9 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
 
     def summarize(self, published=True):
         wtool = self.portal_workflow
-        items = self.contentValues(filter={'portal_type':
-                                           ('ECAssignmentBox',
-                                            'ECAssignmentBoxQC',
-                                            'ECFolder')})
+        items = self.contentValues(filter={'portal_type': 
+                                            self.allowed_content_types})
+
         wf_states = self.getWfStates()
         n_states = len(wf_states)
         students = {}
@@ -74,7 +73,8 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
                             students[student][i] += sum[student][i]
                     else:
                         students[student] = sum[student]
-            else:
+
+            elif self.ecab_utils.isAssignmentBoxType(item):
                 boxsummary = item.getAssignmentsSummary()
                 
                 for assignment in boxsummary:
@@ -108,9 +108,8 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
         n_boxes = 0
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type':
-                                           ('ECAssignmentBox',
-                                            'ECAssignmentBoxQC',
-                                            'ECFolder')})
+                                            self.allowed_content_types})
+
         for item in items:
             if published:
                 review_state = wtool.getInfoFor(item, 'review_state')
@@ -118,7 +117,7 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
                     continue
             if item.portal_type == 'ECFolder':
                 n_boxes += item.countContainedBoxes(published)
-            else:
+            elif self.ecab_utils.isAssignmentBoxType(item):
                 n_boxes += 1
         
         return n_boxes

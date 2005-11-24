@@ -26,7 +26,7 @@ registerDirectory(SKINS_DIR, GLOBALS)
 
 def initialize(context):
     # Import Types here to register them
-    import ECFolder, ECAssignmentBox, ECAssignmentBoxQC, ECSpoolerConnection
+    import ECFolder, ECAssignmentBox
 
     from AccessControl import ModuleSecurityInfo
     from AccessControl import allow_module, allow_class, allow_type

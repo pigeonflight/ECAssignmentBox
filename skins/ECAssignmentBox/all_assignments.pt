@@ -25,7 +25,7 @@
      searchMembers nocall: mtool/searchMembers;
      email         python:request.get('email', member.getProperty('email',''));
      auth_filter   nocall: modules/ZTUtils/LazyFilter;
-     default_types python:('ECAssignmentBox', 'ECAssignmentBoxQC', 'ECFolder');
+     default_types python: here.allowed_content_types;
      types         types | here/show_content_types | default_types;
      raw_items     python: here.contentValues(filter={'portal_type': types});
      items         python: auth_filter(raw_items, skip='View');
@@ -142,7 +142,7 @@
 	   <td tal:content="python: here.toPortalTime(assignment.getDatetime(), True)"/>
 	   <td>
 	    <a tal:attributes="href python: 'all_assignments?userName=%s' % assignment.Creator()"
-	     tal:content="python: assignment.getCreatorFullName()"></a>
+	     tal:content="python: ecab_utils.getFullNameById(assignment.Creator())"></a>
 	   </td>
 	   <td>
 	    <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"

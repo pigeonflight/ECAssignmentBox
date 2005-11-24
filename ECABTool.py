@@ -22,6 +22,9 @@ class ECABTool(UniqueObject, SimpleItem):
         except:
             fullname = member.getProperty('fullname', '')
             
+            if fullname == '':
+                return id
+            
             if fullname.find(' ') == -1:
                 return fullname
             

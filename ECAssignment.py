@@ -8,29 +8,40 @@
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import CMFCorePermissions
+
+from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import updateActions, updateAliases
+from Products.ATContentTypes.content.base import translateMimetypeAlias
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.ATContentTypes.interfaces import IATDocument
+
 # The following two imports are for getAsPlainText()
 from Products.CMFCore.utils import getToolByName
 from Products.PortalTransforms.utils import TransformException
-from config import ICONMAP, I18N_DOMAIN
+
+from config import PROJECTNAME, ICONMAP, I18N_DOMAIN
 from urllib import quote
-import os
+# import os
 import re
-import tempfile
+# import tempfile
 import time, random, md5, socket
 
 import util
 
 # resourcestring
-REGEX_FAILED = '(?m)Falsifiable, after (\d+) tests?:\n(.*)'
-REGEX_PASSED = 'passed (\d+)'
-REGEX_LINENUMBER = ':\d+'
+# REGEX_FAILED = '(?m)Falsifiable, after (\d+) tests?:\n(.*)'
+# REGEX_PASSED = 'passed (\d+)'
+# REGEX_LINENUMBER = ':\d+'
 
-DEFAULT_MODEL_MODULE_NAME = '#Model#'
-DEFAULT_STUDENT_MODULE_NAME =  '#Student#'
+# DEFAULT_MODEL_MODULE_NAME = '#Model#'
+# DEFAULT_STUDENT_MODULE_NAME =  '#Student#'
 
 
 # alter default fields -> hide title and description
-localBaseSchema = BaseSchema.copy()
+localBaseSchema = ATContentTypeSchema.copy()
 localBaseSchema['title'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
@@ -90,18 +101,6 @@ AssignmentSchema = localBaseSchema + Schema((
     ),
 
     TextField(
-        'auto_feedback',
-        searchable = True,
-        widget = ComputedWidget(
-            label = "Auto feedback",
-            label_msgid = "label_auto_feedback",
-            description = "The automatic feedback for this assignment.",
-            description_msgid = "help_auto_feedback",
-            i18n_domain = I18N_DOMAIN,
-        ),
-    ),
-
-    TextField(
         'feedback',
         searchable = True,
         default_content_type = 'text/structured',
@@ -129,10 +128,15 @@ AssignmentSchema = localBaseSchema + Schema((
         ),
     ),
 ))
+finalizeATCTSchema(AssignmentSchema)
 
-
-class ECAssignment(BaseContent):
+class ECAssignment(ATCTContent, HistoryAwareMixin):
     """The ECAssignment class"""
+
+    __implements__ = (ATCTContent.__implements__,
+                      IATDocument,
+                      HistoryAwareMixin.__implements__,
+                     )
 
     security = ClassSecurityInfo()
 
@@ -140,6 +144,10 @@ class ECAssignment(BaseContent):
     schema = AssignmentSchema
     meta_type = "ECAssignment"
     archetype_name = "Assignment"
+
+    default_view   = 'assignment_view'
+    immediate_view = 'assignment_view'
+
     content_icon = "sheet-16.png"
     global_allow = False
 
@@ -199,29 +207,17 @@ class ECAssignment(BaseContent):
             else:
                 return None
 
-    actions = (
-        {
-        'action':      "string:${object_url}/assignment_view",
-        'category':    "object",
-        'id':          'view',
-        'name':        'View',
-        'permissions': ("View",),
-        'condition'  : 'python:1'
-        },
+    actions = updateActions(ATCTContent,
+                            HistoryAwareMixin.actions)
 
-        {
-        'action':      "string:${object_url}/assignment_edit",
-        'category':    "object",
-        'id':          'edit',
-        'name':        'Edit',
-        'permissions': ("Edit",),
-        'condition'  : 'python:1'
-        },
-    )
+    aliases = updateAliases(ATCTContent, {
+        'view': 'assignment_view',
+        'edit': 'assignment_edit',
+        })
 
-registerType(ECAssignment)
+registerATCT(ECAssignment, PROJECTNAME)
 
-# some hepler methods
+# some helper methods
 
 def uuid(*args):
     """

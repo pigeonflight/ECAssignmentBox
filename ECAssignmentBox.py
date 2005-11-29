@@ -117,6 +117,17 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
             roles.append('Reviewer')
             self.manage_setLocalRoles(creator, roles)
 
+        # Create a user-defined role "ECAssignment Viewer".  This role
+        # has the View permission in certain states (defined in
+        # ECAssignmentWorkflow).  This can be used for model
+        # solutions: (1) Submit an assignment with the model
+        # solution. (2) Use the "Sharing" tab to assign the role
+        # "ECAssignment Viewer" to the users or groups who should be
+        # allowed to view the assignment.
+        if 'ECAssignment Viewer' not in self.valid_roles():
+            self.manage_defined_roles('Add Role',
+                                      {'role': 'ECAssignment Viewer'})
+
     security.declarePublic('hasExpired')
     def hasExpired(self):
         now = DateTime()

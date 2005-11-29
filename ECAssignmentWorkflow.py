@@ -17,6 +17,8 @@ from Products.CMFCore.WorkflowTool import addWorkflowFactory
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
 from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, TRIGGER_USER_ACTION, TRIGGER_WORKFLOW_METHOD
 
+from Products.CMFCore.permissions import ManageProperties
+
 def setupAssignment_workflow(wf):
     """Assignment Workflow definition"""
 
@@ -41,6 +43,7 @@ def setupAssignment_workflow(wf):
         wf.variables.addVariable(v)
 
     for p in ('Access contents information',
+              ManageProperties,
               'Modify portal content',
               'View',
               'List folder contents'):
@@ -57,6 +60,12 @@ def setupAssignment_workflow(wf):
                         'Reviewer',
                         'Manager'])
     sdef.setPermission('Modify portal content',
+                       0,
+                       [#'Owner',
+                        'Reviewer',
+                        'Manager'
+                        ])
+    sdef.setPermission(ManageProperties,
                        0,
                        [#'Owner',
                         'Reviewer',
@@ -84,6 +93,12 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Reviewer',
                         'Manager'])
+    sdef.setPermission(ManageProperties,
+                       0,
+                       [#'Owner',
+                        'Reviewer',
+                        'Manager'
+                        ])
     sdef.setPermission('View',
                        0,
                        ['Owner',
@@ -110,7 +125,8 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Viewer'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
@@ -132,7 +148,8 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Viewer'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
@@ -150,6 +167,12 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Reviewer',
                         'Manager'])
+    sdef.setPermission(ManageProperties,
+                       0,
+                       [#'Owner',
+                        'Reviewer',
+                        'Manager'
+                        ])
     sdef.setPermission('View',
                        0,
                        ['Owner',
@@ -176,7 +199,8 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Viewer'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',

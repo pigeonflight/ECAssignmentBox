@@ -33,6 +33,18 @@ class ECABTool(UniqueObject, SimpleItem):
             
         return sn + ', ' + givenName
 
+    security.declarePublic('getUserPropertyById')
+    def getUserPropertyById(self, id, property=''):
+        mtool = self.portal_membership
+        member = mtool.getMemberById(id)
+        
+        try:
+            value = member.getProperty(property)
+        except:
+            return None
+        
+        return value
+
     security.declarePublic('isAssignmentBoxType')
     def isAssignmentBoxType(self, obj):
         return hasattr(obj, 'getAssignmentsSummary')

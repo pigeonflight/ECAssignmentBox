@@ -37,12 +37,27 @@ AssignmentBoxSchema = Schema((
         widget=RichWidget(
             label = 'Assignment text',
             label_msgid = 'label_assignment_text',
-            description = 'Enter text and hints for the assignment.',
+            description = 'Enter text anf hints for the assignment.',
             description_msgid = 'help_assignment_text',
             i18n_domain = I18N_DOMAIN,
-            rows=12,
+            rows=10,
         ),
     ),
+
+#    TextField(
+#        'assignment_hint',
+#        default_output_type = 'text/html',
+#        default_content_type = 'text/structured',
+#        allowable_content_types = TEXT_TYPES,
+#        widget=RichWidget(
+#            label = 'Assignment hint',
+#            label_msgid = 'label_assignment_hint',
+#            description = 'Enter hints for the assignment.',
+#            description_msgid = 'help_assignment_hint',
+#            i18n_domain = I18N_DOMAIN,
+#            rows=8,
+#        ),
+#    ),
 
     DateTimeField(
         'submission_period_start',

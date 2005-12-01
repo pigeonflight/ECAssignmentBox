@@ -145,8 +145,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     meta_type = "ECAssignment"
     archetype_name = "Assignment"
 
-    default_view   = 'assignment_view'
-    immediate_view = 'assignment_view'
+    #default_view   = 'assignment_view'
+    #immediate_view = 'assignment_view'
 
     content_icon = "sheet-16.png"
     global_allow = False

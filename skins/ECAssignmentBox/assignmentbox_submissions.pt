@@ -62,7 +62,7 @@
               <span tal:condition="not: item_state_title">&nbsp;</span>
             </td>
 
-            <td>
+            <td style="text-align: right">
               <span tal:condition="python: (item_wf_state == 'graded') and (item.getMark())"
                   tal:content="item/mark"/>
             </td>

@@ -22,26 +22,18 @@ from Products.ATContentTypes.interfaces import IATDocument
 from Products.CMFCore.utils import getToolByName
 from Products.PortalTransforms.utils import TransformException
 
-from config import PROJECTNAME, ICONMAP, I18N_DOMAIN
+from config import PROJECTNAME, ICONMAP, TEXT_TYPES, I18N_DOMAIN
 from urllib import quote
-# import os
 import re
-# import tempfile
 import time, random, md5, socket
 
 import util
 
-# resourcestring
-# REGEX_FAILED = '(?m)Falsifiable, after (\d+) tests?:\n(.*)'
-# REGEX_PASSED = 'passed (\d+)'
-# REGEX_LINENUMBER = ':\d+'
-
-# DEFAULT_MODEL_MODULE_NAME = '#Model#'
-# DEFAULT_STUDENT_MODULE_NAME =  '#Student#'
-
-
 # alter default fields -> hide title and description
 localBaseSchema = ATContentTypeSchema.copy()
+
+localBaseSchema['title'].default_method = '_generateTitle'
+
 localBaseSchema['title'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
@@ -51,6 +43,8 @@ localBaseSchema['description'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
 }
+
+
 
 #    StringField(
 #        'user_id',
@@ -105,9 +99,7 @@ AssignmentSchema = localBaseSchema + Schema((
         searchable = True,
         default_content_type = 'text/structured',
         default_output_type = 'text/html',
-        allowable_content_types = ('text/structured',
-                                   'text/html',
-                                   'text/plain',),
+        allowable_content_types = TEXT_TYPES,
         widget = TextAreaWidget(
             label = "Manual feedback",
             label_msgid = "label_feedback",
@@ -128,6 +120,7 @@ AssignmentSchema = localBaseSchema + Schema((
         ),
     ),
 ))
+
 finalizeATCTSchema(AssignmentSchema)
 
 class ECAssignment(ATCTContent, HistoryAwareMixin):
@@ -145,8 +138,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     meta_type = "ECAssignment"
     archetype_name = "Assignment"
 
-    #default_view   = 'assignment_view'
-    #immediate_view = 'assignment_view'
+    default_view   = 'assignment_view'
+    immediate_view = 'assignment_view'
 
     content_icon = "sheet-16.png"
     global_allow = False
@@ -159,9 +152,12 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         assignments = self.contentValues(filter = {'Creator': item.Creator()})
         if assignments:
             for a in assignments:
-                wf = wtool.getWorkflowsFor(a)[0]
-                if wf.isActionSupported(a, 'supersede'):
-                    wtool.doActionFor(a, 'supersede', comment='superseded')
+                if a != self:
+                    wf = wtool.getWorkflowsFor(a)[0]
+                    if wf.isActionSupported(a, 'supersede'):
+                        wtool.doActionFor(a, 'supersede',
+                                          comment='Superseded by %s'
+                                          % self.getId())
 
 #     security.declareProtected(CMFCorePermissions.View, 'index_html')
 #     def index_html(self, REQUEST, RESPONSE):
@@ -176,6 +172,10 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         """TODO: add useful comments"""
         field = self.getField(name)
         field.set(self, value, **kw)
+
+    security.declarePrivate('_generateTitle')
+    def _generateTitle(self):
+        return self.getCreatorFullName()
 
     def getCreatorFullName(self):
         return util.getFullNameById(self, self.Creator())

@@ -79,7 +79,8 @@ if msg == '':
     id = str(memberId) + '.' + now.strftime('%Y%m%d') + '.' + now.strftime('%H%M%S')
 
     # create the assignment object
-    context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
+    #context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
+    context.invokeFactory(context.allowed_content_types[0], id)
     qca = getattr(context, id)
 
     qca.setField('source', source)
@@ -94,10 +95,10 @@ if msg == '':
         # TOOD: get MIME-type and add extension
         filename = id
 
-    qca.setFilename(filename , key='file')
+    qca.setFilename(filename, key='file')
     
-    qca.editMetadata(title=id)
-    qca.editMetadata(language='') # '' means "language-neutral"
+    # qca.editMetadata(title=id)
+    # qca.editMetadata(language='') # '' means "language-neutral"
 
     # evaluate only in case of ECAssignmentQC
     if contextType == EC_ASSIGNMENT_BOX_QC_META_TYPE:

@@ -13,7 +13,6 @@ from Products.CMFCore import permissions
 from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
 from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
 
-import util
 
 LocalSchema = Schema((
     TextField(
@@ -32,6 +31,7 @@ LocalSchema = Schema((
     ),
 
 ))
+
 
 class ECFolder(BaseFolder, OrderedBaseFolder):
     """A simple folderish archetype for holding ECAssignments"""
@@ -91,7 +91,9 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
         mtool = self.portal_membership
 
         for key in dict:
-            array.append((key, util.getFullNameById(self, key), dict[key]))
+            #array.append((key, util.getFullNameById(self, key), dict[key]))
+            array.append((key, self.ecab_utils.getFullNameById(key), dict[key]))
+            
             
         array.sort(lambda a, b: cmp(a[1], b[1]))
         return array

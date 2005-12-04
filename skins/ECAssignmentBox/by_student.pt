@@ -1,78 +1,79 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
- lang="en"
- metal:use-macro="here/main_template/macros/master"
- i18n:domain="eduComponents">
+    lang="en"
+    metal:use-macro="here/main_template/macros/master"
+    i18n:domain="eduComponents">
 
- <body>
-  <metal:block fill-slot="css_slot">
-   <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
-  </metal:block>
+  <body>
+    <metal:block fill-slot="css_slot">
+      <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
+    </metal:block>
 
-  <metal:main fill-slot="main"
-   tal:define="n_boxes python: here.countContainedBoxes()">
-   <tal:main-macro metal:define-macro="main">
+    <metal:main fill-slot="main"
+        tal:define="n_boxes python: here.countContainedBoxes()">
+      <tal:main-macro metal:define-macro="main">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-     Document actions (print, sendto, etc.)
-    </div>
+      <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto, etc.)
+      </div>
     
-    <h1 class="documentFirstHeading"
-     i18n:translate="label_submissions">Students</h1>
+      <h1 class="documentFirstHeading" i18n:translate="label_submissions">
+        Students
+      </h1>
 
-    <p i18n:translate="label_n_boxes">Published assignment boxes inside this
-     folder: <span tal:replace="n_boxes"/></p>
+      <p i18n:translate="label_n_boxes">
+        Published assignment boxes inside this folder:
+        <b tal:content="n_boxes"/>
+      </p>
 
-    <!--
-    <div tal:define="dict python: here.summarize();
-     items python: here.rework(dict)">
-     <tal:block tal:repeat="item items">
-     <p tal:content="python: item"/>
-     </tal:block>
-    </div>
+      <!--
+      <div tal:define="dict  python: here.summarize(); 
+                       items python: here.rework(dict)">
+          <tal:block tal:repeat="item items">
+            <p tal:content="python: item"/>
+          </tal:block>
+      </div>
+  
+      <div tal:define="items here/summarize" tal:repeat="item items">
+        <p tal:content="python: item + ': ' + str(items[item])"/>
+      </div>
+      -->
 
-    <div tal:define="items here/summarize" tal:repeat="item items">
-     <p tal:content="python: item + ': ' + str(items[item])"/>
-    </div>
-    -->
+      <table class="listing">
+        <thead>
+          <tr>
+            <th i18n:translate="label_user">User</th>
+            <tal:block tal:repeat="state python: here.getWfStates()">
+	            <th tal:content="state"
+                  tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
+            </tal:block>
+          </tr>
+        </thead>
 
-    <table class="listing">
-     <thead>
-      <tr>
-       <th i18n:translate="label_user">User</th>
-       <tal:block tal:repeat="state python: here.getWfStates()">
-	<th tal:content="state"
-	 tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
-       </tal:block>
-      </tr>
-     </thead>
+        <tbody tal:define="items python: here.rework(here.summarize());">
+          <tal:block tal:repeat="student items">
+            <tr tal:define="oddrow repeat/student/odd;"
+                tal:attributes="class python: test(oddrow, 'odd', 'even')">
+              <td>
+                <a tal:content="python: student[1]"
+          	       tal:attributes="href python: 'all_assignments?userName=%s' % student[0]"></a>
+          	  </td>
 
-     <tbody tal:define="items python: here.rework(here.summarize());">
-      <tal:block tal:repeat="student items">
-       <tr tal:define="oddrow repeat/student/odd;"
-	   tal:attributes="class python: test(oddrow, 'odd', 'even')"
-	>
-	<td>
-	 <a tal:content="python: student[1]"
-	  tal:attributes="href python: 'all_assignments?userName=%s' % student[0]"></a>
-	</td>
+              <tal:block tal:repeat="state python: student[2]">
+                <td>
+                  <span tal:content="state"/>
+                  (<span tal:content="python: round(float(state)/n_boxes * 100, 2)"/>&nbsp;%)
+                </td>
+              </tal:block> 
+            </tr>
+          </tal:block>
+        </tbody>
+      </table>
 
-       <tal:block tal:repeat="state python: student[2]">
-	<td>
-	 <span tal:content="state"/>
-	 (<span tal:content="python: round(float(state)/n_boxes * 100,
-	 2)"/>&nbsp;%)</td>
-       </tal:block> 
-      </tr>
-
-      </tal:block>
-     </tbody>
-    </table>
-   </tal:main-macro>
-  </metal:main>
-
- </body>
+    </tal:main-macro>
+    </metal:main>
+  </body>
 </html>
 <!-- Keep this comment at the end of the file
 Local variables:

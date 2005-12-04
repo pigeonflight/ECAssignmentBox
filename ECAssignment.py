@@ -24,14 +24,10 @@ from Products.PortalTransforms.utils import TransformException
 
 from config import PROJECTNAME, ICONMAP, TEXT_TYPES, I18N_DOMAIN
 from urllib import quote
-import re
-import time, random, md5, socket
 
-import util
 
 # alter default fields -> hide title and description
 localBaseSchema = ATContentTypeSchema.copy()
-
 localBaseSchema['title'].default_method = '_generateTitle'
 
 localBaseSchema['title'].widget.visible = {
@@ -44,17 +40,6 @@ localBaseSchema['description'].widget.visible = {
     'edit' : 'invisible'
 }
 
-
-
-#    StringField(
-#        'user_id',
-#        widget=ComputedWidget(
-#            description = "The id of the student submitting this assignment.",
-#            label='Student id',
-#            description_msgid = 'help_user_id',
-#            i18n_domain = I18N_DOMAIN,
-#        )
-#    ),
 
 # define schema
 AssignmentSchema = localBaseSchema + Schema((
@@ -123,8 +108,9 @@ AssignmentSchema = localBaseSchema + Schema((
 
 finalizeATCTSchema(AssignmentSchema)
 
+
 class ECAssignment(ATCTContent, HistoryAwareMixin):
-    """The ECAssignment class"""
+    """A simple assignment"""
 
     __implements__ = (ATCTContent.__implements__,
                       IATDocument,
@@ -159,13 +145,6 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                                           comment='Superseded by %s'
                                           % self.getId())
 
-#     security.declareProtected(CMFCorePermissions.View, 'index_html')
-#     def index_html(self, REQUEST, RESPONSE):
-#         """
-#         Display the image, with or without standard_html_[header|footer],
-#         as appropriate.
-#         """
-#         return self.file.index_html(REQUEST, RESPONSE)
 
     #security.declarePublic('setField')
     def setField(self, name, value, **kw):
@@ -173,12 +152,16 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         field = self.getField(name)
         field.set(self, value, **kw)
 
+
     security.declarePrivate('_generateTitle')
     def _generateTitle(self):
         return self.getCreatorFullName()
 
+
     def getCreatorFullName(self):
-        return util.getFullNameById(self, self.Creator())
+        #return util.getFullNameById(self, self.Creator())
+        return self.ecab_utils.getFullNameById(self.Creator())
+
     
     def getAsPlainText(self):
         """Return the file contents as plain text.
@@ -207,55 +190,15 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             else:
                 return None
 
+
     actions = updateActions(ATCTContent,
                             HistoryAwareMixin.actions)
+
 
     aliases = updateAliases(ATCTContent, {
         'view': 'assignment_view',
         'edit': 'assignment_edit',
         })
 
+
 registerATCT(ECAssignment, PROJECTNAME)
-
-# some helper methods
-
-def uuid(*args):
-    """
-    Generates a universally unique Id. 
-    Any arguments only create more randomness.
-    
-    @params *args
-    """
-    t = long(time.time() * 1000)
-    r = long(random.random()*100000000000000000L)
-    try:
-        a = socket.gethostbyname(socket.gethostname())
-    except:
-        # if we can't get a network address, just imagine one
-        a = random.random()*100000000000000000L
-  
-    data = str(t)+' '+str(r)+' '+str(a)+' '+str(args)
-    data = md5.md5(data).hexdigest()
-    return data
-
-def unique(seq, idfun=None):
-    """
-    Returns a list with no duplicate items.
-    
-    @param seq A Sequenz of elements maybe including some duplicte items.
-    @return A list without duplicate items.
-    """
-    if idfun is None:
-        def idfun(x): return x
-
-    seen = {}
-    result = []
-    for item in seq:
-        marker = idfun(item)
-        # in old Python versions:
-        # if seen.has_key(marker)
-        # but in new ones:
-        if marker in seen: continue
-        seen[marker] = 1
-        result.append(item)
-    return result

@@ -16,6 +16,16 @@
     
      <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
 
+     <a href=""
+      class="link-parent"
+      tal:define="parent_url python:here.navigationParent(here, template_id)"
+      tal:condition="parent_url"
+      tal:attributes="href parent_url"
+      i18n:domain="plone"
+      i18n:translate="go_to_parent_url">
+      Up one level
+     </a>
+
      <div class="documentDescription"
          tal:content="structure here/getDescription"
          tal:condition="here/getDescription"/>

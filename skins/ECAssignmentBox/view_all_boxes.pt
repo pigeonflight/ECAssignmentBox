@@ -62,6 +62,14 @@
        </span>
        <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
       </div>
+
+      <div class="documentByLine"
+       tal:condition="python: item.submission_period_end and item.isEffective() and item.hasExpired()">
+       <span i18n:translate="submission_period_ended">
+	Submission period ended: 
+       </span>
+       <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
+      </div>
      </tal:block>
       
        <div class="documentDescription"
@@ -71,9 +79,19 @@
       <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">      
        <div class="field" tal:content="structure item/getAssignment_text"/>
       
+      <tal:block tal:condition="python: not item.hasExpired()">
        <p>&#x25B6; <a href="/view" tal:attributes="href item/absolute_url" i18n:translate="label_work_on">
          Work on this assignment</a>
        </p>
+      </tal:block>
+
+      <tal:block tal:condition="python: item.hasExpired()">
+       <p>&#x25B6; <a href="/assignments"
+	 tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))"
+	 i18n:translate="label_view_assignments">
+         View submitted assignments</a>
+       </p>
+      </tal:block>
      </tal:block>
 
        <hr/>

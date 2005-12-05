@@ -24,6 +24,7 @@ from Products.PortalTransforms.utils import TransformException
 
 from config import PROJECTNAME, ICONMAP, TEXT_TYPES, I18N_DOMAIN
 from urllib import quote
+import re
 
 
 # alter default fields -> hide title and description

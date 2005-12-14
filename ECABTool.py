@@ -16,6 +16,9 @@ class ECABTool(UniqueObject, SimpleItem):
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         
+        if not member:
+            return id
+        
         try:
             sn        = member.getProperty('sn')
             givenName = member.getProperty('givenName')

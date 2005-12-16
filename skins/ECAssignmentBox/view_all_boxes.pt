@@ -27,8 +27,8 @@
      </a>
 
      <div class="documentDescription"
-         tal:content="structure here/getDescription"
-         tal:condition="here/getDescription"/>
+         tal:content="structure here/Description"
+         tal:condition="here/Description"/>
 
      <div tal:define="
           global ecab_utils nocall:portal/ecab_utils;

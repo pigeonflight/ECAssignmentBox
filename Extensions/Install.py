@@ -10,13 +10,13 @@ from Products.Archetypes.public import listTypes
 from Products.CMFCore.utils import getToolByName
 from Products.ECAssignmentBox.config import *
 from StringIO import StringIO
-
+from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
 def install(self):
     out = StringIO()
 
     installTypes(self, out, listTypes(PROJECTNAME), PROJECTNAME)
-
+    migrateFTIs(self, product=PROJECTNAME)
     install_subskin(self, out, GLOBALS)
 
     # install assignment workflow

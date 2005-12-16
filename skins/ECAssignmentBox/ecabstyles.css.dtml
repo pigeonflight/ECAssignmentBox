@@ -20,4 +20,8 @@
     color: green;
 }
 
+thead tr td {
+  border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+}
+
 /* </dtml-with> */

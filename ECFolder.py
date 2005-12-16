@@ -10,45 +10,85 @@ from DateTime import DateTime
 from Products.Archetypes.atapi import *
 from Products.CMFCore import permissions
 
-from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
+from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.content.base import updateActions, updateAliases
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.content.folder import ATFolderSchema
+from Products.ATContentTypes.content.folder import ATFolder
+
+from Products.ECAssignmentBox.config \
+     import I18N_DOMAIN, TEXT_TYPES, PROJECTNAME
 from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
+from Products.ECAssignmentBox.validators import *
+from Products.validation import validation
+
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.permissions import setDefaultRoles
+from Products.CMFDynamicViewFTI.permissions import ModifyViewTemplate
 
 
-LocalSchema = Schema((
-    TextField(
-        'description',
-        searchable = True,
-        default_content_type = 'text/plain',
-        default_output_type = 'text/plain',
-        widget = TextAreaWidget(
-            label = "Description",
-            label_msgid = "label_description",
-            description = "Enter a brief description of the folder.",
-            description_msgid = "help_description",
+isPositive = PositiveNumberValidator("isPositive")
+validation.register(isPositive)
+
+localSchema = Schema((
+    LinesField(
+        'completedStates',
+        searchable = False,
+        vocabulary = 'getWfStates',
+        multiValued = True,
+        widget = MultiSelectionWidget(
+            label = "Completed States",
+            label_msgid = "label_completed_states",
+            description = "States considered as completed.",
+            description_msgid = "help_completed_states",
             i18n_domain = I18N_DOMAIN,
-            rows = 5,
+        ),
+    ),
+
+    IntegerField(
+        'projectedAssignments',
+        searchable = False,
+        required = True,
+        default = 0,
+        validators = ('isInt', 'isPositive'),
+        widget = IntegerWidget(
+            label = "Projected Number of Assignments",
+            label_msgid = "label_projected_assignments",
+            description = "Projected number of assignments.",
+            description_msgid = "help_projected_assignments",
+            i18n_domain = I18N_DOMAIN,
         ),
     ),
 
 ))
 
+ECFolderSchema = ATFolderSchema.copy() + localSchema
+finalizeATCTSchema(ECFolderSchema, folderish=True, moveDiscussion=False)
 
-class ECFolder(BaseFolder, OrderedBaseFolder):
+class ECFolder(ATFolder):
     """A simple folderish archetype for holding ECAssignments"""
+
+    schema = ECFolderSchema
+    
+    content_icon = "folder-box-16.png"
+    portal_type = meta_type = "ECFolder"
+    archetype_name = "ECFolder"
+    default_view = 'view_all_boxes'
+    immediate_view = 'view_all_boxes'
+    suppl_views = ('all_assignments', 'by_student',)
+    allowed_content_types = []
+
+    __implements__ = (ATFolder.__implements__,)
 
     security = ClassSecurityInfo()
 
-    __implements__ = (BaseFolder.__implements__, OrderedBaseFolder.__implements__, )
-
-    _at_rename_after_creation = True
-
-    schema = BaseFolder.schema + LocalSchema
-    filter_content_types = False
-    allowed_content_types = []
-    meta_type = "ECFolder"
-    archetype_name = "ECFolder"
-    content_icon = "folder-box-16.png"
-
+    security.declarePrivate('manage_afterAdd')
+    def manage_afterAdd(self, item, container):
+        ATFolder.manage_afterAdd(self, item, container)
+        self.manage_permission(ModifyViewTemplate,
+                               roles=['Authenticated'],
+                               acquire=True)
+    
     def summarize(self, published=True):
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type': 
@@ -83,7 +123,7 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
                                                           in range(n_states)]
                     students[assignment.Creator()][wf_states.index(
                         wtool.getInfoFor(assignment, 'review_state', ''))] += 1
-        
+
         return students
     
     def rework(self, dict):
@@ -97,6 +137,26 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
             
         array.sort(lambda a, b: cmp(a[1], b[1]))
         return array
+
+    def summarizeCompletedAssignments(self):
+        """Returns a dictionary containing the number of assignments
+        in a completed state per student"""
+        if not self.completedStates:
+            return None
+        
+        summary = self.summarize()
+        states = self.getWfStates()
+        retval = {}
+
+        for student in summary.keys():
+            state_no = 0
+            retval[student] = 0
+
+            for num in summary[student]:
+                if states[state_no] in self.completedStates and num > 0:
+                    retval[student] += num
+                state_no += 1
+        return retval
 
     def getWfStates(self):
         wtool = self.portal_workflow
@@ -126,27 +186,25 @@ class ECFolder(BaseFolder, OrderedBaseFolder):
 
     ###########################################################################
 
-    actions = (
-        {
-        'action':      "string:$object_url/view_all_boxes",
-        'id':          'view',
-        'name':        'View',
-        'permissions': (permissions.View,),
-        },
+#     actions = updateActions(ATFolder, (
+#         {
+#         'action':      "string:$object_url/all_assignments",
+#         'id':          'all_assignments',
+#         'name':        'Assignments',
+#         'permissions': (permissions.View,),
+#         },
 
-        {
-        'action':      "string:$object_url/all_assignments",
-        'id':          'all_assignments',
-        'name':        'All Assignments',
-        'permissions': (permissions.View,),
-        },
+#         {
+#         'action':      "string:$object_url/by_student",
+#         'id':          'by_student',
+#         'name':        'Statistics',
+#         'permissions': (permissions.View,),
+#         },
+#    ))
+    
+    aliases = updateAliases(ATFolder, {
+        'view': 'view_all_boxes',
+        })
 
-        {
-        'action':      "string:$object_url/by_student",
-        'id':          'by_student',
-        'name':        'By Student',
-        'permissions': (permissions.View,),
-        },
-    )
 
-registerType(ECFolder)
+registerATCT(ECFolder, PROJECTNAME)

@@ -75,19 +75,19 @@ class ECFolder(ATFolder):
     archetype_name = "ECFolder"
     default_view = 'view_all_boxes'
     immediate_view = 'view_all_boxes'
-    suppl_views = ('all_assignments', 'by_student',)
+    suppl_views = () #('all_assignments', 'by_student',)
     allowed_content_types = []
 
     __implements__ = (ATFolder.__implements__,)
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('manage_afterAdd')
-    def manage_afterAdd(self, item, container):
-        ATFolder.manage_afterAdd(self, item, container)
-        self.manage_permission(ModifyViewTemplate,
-                               roles=['Authenticated'],
-                               acquire=True)
+#     security.declarePrivate('manage_afterAdd')
+#     def manage_afterAdd(self, item, container):
+#         ATFolder.manage_afterAdd(self, item, container)
+#         self.manage_permission(ModifyViewTemplate,
+#                                roles=['Authenticated'],
+#                                acquire=True)
     
     def summarize(self, published=True):
         wtool = self.portal_workflow
@@ -186,21 +186,21 @@ class ECFolder(ATFolder):
 
     ###########################################################################
 
-#     actions = updateActions(ATFolder, (
-#         {
-#         'action':      "string:$object_url/all_assignments",
-#         'id':          'all_assignments',
-#         'name':        'Assignments',
-#         'permissions': (permissions.View,),
-#         },
+    actions = updateActions(ATFolder, (
+        {
+        'action':      "string:$object_url/all_assignments",
+        'id':          'all_assignments',
+        'name':        'Assignments',
+        'permissions': (permissions.View,),
+        },
 
-#         {
-#         'action':      "string:$object_url/by_student",
-#         'id':          'by_student',
-#         'name':        'Statistics',
-#         'permissions': (permissions.View,),
-#         },
-#    ))
+        {
+        'action':      "string:$object_url/by_student",
+        'id':          'by_student',
+        'name':        'Statistics',
+        'permissions': (permissions.View,),
+        },
+   ))
     
     aliases = updateAliases(ATFolder, {
         'view': 'view_all_boxes',

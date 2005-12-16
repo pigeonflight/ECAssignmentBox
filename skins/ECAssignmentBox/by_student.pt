@@ -43,57 +43,44 @@
 	<table class="listing">
 	  <thead>
 	    <tr>
-	      <th rowspan="2" i18n:translate="label_user">User</th>
+	      <th i18n:translate="label_user">User</th>
 
-	      <th tal:condition="here/completedStates"
-		tal:attributes="colspan python: [2, 3][int(here.projectedAssignments > 0)]"
-		i18n:translate="label_completed">Completed</th>
+	      <tal:block tal:condition="here/completedStates">
+		<th i18n:translate="label_completed">Completed</th>
+		<th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
+		<th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">%&nbsp;Proj.</th>
+	      </tal:block>
 
 	      <tal:block tal:repeat="state python: here.getWfStates()">
-		<th rowspan="2" tal:content="state"
-                  tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
+		<th tal:content="string: ${state} (%)" tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
 	      </tal:block>
-	    </tr>
-
-	    <tr tal:condition="here/completedStates">
-	      <td i18n:translate="label_completed_count">Count</td>
-	      <td i18n:translate="label_completed_curr">% Current</td>
-	      <td tal:condition="here/projectedAssignments"
-		i18n:translate="label_completed_proj">% Projected</td>
 	    </tr>
 	  </thead>
 
-	  <tbody tal:define="
+	  <tbody style="text-align: right"
+	    tal:define="
 	    summary   python: here.summarize();
 	    items     python: here.rework(summary);
 	    completed python: here.summarizeCompletedAssignments(summary);">
 	    <tal:block tal:repeat="student items">
-	      <tr tal:define="oddrow repeat/student/odd;"
+	      <tr
+		tal:define="oddrow repeat/student/odd;"
                 tal:attributes="class python: test(oddrow, 'odd', 'even')">
-		<td>
+		<td style="text-align: left">
 		  <a tal:content="python: student[1]"
 		    tal:attributes="href python: 'all_assignments?userName=%s' % student[0]"></a>
 		</td>
-
 	      <tal:block tal:condition="here/completedStates">
 		<tal:block tal:define="c python: completed[student[0]]">
-		  <td style="text-align: right" tal:content="c"/>
-		  <td style="text-align: right">
-		    <span tal:replace="python: round(float(c)/n_boxes * 100, 2)"/>
-		  </td>
-		  <td style="text-align: right" tal:condition="here/projectedAssignments">
-		    <span tal:replace="python: round(float(c)/here.projectedAssignments * 100, 2)"/>
-		  </td>
+		  <td tal:content="c"/>
+		  <td><span tal:replace="python: '%.2f' % round(float(c)/n_boxes * 100, 2)"/></td>
+		  <td tal:condition="here/projectedAssignments">
+		    <span tal:replace="python: '%.2f' % round(float(c)/here.projectedAssignments * 100, 2)"/></td>
 		</tal:block>
 	      </tal:block>
-
               <tal:block tal:repeat="state python: student[2]">
-                <td style="text-align: right">
-                  <span tal:content="state"/>
-                  (<span tal:content="python: round(float(state)/n_boxes * 100, 2)"/>&nbsp;%)
-                </td>
+                <td><span tal:replace="state"/> (<span tal:replace="python: '%.2f' % round(float(state)/n_boxes * 100, 2)"/>)</td>
               </tal:block>
-	      
             </tr>
 	    </tal:block>
 	  </tbody>

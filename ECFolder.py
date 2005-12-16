@@ -131,20 +131,20 @@ class ECFolder(ATFolder):
         mtool = self.portal_membership
 
         for key in dict:
-            #array.append((key, util.getFullNameById(self, key), dict[key]))
             array.append((key, self.ecab_utils.getFullNameById(key), dict[key]))
-            
-            
-        array.sort(lambda a, b: cmp(a[1], b[1]))
+            array.sort(lambda a, b: cmp(a[1], b[1]))
+
         return array
 
-    def summarizeCompletedAssignments(self):
+    def summarizeCompletedAssignments(self, summary=None):
         """Returns a dictionary containing the number of assignments
         in a completed state per student"""
         if not self.completedStates:
             return None
+
+        if not summary:
+            summary = self.summarize()
         
-        summary = self.summarize()
         states = self.getWfStates()
         retval = {}
 

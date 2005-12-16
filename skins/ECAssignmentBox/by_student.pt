@@ -63,8 +63,10 @@
 	    </tr>
 	  </thead>
 
-	  <tbody tal:define="items     python: here.rework(here.summarize());
-	                     completed python: here.summarizeCompletedAssignments()">
+	  <tbody tal:define="
+	    summary   python: here.summarize();
+	    items     python: here.rework(summary);
+	    completed python: here.summarizeCompletedAssignments(summary);">
 	    <tal:block tal:repeat="student items">
 	      <tr tal:define="oddrow repeat/student/odd;"
                 tal:attributes="class python: test(oddrow, 'odd', 'even')">
@@ -74,19 +76,19 @@
 		</td>
 
 	      <tal:block tal:condition="here/completedStates">
-		<tal:block tal:define="completed python: here.summarizeCompletedAssignments()[student[0]]">
-		  <td tal:content="completed"/>
-		  <td>
-		    <span tal:replace="python: round(float(completed)/n_boxes * 100, 2)"/>&nbsp;%
+		<tal:block tal:define="c python: completed[student[0]]">
+		  <td style="text-align: right" tal:content="c"/>
+		  <td style="text-align: right">
+		    <span tal:replace="python: round(float(c)/n_boxes * 100, 2)"/>
 		  </td>
-		  <td tal:condition="here/projectedAssignments">
-		    <span tal:replace="python: round(float(completed)/here.projectedAssignments * 100, 2)"/>&nbsp;%
+		  <td style="text-align: right" tal:condition="here/projectedAssignments">
+		    <span tal:replace="python: round(float(c)/here.projectedAssignments * 100, 2)"/>
 		  </td>
 		</tal:block>
 	      </tal:block>
 
               <tal:block tal:repeat="state python: student[2]">
-                <td>
+                <td style="text-align: right">
                   <span tal:content="state"/>
                   (<span tal:content="python: round(float(state)/n_boxes * 100, 2)"/>&nbsp;%)
                 </td>

@@ -26,9 +26,9 @@
       Up one level
      </a>
 
-     <div class="documentDescription"
-         tal:content="structure here/Description"
-         tal:condition="here/Description"/>
+    <div class="documentDescription"
+         tal:content="structure here/description"
+         tal:condition="here/description"/>
 
      <div tal:define="
           global ecab_utils nocall:portal/ecab_utils;
@@ -49,7 +49,7 @@
                       item_url item/getURL|item/absolute_url;
 		      item_id item/getId|item/id;
 		      item_title_or_id item/pretty_title_or_id;
-		      item_description item/Description;
+		      item_description item/description;
 		      item_type item/portal_type;
 		      item_type_class python: 'contenttype-' + normalizeString(item_type);"
           tal:condition="python: (item_wf_state == 'published')">

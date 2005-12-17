@@ -24,4 +24,16 @@ thead tr td {
   border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
 }
 
+dd.ec-listing {
+  margin-left: 16px
+}
+
+.ec-description {
+  font-style: italic;
+  /* background-color: rgb(250, 250, 250);
+  padding-left: 0.5ex;
+  border-bottom: 1px dotted gray; */
+  margin-bottom: 1em;
+}
+
 /* </dtml-with> */

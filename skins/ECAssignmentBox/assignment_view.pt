@@ -6,7 +6,8 @@
       i18n:domain="eduComponents">
 <body>
 <metal:block fill-slot="css_slot">
-  <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
+  <style type="text/css" media="screen"
+    tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
 </metal:block>
 
 <metal:main fill-slot="main">
@@ -19,8 +20,10 @@
     <div metal:use-macro="here/document_actions/macros/document_actions"/>
   
     <!-- print page title -->    
-    <h1 class="documentFirstHeading"
-      tal:content="python: here.getCreatorFullName() + ' - ' + here.aq_parent.title_or_id()" />
+    <h1 class="documentFirstHeading">
+     <a tal:attributes="name here/aq_parent/id"
+      tal:content="here/aq_parent/title_or_id"/>
+    </h1>
 
     <a href=""
      class="link-parent"
@@ -32,9 +35,40 @@
      Up one level
     </a>
 
+    <a class="link-down"
+     tal:attributes="href python: '#' + here.getId()">
+     <span i18n:translate="go_to_submission">Go to the submission of</span>
+     <span tal:replace="here/getCreatorFullName"/></a>
+
+    <!-- display the assignment text -->
+    <dl class="collapsible collapsedBlockCollapsible">
+     <dt class="collapsibleHeader"
+      i18n:translate="assignment_text">Assignment text</dt>
+     <dd class="collapsibleContent">
+      <div class="documentDescription"
+       tal:content="structure here/aq_parent/getDescription"
+       tal:condition="here/aq_parent/getDescription"/>
+
+      <div tal:replace="structure here/aq_parent/getAssignment_text"/>
+     </dd>
+    </dl>
+
+    <p/>
+
     <!-- print all relevant fields -->
-    <div class="field">
-      <span i18n:translate="label_datetime">Delivered at</span>
+    <h1>
+     <a i18n:translate="assignment_of"
+      tal:attributes="name here/getId"
+      >Assignment of</a>
+     <span tal:replace="here/getCreatorFullName"/>
+    </h1>
+
+    <a tal:attributes="href string: #${here/aq_parent/id}"
+     i18n:translate="back_to_overview"
+     class="link-parent">Back to the assignment text</a>
+
+    <div class="documentByLine">
+      <span i18n:translate="label_datetime">Submitted at</span>
       <span tal:content="python: here.toPortalTime(here.getDatetime(), 1)"/>
     </div>
 
@@ -56,6 +90,9 @@
       <pre id="auto_feedback" tal:content="auto_feedback"/>
     </div>
 
+    <a tal:attributes="href string: #${here/aq_parent/id}"
+     i18n:translate="back_to_overview"
+     class="link-parent">Back to the assignment text</a>
 
     <tal:block tal:define="field_macro field_macro|here/widgets/field/macros/view;
                            mode string:view;

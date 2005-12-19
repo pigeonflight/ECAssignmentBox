@@ -71,10 +71,11 @@ AssignmentSchema = localBaseSchema + Schema((
     FileField(
         'file',
         searchable = True,
+        primary = True,
         widget = FileWidget(
             description = "The uploaded file containing this assignment.",
             description_msgid = "help_file",
-            label= "File",
+            label = "File",
             label_msgid = "label_file",
             i18n_domain = I18N_DOMAIN,
         ),
@@ -105,7 +106,8 @@ AssignmentSchema = localBaseSchema + Schema((
             i18n_domain = I18N_DOMAIN,
         ),
     ),
-))
+  ) # , marshall = PrimaryFieldMarshaller()
+)
 
 finalizeATCTSchema(AssignmentSchema)
 

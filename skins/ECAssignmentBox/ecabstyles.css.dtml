@@ -20,6 +20,15 @@
     color: green;
 }
 
+.link-down {
+  display: block;
+  background: transparent url(&dtml-portal_url;/arrowDown.gif) 4px 5px no-repeat
+;
+  padding: 1px 0px 10px 16px;
+  font-size: &dtml-fontSmallSize;;
+  text-decoration: none;
+}
+
 thead tr td {
   border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
 }

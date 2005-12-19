@@ -188,7 +188,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             if result:
                 return result.getData()
             
-            if re.match("text/", mt):
+            if re.match("text/|application/xml", mt):
                 return f.get(self)
             else:
                 return None

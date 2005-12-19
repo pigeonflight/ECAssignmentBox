@@ -8,12 +8,19 @@
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
 from Products.Archetypes.atapi import *
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore import permissions
 
-from Products.ECAssignmentBox.config import I18N_DOMAIN, TEXT_TYPES
+from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.content.base import updateActions, updateAliases
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.content.folder import ATFolderSchema
+from Products.ATContentTypes.content.folder import ATFolder
+
+from Products.ECAssignmentBox.config \
+     import I18N_DOMAIN, TEXT_TYPES, PROJECTNAME
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 
-AssignmentBoxSchema = Schema((
+ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
     TextField(
         'description',
         searchable = True,
@@ -103,21 +110,25 @@ AssignmentBoxSchema = Schema((
     ),
 ))
 
-class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
+finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
+
+class ECAssignmentBox(ATFolder):
     """A simple folderish archetype for holding ECAssignments"""
 
-    security = ClassSecurityInfo()
+    schema = ECAssignmentBoxSchema
 
-    __implements__ = (BaseFolder.__implements__, OrderedBaseFolder.__implements__, )
-
-    _at_rename_after_creation = True
-
-    schema = BaseFolder.schema + AssignmentBoxSchema
+    content_icon = "box-16.png"
+    portal_type = meta_type = "ECAssignmentBox"
+    archetype_name = "AssignmentBox"
+    default_view = 'assignmentbox_view'
+    immediate_view = 'assignmentbox_view'
+    suppl_views = None
     filter_content_types = 1
     allowed_content_types = [ECAssignment.meta_type]
-    meta_type = "ECAssignmentBox"
-    archetype_name = "AssignmentBox"
-    content_icon = "box-16.png"
+
+    __implements__ = (ATFolder.__implements__)
+
+    security = ClassSecurityInfo()
 
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
@@ -187,30 +198,26 @@ class ECAssignmentBox(BaseFolder, OrderedBaseFolder):
         summary = []
         
         for item in items:
-            if (current_user.checkPermission('View', item)):
+            if (current_user.checkPermission(permissions.View, item)):
                 if id and item.Creator() != id:
                     continue
                 summary.append(item)
         return summary
 
-    actions =  (
-        {
-        'action':      "string:$object_url/assignmentbox_view",
-        'category':    "object",
-        'id':          'view',
-        'name':        'View',
-        'permissions': ("View",),
-        'condition'  : 'python:1'
-        },
-
+    actions = updateActions(ATFolder, (
         {
         'action':      "string:$object_url/assignmentbox_submissions",
         'category':    "object",
         'id':          'assignments',
         'name':        'Assignments',
-        'permissions': ("View",),
+        'permissions': (permissions.View,),
         'condition'  : 'python:1'
         },
-    )
+    ))
+    
+    aliases = updateAliases(ATFolder, {
+        'view': 'assignmentbox_view',
+        })
 
-registerType(ECAssignmentBox)
+
+registerATCT(ECAssignmentBox, PROJECTNAME)

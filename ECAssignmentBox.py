@@ -21,20 +21,20 @@ from Products.ECAssignmentBox.config \
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 
 ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
-    TextField(
-        'description',
-        searchable = True,
-        default_content_type = 'text/plain',
-        default_output_type = 'text/plain',
-        widget = TextAreaWidget(
-            label = "Description",
-            label_msgid = "label_description",
-            description = "Enter a brief description of the assignment.",
-            description_msgid = "help_description",
-            i18n_domain = I18N_DOMAIN,
-            rows = 5,
-        ),
-    ),
+#    TextField(
+#        'description',
+#        searchable = True,
+#        default_content_type = 'text/plain',
+#        default_output_type = 'text/plain',
+#        widget = TextAreaWidget(
+#            label = "Description",
+#            label_msgid = "label_description",
+#            description = "Enter a brief description of the assignment.",
+#            description_msgid = "help_description",
+#            i18n_domain = I18N_DOMAIN,
+#            rows = 5,
+#        ),
+#    ),
 
     TextField(
         'assignment_text',
@@ -96,18 +96,18 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
-    BooleanField(
-        'mark_assigned',
-        searchable = True,
-        widget=BooleanWidget(
-            label = 'Mark assigned',
-            label_msgid = 'label_mark_assigned',
-            description = ('Indicate whether or not marks are assigned '
-                           'for the assignment.'),
-            description_msgid = 'help_mark_assigned',
-            i18n_domain = I18N_DOMAIN
-        ),
-    ),
+#    BooleanField(
+#        'mark_assigned',
+#        searchable = True,
+#        widget=BooleanWidget(
+#            label = 'Mark assigned',
+#            label_msgid = 'label_mark_assigned',
+#            description = ('Indicate whether or not marks are assigned '
+#                           'for assignments.'),
+#            description_msgid = 'help_mark_assigned',
+#            i18n_domain = I18N_DOMAIN
+#        ),
+#    ),
 ))
 
 finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
@@ -122,6 +122,7 @@ class ECAssignmentBox(ATFolder):
     archetype_name = "AssignmentBox"
     default_view = 'assignmentbox_view'
     immediate_view = 'assignmentbox_view'
+
     suppl_views = None
     filter_content_types = 1
     allowed_content_types = [ECAssignment.meta_type]

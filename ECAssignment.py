@@ -43,7 +43,7 @@ localBaseSchema['description'].widget.visible = {
 
 
 # define schema
-AssignmentSchema = localBaseSchema + Schema((
+ECAssignmentSchema = localBaseSchema + Schema((
     DateTimeField(
         'datetime',
         widget = ComputedWidget(
@@ -55,28 +55,28 @@ AssignmentSchema = localBaseSchema + Schema((
         ),   
     ),
 
-    TextField(
-        'source',
-        searchable = True,
-        default_output_type = 'text/structured',
-        widget = ComputedWidget(
-            label = 'Answer',
-            label_msgid = 'label_answer',
-            description = 'The answer for this assignment.',
-            description_msgid = 'help_source',
-            i18n_domain = I18N_DOMAIN,
-        ),
-    ),
+#    TextField(
+#        'source',
+#        searchable = True,
+#        default_output_type = 'text/structured',
+#        widget = ComputedWidget(
+#            label = 'Answer',
+#            label_msgid = 'label_answer',
+#            description = 'The answer for this assignment.',
+#            description_msgid = 'help_source',
+#            i18n_domain = I18N_DOMAIN,
+#        ),
+#    ),
 
     FileField(
         'file',
         searchable = True,
         primary = True,
         widget = FileWidget(
-            description = "The uploaded file containing this assignment.",
-            description_msgid = "help_file",
-            label = "File",
-            label_msgid = "label_file",
+            description = "The answer for this assignment.",
+            description_msgid = "help_answer",
+            label = "Answer",
+            label_msgid = "label_answer",
             i18n_domain = I18N_DOMAIN,
         ),
     ),
@@ -109,7 +109,7 @@ AssignmentSchema = localBaseSchema + Schema((
   ) # , marshall = PrimaryFieldMarshaller()
 )
 
-finalizeATCTSchema(AssignmentSchema)
+finalizeATCTSchema(ECAssignmentSchema)
 
 
 class ECAssignment(ATCTContent, HistoryAwareMixin):
@@ -123,7 +123,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
 
     #_at_rename_after_creation = True
-    schema = AssignmentSchema
+    schema = ECAssignmentSchema
     meta_type = "ECAssignment"
     archetype_name = "Assignment"
 
@@ -174,25 +174,25 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         transformations."""
         ptTool = getToolByName(self, 'portal_transforms')
         f = self.getField('file')
-        source = ''
+        #source = ''
 
         if f:
             mt = self.getContentType('file')
             
+            if re.match("text/|application/xml", mt):
+                return str(f.get(self))
+
             try:
                 result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
                                           mimetype=mt)
-            except TransformException:
-                result = ''
-            
-            if result:
                 return result.getData()
-            
-            if re.match("text/|application/xml", mt):
-                return f.get(self)
-            else:
+
+            except TransformException:
                 return None
 
+        else:
+            return None
+            
 
     actions = updateActions(ATCTContent,
                             HistoryAwareMixin.actions)

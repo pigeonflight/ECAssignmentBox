@@ -73,13 +73,12 @@
     </div>
 
     <div class="field"
-        tal:define="answer here/getAsPlainText;"
-        tal:condition="answer">
+        tal:define="answer here/getAsPlainText;">
       <label for="answer" i18n:translate="label_answer">Answer:</label>
 
       <p class="discreet" tal:content="here/file/getContentType"/>
 
-      <pre id="answer" tal:content="answer"/>
+      <pre id="answer" tal:condition="answer" tal:content="answer"/>
 
       <div tal:define="field python:here.getField('file');
                        unit here/file;">

@@ -7,7 +7,7 @@
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore import permissions
 
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -192,13 +192,32 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             return None
             
 
-    actions = updateActions(ATCTContent,
-                            HistoryAwareMixin.actions)
+    actions = updateActions(ATCTContent, (
+        {
+        'action':      "string:$object_url/assignment_edit",
+        'category':    "object",
+        'id':          'grade',
+        'name':        'Grade',
+        'permissions': (permissions.ModifyPortalContent,),
+        'condition'  : 'python:1'
+        #'condition': "python: portal.portal_workflow.getInfoFor(here, 'review_state', '') == 'graded'"
+        },
+
+        {
+        'action':      "string:$object_url/base_edit",
+        'category':    "object",
+        'id':          'edit',
+        'name':        'Edit',
+        'permissions': (permissions.ModifyPortalContent,),
+        'condition': "python: here.Creator() == \
+        portal.portal_membership.getAuthenticatedMember().getUserName()"
+        },
+
+        ))
 
 
     aliases = updateAliases(ATCTContent, {
         'view': 'assignment_view',
-        'edit': 'assignment_edit',
         })
 
 

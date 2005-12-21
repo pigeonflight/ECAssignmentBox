@@ -87,9 +87,9 @@
                               isReviewer python: bool(permission('Review portal content', here));"
                   tal:condition="python: isReviewer">
                 <a href="item_url"
-                    tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('edit'))"
-                    i18n:translate="label_action_edit">
-                  [Edit]
+                    tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('grade'))"
+                    i18n:translate="label_action_grade">
+                  [Grade]
                 </a>
               </tal:block>
 

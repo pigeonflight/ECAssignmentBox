@@ -46,8 +46,8 @@
       i18n:translate="assignment_text">Assignment text</dt>
      <dd class="collapsibleContent">
       <div class="documentDescription"
-       tal:content="structure here/aq_parent/getDescription"
-       tal:condition="here/aq_parent/getDescription"/>
+       tal:content="structure here/aq_parent/Description"
+       tal:condition="here/aq_parent/Description"/>
 
       <div tal:replace="structure here/aq_parent/getAssignment_text"/>
      </dd>
@@ -69,14 +69,37 @@
 
     <div class="documentByLine">
       <span i18n:translate="label_datetime">Submitted at</span>
-      <span tal:content="python: here.toPortalTime(here.getDatetime(), 1)"/>
+      <span tal:content="python: here.toPortalTime(here.CreationDate(), 1)"/>
     </div>
 
-    <div class="field" tal:condition="here/source">
-      <label for="source" i18n:translate="label_source">Source:</label>
-      <pre id="source" tal:content="here/getSource"/>
+    <div class="field"
+        tal:define="answer here/getAsPlainText;"
+        tal:condition="answer">
+      <label for="answer" i18n:translate="label_answer">Answer:</label>
+
+      <p class="discreet" tal:content="here/file/getContentType"/>
+
+      <pre id="answer" tal:content="answer"/>
+
+      <div tal:define="field python:here.getField('file');
+                       unit here/file;">
+          <a href="" 
+             tal:define="fieldName python:field.getName();"
+             tal:attributes="href string:${here/absolute_url}/at_download/$fieldName">
+            <img tal:define="icon unit/getBestIcon | nothing;"
+                 tal:condition="icon" 
+                 src=""
+                 tal:attributes="src string:${here/portal_url}/$icon"/>
+            <span tal:replace="unit/filename"/>
+            (<span tal:content="python:here.lookupMime(unit.getContentType())">ContentType</span>
+            <span tal:define="size unit/get_size | python:unit and len(unit) or 0;"
+                tal:content="python:'%sKb' % (size / 1024)"/>)
+          </a>
+      </div>
+
     </div>
 
+    <!--
     <div tal:condition="not: here/source">
      <div class="field" tal:condition="here/file">
       <label for="source" i18n:translate="label_source">Source:</label>
@@ -85,15 +108,6 @@
      </div>
     </div>
 
-    <div class="field" tal:condition="auto_feedback">
-      <label for="auto_feedback" i18n:translate="label_auto_feedback">Auto-feedback:</label>
-      <pre id="auto_feedback" tal:content="auto_feedback"/>
-    </div>
-
-    <a tal:attributes="href string: #${here/aq_parent/id}"
-     i18n:translate="back_to_overview"
-     class="link-parent">Back to the assignment text</a>
-
     <tal:block tal:define="field_macro field_macro|here/widgets/field/macros/view;
                            mode string:view;
                            use_label python:1">
@@ -101,6 +115,11 @@
         <span metal:use-macro="field_macro"/>
       </div>
     </tal:block>
+    -->
+
+    <a tal:attributes="href string: #${here/aq_parent/id}"
+     i18n:translate="back_to_overview"
+     class="link-parent">Back to the assignment text</a>
 
     <div class="field" tal:condition="here/getFeedback">
       <label for="feedback" i18n:translate="label_feedback">Feedback:</label>

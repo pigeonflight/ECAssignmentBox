@@ -175,20 +175,19 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         f = self.getField('file')
         #source = ''
 
-        if f:
-            mt = self.getContentType('file')
+        mt = self.getContentType('file')
+        
+        if re.match("text/|application/xml", mt):
+            return str(f.get(self))
+
+        try:
+            result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
+                                      mimetype=mt)
+        except TransformException:
+            result = None
             
-            if re.match("text/|application/xml", mt):
-                return str(f.get(self))
-
-            try:
-                result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
-                                          mimetype=mt)
-                return result.getData()
-
-            except TransformException:
-                return None
-
+        if result:
+            return result.getData()
         else:
             return None
             

@@ -39,8 +39,8 @@
     </a>
 
     <div class="documentDescription"
-     tal:content="structure here/getDescription"
-     tal:condition="here/getDescription"/>
+     tal:content="structure here/Description"
+     tal:condition="here/Description"/>
 
     <div class="field" tal:content="structure here/getAssignment_text"/>
     

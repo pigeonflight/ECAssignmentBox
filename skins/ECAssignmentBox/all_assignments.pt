@@ -145,7 +145,7 @@
 	  <tr tal:define="oddrow repeat/assignment/odd;
 	   wf_state_class python: 'state-' + putils.normalizeString(wtool.getInfoFor(assignment, 'review_state', ''));"
 	   tal:attributes="class python: test(oddrow, 'odd', 'even')">
-	   <td tal:content="python: here.toPortalTime(assignment.getDatetime(), True)"/>
+	   <td tal:content="python: here.toPortalTime(assignment.CreationDate(), True)"/>
 	   <td>
 	    <a tal:attributes="href python: 'all_assignments?userName=%s' % assignment.Creator()"
 	     tal:content="python: ecab_utils.getFullNameById(assignment.Creator())"></a>

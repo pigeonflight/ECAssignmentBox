@@ -59,7 +59,7 @@
               tal:attributes="class python: test(oddrow, 'odd', 'even')">
 
             <td>
-          	  <span tal:replace="python: here.toPortalTime(item.getDatetime(), 1)" />
+          	  <span tal:replace="python: here.toPortalTime(item.CreationDate(), 1)" />
             </td>
 
             <td tal:content="python: ecab_utils.getFullNameById(item.Creator())"/>

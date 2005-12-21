@@ -44,17 +44,16 @@ localBaseSchema['description'].widget.visible = {
 
 # define schema
 ECAssignmentSchema = localBaseSchema + Schema((
-    DateTimeField(
-        'datetime',
-        widget = ComputedWidget(
-            label = 'Datetime',
-            label_msgid = 'label_datetime',
-            description = 'The date and time for this submission.',
-            description_msgid = 'help_datetime',
-            i18n_domain = I18N_DOMAIN,
-        ),   
-    ),
-
+#    DateTimeField(
+#        'datetime',
+#        widget = ComputedWidget(
+#            label = 'Datetime',
+#            label_msgid = 'label_datetime',
+#            description = 'The date and time for this submission.',
+#            description_msgid = 'help_datetime',
+#            i18n_domain = I18N_DOMAIN,
+#        ),   
+#    ),
 #    TextField(
 #        'source',
 #        searchable = True,

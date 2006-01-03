@@ -4,11 +4,15 @@
 # Copyright (c) 2005 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
+from DateTime import DateTime
 
 from AccessControl import ClassSecurityInfo
-from DateTime import DateTime
 from Products.Archetypes.atapi import *
 from Products.CMFCore import permissions
+
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.permissions import setDefaultRoles
+from Products.CMFDynamicViewFTI.permissions import ModifyViewTemplate
 
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import updateActions, updateAliases
@@ -16,21 +20,33 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.content.folder import ATFolder
 
-from Products.ECAssignmentBox.config \
-     import I18N_DOMAIN, TEXT_TYPES, PROJECTNAME
-from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
-from Products.ECAssignmentBox.validators import *
 from Products.validation import validation
 
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import setDefaultRoles
-from Products.CMFDynamicViewFTI.permissions import ModifyViewTemplate
+# local imports
+from Products.ECAssignmentBox.config import *
+from Products.ECAssignmentBox.ECAssignmentBox import ECAssignmentBox
+from Products.ECAssignmentBox.validators import *
 
 
 isPositive = PositiveNumberValidator("isPositive")
 validation.register(isPositive)
 
 localSchema = Schema((
+    TextField(
+        'directionText',
+        default_output_type = 'text/html',
+        default_content_type = 'text/structured',
+        allowable_content_types = TEXT_TYPES,
+        widget=RichWidget(
+            label = 'Direction text',
+            label_msgid = 'label_direction_text',
+            description = 'Some content that all boxes in this folder refer to.',
+            description_msgid = 'help_direction_text',
+            i18n_domain = I18N_DOMAIN,
+            rows=6,
+        ),
+    ),
+
     LinesField(
         'completedStates',
         searchable = False,
@@ -68,27 +84,53 @@ finalizeATCTSchema(ECFolderSchema, folderish=True, moveDiscussion=False)
 class ECFolder(ATFolder):
     """A simple folderish archetype for holding ECAssignments"""
 
+    __implements__ = (ATFolder.__implements__,)
+    security = ClassSecurityInfo()
+
     schema = ECFolderSchema
     
     content_icon = "folder-box-16.png"
     portal_type = meta_type = "ECFolder"
     archetype_name = "ECFolder"
-    default_view = 'view_all_boxes'
-    immediate_view = 'view_all_boxes'
     suppl_views = () #('all_assignments', 'by_student',)
     allowed_content_types = []
 
-    __implements__ = (ATFolder.__implements__,)
 
-    security = ClassSecurityInfo()
+    default_view = 'ecfolder_view'
+    immediate_view = 'ecfolder_view'
 
-#     security.declarePrivate('manage_afterAdd')
-#     def manage_afterAdd(self, item, container):
-#         ATFolder.manage_afterAdd(self, item, container)
-#         self.manage_permission(ModifyViewTemplate,
-#                                roles=['Authenticated'],
-#                                acquire=True)
+    # -- actions ---------------------------------------------------------------
+    actions = updateActions(ATFolder, (
+        {
+        'action':      "string:$object_url/all_assignments",
+        'id':          'all_assignments',
+        'name':        'Assignments',
+        'permissions': (permissions.View,),
+        },
+
+        {
+        'action':      "string:$object_url/by_student",
+        'id':          'by_student',
+        'name':        'Statistics',
+        'permissions': (permissions.View,),
+        },
+   ))
     
+    aliases = updateAliases(ATFolder, {
+        'view': 'ecfolder_view',
+        })
+
+    # -- methods ---------------------------------------------------------------
+
+#    security.declarePrivate('manage_afterAdd')
+#    def manage_afterAdd(self, item, container):
+#        ATFolder.manage_afterAdd(self, item, container)
+#        self.manage_permission(ModifyViewTemplate,
+#                               roles=['Authenticated'],
+#                               acquire=True)
+
+    
+    #security.declarePrivate('summarize')
     def summarize(self, published=True):
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type': 
@@ -125,7 +167,9 @@ class ECFolder(ATFolder):
                         wtool.getInfoFor(assignment, 'review_state', ''))] += 1
 
         return students
+  
     
+    #security.declarePrivate('FIXME')
     def rework(self, dict):
         array = []
         mtool = self.portal_membership
@@ -136,6 +180,8 @@ class ECFolder(ATFolder):
 
         return array
 
+
+    #security.declarePrivate('FIXME')
     def summarizeCompletedAssignments(self, summary=None):
         """Returns a dictionary containing the number of assignments
         in a completed state per student"""
@@ -158,10 +204,14 @@ class ECFolder(ATFolder):
                 state_no += 1
         return retval
 
+
+    #security.declarePrivate('FIXME')
     def getWfStates(self):
         wtool = self.portal_workflow
         return wtool.getWorkflowById('ec_assignment_workflow').states.keys()
 
+
+    #security.declarePrivate('FIXME')
     def countContainedBoxes(self, published=True):
         """Count the assignment boxes contained in this folder and its
         subfolders.  By default, only published boxes and folders are
@@ -183,28 +233,6 @@ class ECFolder(ATFolder):
                 n_boxes += 1
         
         return n_boxes
-
-    ###########################################################################
-
-    actions = updateActions(ATFolder, (
-        {
-        'action':      "string:$object_url/all_assignments",
-        'id':          'all_assignments',
-        'name':        'Assignments',
-        'permissions': (permissions.View,),
-        },
-
-        {
-        'action':      "string:$object_url/by_student",
-        'id':          'by_student',
-        'name':        'Statistics',
-        'permissions': (permissions.View,),
-        },
-   ))
-    
-    aliases = updateAliases(ATFolder, {
-        'view': 'view_all_boxes',
-        })
 
 
 registerATCT(ECFolder, PROJECTNAME)

@@ -10,8 +10,17 @@ from Products.Archetypes.public import DisplayList
 
 GLOBALS = globals()
 
-PROJECTNAME = "ECAssignmentBox"
 I18N_DOMAIN = 'eduComponents'
+
+# define product and tool names
+PROJECTNAME = "ECAssignmentBox"
+
+ECAB_META = "ECAssignmentBox"
+ECAB_NAME = "AssignmentBox"
+
+ECA_META = "ECAssignment"
+ECA_NAME = "Assignment"
+
 
 SKINS_DIR = 'skins'
 
@@ -32,3 +41,10 @@ TEXT_TYPES = (
     'text/html',
     'text/plain',
     )
+
+
+# Some LOG levels
+BLATHER=-100
+DEBUG=-200
+TRACE=-300
+    

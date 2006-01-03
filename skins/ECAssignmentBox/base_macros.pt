@@ -1,0 +1,95 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xml:lang="en" lang="en"
+      i18n:domain="eduComponents">
+
+  <body>
+
+    <metal:define define-macro="base_view">
+      <tal:view define="mode      string:view;
+                        use_label python:True;
+                        accessor  python:field.getAccessor(here);
+                        object    python:accessor();"
+             condition="object | object/get_data | object/data | nothing" >
+        <metal:use use-macro="here/widgets/field/macros/view" />
+      </tal:view>
+    </metal:define>
+
+  
+    <metal:define define-macro="base_edit">
+      <tal:edit define="mode      string:edit;
+                        widget    python:field.widget;
+                        use_label python:True;">
+        <div tal:content="nocall:widget" />
+        <metal:use use-macro="here/widgets/field/macros/edit" />
+      </tal:edit>
+    </metal:define>
+
+    
+    <metal:define define-macro="eca_view_head">
+      <div metal:use-macro="here/document_actions/macros/document_actions"/>
+
+      <!-- show page title using parent's title -->    
+      <h1 class="documentFirstHeading">
+        <a tal:attributes="name here/aq_parent/id"
+           tal:content="here/aq_parent/title_or_id"/>
+      </h1>
+
+      <a class="link-parent"
+         href=""
+         tal:define="parent_url python:here.navigationParent(here, template_id)"
+         tal:condition="parent_url"
+         tal:attributes="href parent_url"
+         i18n:domain="plone"
+         i18n:translate="go_to_parent_url">
+        Up one level
+      </a>
+
+      <a class="link-down"
+         tal:attributes="href python: '#' + here.getId()">
+        <span i18n:translate="go_to_submission">Go to the submission of</span>
+        <span tal:replace="here/getCreatorFullName"/>
+      </a>
+
+      <!-- display assignmentbox text in a collapsable box-->
+      <dl class="collapsible collapsedBlockCollapsible">
+        <dt class="collapsibleHeader"
+            i18n:translate="assignment_text">
+          Assignment text
+        </dt>
+        <dd class="collapsibleContent">
+          <div class="documentDescription"
+               tal:content="structure here/aq_parent/Description"
+               tal:condition="here/aq_parent/Description"/>
+
+          <div tal:replace="structure here/aq_parent/getAssignment_text"/>
+        </dd>
+      </dl>
+
+      <p/>
+
+      <!-- show links and further information about this assignment -->
+      <h1>
+        <a i18n:translate="assignment_of"
+           tal:attributes="name here/getId">
+          Assignment of
+        </a>
+        <span tal:replace="here/getCreatorFullName"/>
+      </h1>
+
+      <div class="documentByLine">
+        <span i18n:translate="label_datetime">submitted at</span>
+        <span tal:content="python: here.toPortalTime(here.CreationDate(), 1)"/>
+      </div>
+
+      <a class="link-parent"
+         tal:attributes="href string: #${here/aq_parent/id}"
+         i18n:translate="back_to_overview">
+        Back to the assignment text
+      </a>
+    </metal:define>
+
+  </body>
+</html>

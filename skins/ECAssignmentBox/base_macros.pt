@@ -6,7 +6,9 @@
       i18n:domain="eduComponents">
 
   <body>
+    <!-- macros used in this project -->
 
+    <!-- base view macro -->
     <metal:define define-macro="base_view">
       <tal:view define="mode      string:view;
                         use_label python:True;
@@ -18,6 +20,7 @@
     </metal:define>
 
   
+    <!-- base edit macro -->
     <metal:define define-macro="base_edit">
       <tal:edit define="mode      string:edit;
                         widget    python:field.widget;
@@ -27,7 +30,10 @@
       </tal:edit>
     </metal:define>
 
-    
+    <!-- 
+      shows assignmentbox text in a collapsable box and further information 
+      about student's submission.
+    -->
     <metal:define define-macro="eca_view_head">
       <div metal:use-macro="here/document_actions/macros/document_actions"/>
 

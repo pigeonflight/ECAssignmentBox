@@ -34,16 +34,16 @@ validation.register(isPositive)
 localSchema = Schema((
     TextField(
         'directionText',
-        default_output_type = 'text/html',
         default_content_type = 'text/structured',
+        default_output_type = 'text/html',
         allowable_content_types = TEXT_TYPES,
-        widget=RichWidget(
+        widget = TextAreaWidget(
             label = 'Direction text',
             label_msgid = 'label_direction_text',
             description = 'Some content that all boxes in this folder refer to.',
             description_msgid = 'help_direction_text',
             i18n_domain = I18N_DOMAIN,
-            rows=6,
+            rows = 8,
         ),
     ),
 

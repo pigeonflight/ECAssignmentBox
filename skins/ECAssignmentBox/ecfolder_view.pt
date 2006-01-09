@@ -31,7 +31,7 @@
           tal:content="structure here/Description"
           tal:condition="here/Description"/>
           
-        <tal:nothing condition="here/directionText">
+        <tal:nothing condition="here/directionText|nothing">
           <div tal:content="structure here/directionText"/>
           <hr/>
         </tal:nothing>

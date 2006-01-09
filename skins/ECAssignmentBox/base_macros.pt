@@ -31,7 +31,7 @@
     </metal:define>
 
     <!-- 
-      shows assignmentbox text in a collapsable box and further information 
+      shows assignmentbox's text in a collapsible box and further information 
       about student's submission.
     -->
     <metal:define define-macro="eca_view_head">
@@ -59,7 +59,7 @@
         <span tal:replace="here/getCreatorFullName"/>
       </a>
 
-      <!-- display assignmentbox text in a collapsable box-->
+      <!-- display assignmentbox text in a collapsible box-->
       <dl class="collapsible collapsedBlockCollapsible">
         <dt class="collapsibleHeader"
             i18n:translate="assignment_text">

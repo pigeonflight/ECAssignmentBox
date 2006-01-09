@@ -1,0 +1,135 @@
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+  
+  <body>
+    <metal:block fill-slot="css_slot">
+      <style type="text/css" media="screen" 
+             tal:content="string: @import url($portal_url/ecabstyles.css);" />
+    </metal:block>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+          tal:define="Iterator    python: modules['Products.Archetypes'].IndexIterator;
+		                  tabindex    python: Iterator();
+                  		user_id     python: member.getId();
+                  		hasExpired  here/hasExpired;
+                  		isEffective here/isEffective;
+                  		canResubmit here/canResubmit">
+
+        <div metal:use-macro="here/document_actions/macros/document_actions"/>
+      
+        <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
+  
+        <div class="documentByLine"
+            tal:condition="python: here.submission_period_end and isEffective and not hasExpired">
+  
+          <span i18n:translate="submission_period_ends">
+            Submission period ends: 
+          </span>
+          <span tal:content="python: here.toPortalTime(here.getSubmission_period_end(), True)"/>
+        </div>
+  
+        <a class="link-parent"
+           href=""
+           tal:define="parent_url python:here.navigationParent(here, template_id)"
+           tal:condition="parent_url"
+           tal:attributes="href parent_url"
+           i18n:domain="plone"
+           i18n:translate="go_to_parent_url">
+          Up one level
+        </a>
+        
+        <!-- TODO: add collapsible box with direction text from ecfolder -->
+  
+        <div class="documentDescription"
+             tal:content="structure here/Description"
+             tal:condition="here/Description"/>
+  
+        <div class="field" tal:content="structure here/getAssignment_text"/>
+      
+        <hr/>
+  
+        <form action=""
+            name="eca_add"
+            method="post"
+            enctype="multipart/form-data"
+            tal:attributes="action string:${here/absolute_url}/${template/getId}"
+            tal:condition="python: not hasExpired and isEffective and canResubmit">
+  
+          <!-- text field -->
+          <div class="field">
+            <label for="answer" i18n:translate="label_answer">Answer</label>
+            <div class="formHelp" i18n:translate="help_answer">
+              Enter your answer for this assignment
+            </div>
+            <textarea cols="30"
+              rows="12"
+              wrap="off"
+              name="answer"
+              tabindex=""
+              tal:attributes="tabindex tabindex/next;"></textarea>
+          </div>
+  
+         <!-- upload file button -->
+         <div class="field">
+           <label for="file" i18n:translate="upload_file_label">File</label>
+           <div class="formHelp" i18n:translate="help_upload_file">
+             or upload a file (existing content will be replaced).
+           </div>
+           <input type="file"
+             name="file"
+             size="25"
+             tabindex=""
+             tal:attributes="tabindex tabindex/next;" />
+         </div>
+  
+         <!-- submit button -->
+         <div class="formControls">
+           <input class="context"
+               tabindex=""
+               type="submit"
+               name="form.button.Submit"
+               value="Submit"
+               i18n:attributes="value"
+               tal:attributes="tabindex tabindex/next;"/>
+  
+           <input class="standalone"
+               tabindex=""
+               type="submit"
+               name="form.button.Cancel"
+               value="Cancel"
+               i18n:attributes="value"
+               tal:attributes="tabindex tabindex/next;"/>
+          </div>
+  
+          <!-- hidden fields -->
+          <input type="hidden" name="user_id" tal:attributes="value user_id"/>          
+          <input type="hidden" name="form.submitted" value="1" />
+        </form>
+      
+        <div class="field">
+          <i tal:condition="hasExpired"
+             i18n:translate="submission_period_expired">
+            The submission period has expired.
+          </i>
+      
+          <i tal:condition="not: isEffective"
+             i18n:translate="submission_period_not_effective">
+            The submission period is not effective.
+          </i>
+  
+          <i tal:condition="python: (not canResubmit) and (not hasExpired)"
+             i18n:translate="submission_cannot_resubmit">
+            Submission not permitted: An earlier submission is under review
+            or has already been accepted.
+          </i>
+        </div>
+  
+        <div metal:use-macro="here/document_byline/macros/byline" />
+
+      </tal:main-macro>
+    </metal:main>
+  </body>
+</html>

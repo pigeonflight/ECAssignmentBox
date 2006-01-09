@@ -5,6 +5,9 @@
 #
 # This file is part of ECAssignmentBox.
 
+from urllib import quote
+import re
+
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import permissions
@@ -22,61 +25,37 @@ from Products.ATContentTypes.interfaces import IATDocument
 from Products.CMFCore.utils import getToolByName
 from Products.PortalTransforms.utils import TransformException
 
-from config import PROJECTNAME, ICONMAP, TEXT_TYPES, I18N_DOMAIN
-from urllib import quote
-import re
+# local imports
+from Products.ECAssignmentBox.config import *
 
 
 # alter default fields -> hide title and description
-localBaseSchema = ATContentTypeSchema.copy()
-localBaseSchema['title'].default_method = '_generateTitle'
+ECAssignmentSchema = ATContentTypeSchema.copy()
+ECAssignmentSchema['title'].default_method = '_generateTitle'
 
-localBaseSchema['title'].widget.visible = {
+ECAssignmentSchema['title'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
 }
 
-localBaseSchema['description'].widget.visible = {
+ECAssignmentSchema['description'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
 }
-
 
 # define schema
-ECAssignmentSchema = localBaseSchema + Schema((
-#    DateTimeField(
-#        'datetime',
-#        widget = ComputedWidget(
-#            label = 'Datetime',
-#            label_msgid = 'label_datetime',
-#            description = 'The date and time for this submission.',
-#            description_msgid = 'help_datetime',
-#            i18n_domain = I18N_DOMAIN,
-#        ),   
-#    ),
-#    TextField(
-#        'source',
-#        searchable = True,
-#        default_output_type = 'text/structured',
-#        widget = ComputedWidget(
-#            label = 'Answer',
-#            label_msgid = 'label_answer',
-#            description = 'The answer for this assignment.',
-#            description_msgid = 'help_source',
-#            i18n_domain = I18N_DOMAIN,
-#        ),
-#    ),
-
+ECAssignmentSchema = ECAssignmentSchema + Schema((
     FileField(
         'file',
         searchable = True,
         primary = True,
         widget = FileWidget(
-            description = "The answer for this assignment.",
+            description = "The answer for this assignment",
             description_msgid = "help_answer",
             label = "Answer",
             label_msgid = "label_answer",
             i18n_domain = I18N_DOMAIN,
+            macro = 'answer_widget',
         ),
     ),
 
@@ -87,9 +66,9 @@ ECAssignmentSchema = localBaseSchema + Schema((
         default_output_type = 'text/html',
         allowable_content_types = TEXT_TYPES,
         widget = TextAreaWidget(
-            label = "Manual feedback",
+            label = "Feedback",
             label_msgid = "label_feedback",
-            description = "The marker's feedback for this assignment.",
+            description = "The grader's feedback for this assignment",
             description_msgid = "help_feedback",
             i18n_domain = I18N_DOMAIN,
             rows = 8,
@@ -101,7 +80,7 @@ ECAssignmentSchema = localBaseSchema + Schema((
         searchable = True,
         widget=StringWidget(
             label = 'Grade',
-            description = "The grade awarded for this assignment.",
+            description = "The grade awarded for this assignment",
             i18n_domain = I18N_DOMAIN,
         ),
     ),
@@ -123,16 +102,46 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
     #_at_rename_after_creation = True
     schema = ECAssignmentSchema
-    meta_type = "ECAssignment"
-    archetype_name = "Assignment"
-
-    default_view   = 'assignment_view'
-    immediate_view = 'assignment_view'
+    meta_type = ECA_META
+    archetype_name = ECA_NAME
 
     content_icon = "sheet-16.png"
     global_allow = False
 
+    default_view   = 'eca_view'
+    immediate_view = 'eca_view'
+
+    # -- actions ---------------------------------------------------------------
+    actions = updateActions(ATCTContent, (
+        {
+        'action':      "string:$object_url/eca_grade",
+        'category':    "object",
+        'id':          'grade',
+        'name':        'Grade',
+        'permissions': (permissions.ModifyPortalContent,),
+        'condition':   'python:1'
+        #'condition':   "python: portal.portal_workflow.getInfoFor(here, 'review_state', '') == 'graded'"
+        },
+
+        {
+        'action':      "string:$object_url/base_edit",
+        'category':    "object",
+        'id':          'edit',
+        'name':        'Edit',
+        'permissions': (permissions.ModifyPortalContent,),
+        'condition':   "python: here.Creator() == \
+            portal.portal_membership.getAuthenticatedMember().getUserName()"
+        },
+
+        ))
+
+    aliases = updateAliases(ATCTContent, {
+        'view': 'eca_view',
+        })
+
+    # -- methods ---------------------------------------------------------------
     security.declarePrivate('manage_afterAdd')
+    # FIXME: use a constant for 'supersede' which should be imported from config
     def manage_afterAdd(self, item, container):
         BaseContent.manage_afterAdd(self, item, container)
         
@@ -148,23 +157,27 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                                           % self.getId())
 
 
-    #security.declarePublic('setField')
+    # FIXME: deprecated, set security
     def setField(self, name, value, **kw):
-        """TODO: add useful comments"""
+        """Sets value of a field"""
         field = self.getField(name)
         field.set(self, value, **kw)
 
 
     security.declarePrivate('_generateTitle')
     def _generateTitle(self):
+        #log("Title changed from '%s' to '%s'" % \
+        #        (self.title, self.getCreatorFullName(),), severity=DEBUG)
         return self.getCreatorFullName()
 
 
+    # FIXME: set security
     def getCreatorFullName(self):
         #return util.getFullNameById(self, self.Creator())
         return self.ecab_utils.getFullNameById(self.Creator())
 
     
+    # FIXME: deprecated, use get_data or data in page templates
     def getAsPlainText(self):
         """Return the file contents as plain text.
         Cf. <http://www.bozzi.it/plone/>,
@@ -179,6 +192,11 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
         if re.match("text/|application/xml", mt):
             return str(f.get(self))
+        else:
+            return None
+        
+        # FIXME: cut this for the moment because result of Word or PDF files 
+        #        looks realy ugly
 
         try:
             result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
@@ -190,35 +208,10 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             return result.getData()
         else:
             return None
-            
-
-    actions = updateActions(ATCTContent, (
-        {
-        'action':      "string:$object_url/assignment_edit",
-        'category':    "object",
-        'id':          'grade',
-        'name':        'Grade',
-        'permissions': (permissions.ModifyPortalContent,),
-        'condition'  : 'python:1'
-        #'condition': "python: portal.portal_workflow.getInfoFor(here, 'review_state', '') == 'graded'"
-        },
-
-        {
-        'action':      "string:$object_url/base_edit",
-        'category':    "object",
-        'id':          'edit',
-        'name':        'Edit',
-        'permissions': (permissions.ModifyPortalContent,),
-        'condition': "python: here.Creator() == \
-        portal.portal_membership.getAuthenticatedMember().getUserName()"
-        },
-
-        ))
-
-
-    aliases = updateAliases(ATCTContent, {
-        'view': 'assignment_view',
-        })
+    
+    security.declarePublic('evaluate')
+    def evaluate(self, parent):
+        return None
 
 
 registerATCT(ECAssignment, PROJECTNAME)

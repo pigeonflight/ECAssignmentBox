@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-11-03 13:44+0000\n"
+"POT-Creation-Date: 2006-01-10 13:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,38 +17,83 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: eduComponents\n"
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
-#. <input class="context" i18n:attributes="value" name="choice" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Submit"/>
-# Original: "Submit"
-# Original: "Submit"
-msgid "Submit"
+#: .\skins\ECAssignmentBox\eca_add.cpy
+msgid "Neither answer nor uploaded file found."
+msgstr ""
+
+#: .\skins\ECAssignmentBox\eca_add_validate.vpy
+msgid "The submission period has expired. Your submission was rejected."
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
+#: .\skins\ECAssignmentBox\eca_add_validate.vpy
+msgid "You need to be logged in with your username and password."
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\eca_add.cpy
+msgid "Your submission has been saved."
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\base_macros.pt
+#. <a i18n:translate="assignment_of" tal:attributes="name here/getId">
+#.           Assignment of
+#. </a>
+# Original: "Assignment of"
+msgid "assignment_of"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\base_macros.pt
+#. <dt class="collapsibleHeader" i18n:translate="assignment_text">
+#.           Assignment text
+#. </dt>
+# Original: "Assignment text"
+msgid "assignment_text"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\base_macros.pt
+#. <a class="link-parent" i18n:translate="back_to_overview" tal:attributes="href string: #${here/aq_parent/id}">
+#.         Back to the assignment text
+#. </a>
+# Original: "Back to the assignment text"
+msgid "back_to_overview"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\base_macros.pt
+#. <span i18n:translate="go_to_submission">
+#.  Go to the submission of
+#. </span>
+# Original: "Go to the submission of"
+msgid "go_to_submission"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecab_view.cpt
 #. <div class="formHelp" i18n:translate="help_answer">
-#.        Enter your answer for this assignment
+#.               Enter your answer for this assignment
 #. </div>
 # Original: "Enter your answer for this assignment"
 msgid "help_answer"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
+#: .\skins\ECAssignmentBox\ecab_view.cpt
 #. <div class="formHelp" i18n:translate="help_upload_file">
-#.        or upload a file (existing content will be replaced).
+#.              or upload a file (existing content will be replaced).
 #. </div>
-# Original: "or upload a file (existing content will be replaced)."
 # Original: "or upload a file (existing content will be replaced)."
 msgid "help_upload_file"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_download" tal:attributes="href python: '%s/at_download/file' % (item.getId(),)">
 #.  [Download]
 #. </a>
-# Original: "[Download]"
 # Original: "[Download]"
 msgid "label_action_download"
 msgstr ""
@@ -64,28 +109,39 @@ msgid "label_action_edit"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <a href="item_url" i18n:translate="label_action_grade" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('grade'))">
+#.                         [Grade]
+#. </a>
+# Original: "[Grade]"
+msgid "label_action_grade"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\all_assignments.pt
+#. <a href="item_url" i18n:translate="label_action_view" tal:attributes="href python: assignment.reference_url()">
+#.                               [View]
+#. </a>
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_view" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))">
 #.  [View]
 #. </a>
-# Original: "[View]"
 # Original: "[View]"
 msgid "label_action_view"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_actions">
 #.  Actions
 #. </th>
-# Original: "Actions"
 # Original: "Actions"
 msgid "label_actions"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
-#. <label for="source" i18n:translate="label_answer">
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <label for="answer" i18n:translate="label_answer">
 #.  Answer
 #. </label>
 # Original: "Answer"
@@ -111,22 +167,56 @@ msgid "label_cancel"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <th i18n:translate="label_completed">
+#.  Completed
+#. </th>
+# Original: "Completed"
+msgid "label_completed"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <th i18n:translate="label_completed_curr">
+#.  %Curr.
+#. </th>
+# Original: "%Curr."
+msgid "label_completed_curr"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">
+#.  %Proj.
+#. </th>
+# Original: "%Proj."
+msgid "label_completed_proj"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b i18n:translate="label_completed_states">
+#.  Completed States
+#. </b>
+# Original: "Completed States"
+msgid "label_completed_states"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_date">
 #.  Date
 #. </th>
-# Original: "Date"
 # Original: "Date"
 msgid "label_date"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
+#: .\skins\ECAssignmentBox\base_macros.pt
 #. <span i18n:translate="label_datetime">
-#.  Delivered at
+#.  submitted at
 #. </span>
-# Original: "Delivered at"
-# Original: "Delivered at"
+# Original: "submitted at"
 msgid "label_datetime"
 msgstr ""
 
@@ -141,23 +231,45 @@ msgid "label_feedback"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_mark">
 #.  Grade
 #. </th>
 # Original: "Grade"
-# Original: "Mark"
 msgid "label_mark"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <label for="source" i18n:translate="label_source">
-#.  Text:
-#. </label>
+#: .\skins\ECAssignmentBox\all_assignments.pt
+#. <p i18n:translate="label_n_boxes">
+#.               Published assignment boxes inside this folder:
+#.  <span tal:replace="n_boxes"/>
+#. </p>
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b i18n:translate="label_n_boxes">
+#.  Published assignment boxes inside this folder
+#. </b>
+# Original: "Published assignment boxes inside this folder: <span tal:replace=\"n_boxes\"/>"
+msgid "label_n_boxes"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b i18n:translate="label_projected_assignments">
+#.  Projected Number of Assignments
+#. </b>
+# Original: "Projected Number of Assignments"
+msgid "label_projected_assignments"
+msgstr ""
+
+
 #: ./skins/ECAssignmentBox/assignment_view.pt
 #. <label for="source" i18n:translate="label_source">
 #.  Source:
+#. </label>
+#: ./skins/ECAssignmentBox/assignment_edit.cpt
+#. <label for="source" i18n:translate="label_source">
+#.  Text:
 #. </label>
 # Original: "Text:"
 # Original: "Source:"
@@ -165,21 +277,24 @@ msgid "label_source"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_state">
 #.  State
 #. </th>
-# Original: "State"
 # Original: "State"
 msgid "label_state"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\all_assignments.pt
+#. <span i18n:translate="label_submissions">
+#.  Submissions
+#. </span>
+#: .\skins\ECAssignmentBox\by_student.pt
 #. <h1 class="documentFirstHeading" i18n:translate="label_submissions">
-#.  Submitted Assignments
+#. 	  Students
 #. </h1>
-# Original: "Submitted Assignments"
+# Original: "Submissions"
 msgid "label_submissions"
 msgstr ""
 
@@ -191,13 +306,30 @@ msgid "label_submit"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
+#: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_user">
 #.  User
 #. </th>
 # Original: "User"
-# Original: "User"
 msgid "label_user"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#. <a href="/assignments" i18n:translate="label_view_assignments" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))">
+#.                           View submitted assignments
+#. </a>
+# Original: "View submitted assignments"
+msgid "label_view_assignments"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#. <a href="/view" i18n:translate="label_work_on" tal:attributes="href item/absolute_url">
+#.                           Work on this assignment
+#. </a>
+# Original: "Work on this assignment"
+msgid "label_work_on"
 msgstr ""
 
 
@@ -211,57 +343,57 @@ msgid "msg_marked_with"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
-#. <span i18n:translate="submission_period_ends">
-#.       Submission Period Ends:
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <i i18n:translate="submission_cannot_resubmit" tal:condition="python: (not canResubmit) and (not hasExpired)">
+#.             Submission not permitted: An earlier submission is under review
+#.             or has already been accepted.
+#. </i>
+# Original: "Submission not permitted: An earlier submission is under review or has already been accepted."
+msgid "submission_cannot_resubmit"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#. <span i18n:translate="submission_period_ended">
+#.                         Submission period ended:
 #. </span>
-# Original: "Submission Period Ends:"
+# Original: "Submission period ended:"
+msgid "submission_period_ended"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <span i18n:translate="submission_period_ends">
+#.             Submission period ends:
+#. </span>
+# Original: "Submission period ends:"
 msgid "submission_period_ends"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
-#. <b i18n:translate="submission_period_expired" tal:condition="hasExpired">
-#.       The submission period has expired.
-#. </b>
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <i i18n:translate="submission_period_expired" tal:condition="hasExpired">
+#.             The submission period has expired.
+#. </i>
 # Original: "The submission period has expired."
 msgid "submission_period_expired"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
-#. <b i18n:translate="submission_period_not_effective" tal:condition="not: isEffective">
-#.      The submission period is not effective.
-#. </b>
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <i i18n:translate="submission_period_not_effective" tal:condition="not: isEffective">
+#.             The submission period is not effective.
+#. </i>
 # Original: "The submission period is not effective."
 msgid "submission_period_not_effective"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignmentbox_view.pt
+#: .\skins\ECAssignmentBox\ecab_view.cpt
 #. <label for="file" i18n:translate="upload_file_label">
 #.  File
 #. </label>
 # Original: "File"
-# Original: "File"
 msgid "upload_file_label"
 msgstr ""
 
-#- Removed msgids:
-#  "<tal:nothing tal:content=\"item_state\"/>"
-# "No text inserted and uploaded file could not be read."
-# "Some values left unset."
-# "The submission period has expired. Your submission was rejected."
-# "You need to be logged in with your user name and password."
-# "Your submission has been saved." help_submission_text label_next
-# label_not_solved label_previous label_save label_solved label_status
-# label_submission_text msg_not_solved msg_solved
-# submission_periode_expired submission_periode_not_effective
-
-#- Added msgids:
-#  label_submit submission_period_ends label_answer help_answer
-# submission_period_expired submission_period_not_effective
-# label_submissions
-
-#- Added msgids by merging file None:
-# 

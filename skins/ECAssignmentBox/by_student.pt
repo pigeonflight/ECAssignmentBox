@@ -24,18 +24,18 @@
 	</h1>
 
 	<p>
-	  <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder</b>:
+	  <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
 	  <span tal:omit-tag="" tal:content="n_boxes"/>
 	  <br/>
 
 	  <span tal:omit-tag="" tal:condition="here/completedStates">
 	    <span tal:omit-tag="" tal:condition="here/projectedAssignments">
-	      <b i18n:translate="label_projected_assignments">Projected Number of Assignments</b>:
+	      <b i18n:translate="label_projected_assignments">Projected Number of Assignments:</b>
 	      <span tal:omit-tag="" tal:replace="here/projectedAssignments"/>
 	      <br/>
 	    </span>
 
-	    <b i18n:translate="label_completed_states">Completed States</b>:
+	    <b i18n:translate="label_completed_states">Completed States:</b>
 	    <span tal:omit-tag="" tal:replace="python: ', '.join(here.completedStates)"/>
 	  </span>
 	</p>

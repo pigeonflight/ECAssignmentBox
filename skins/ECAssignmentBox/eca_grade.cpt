@@ -49,6 +49,7 @@
                 type="submit"
                 name="form.button.Submit"
                 value="Save"
+                i18n:domain="plone"
                 i18n:attributes="value"
                 tal:attributes="tabindex tabindex/next;"/>
 
@@ -56,6 +57,7 @@
                 tabindex=""
                 type="submit"
                 name="form.button.Cancel"
+                i18n:domain="plone"
                 value="Cancel"
                 i18n:attributes="value"
                 tal:attributes="tabindex tabindex/next;"/>

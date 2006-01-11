@@ -149,7 +149,8 @@
                           </td>
                           <td>
                             <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"
-                                  tal:attributes="class wf_state_class"/>
+                                  tal:attributes="class wf_state_class"
+                                  i18n:domain="plone" i18n:translate=""/>
                           </td>
                           <td>
                             <span tal:content="python: assignment.getMark()"/>

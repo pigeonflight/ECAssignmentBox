@@ -1,7 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xml:lang="en"
     lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     metal:use-macro="here/main_template/macros/master"
     i18n:domain="eduComponents">
 
@@ -36,7 +40,10 @@
 	    </span>
 
 	    <b i18n:translate="label_completed_states">Completed States:</b>
-	    <span tal:omit-tag="" tal:replace="python: ', '.join(here.completedStates)"/>
+	    <tal:nothing repeat="state python: here.completedStates">
+	      <span tal:content="state" i18n:domain="plone" i18n:translate=""/><span>,<span/>
+	    </tal:nothing>
+	    <!-- <span tal:omit-tag="" tal:replace="python: ', '.join(here.completedStates)"/> -->
 	  </span>
 	</p>
 
@@ -46,13 +53,15 @@
 	      <th i18n:translate="label_user">User</th>
 
 	      <tal:block tal:condition="here/completedStates">
-		<th i18n:translate="label_completed">Completed</th>
-		<th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
-		<th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">%&nbsp;Proj.</th>
+      		<th i18n:translate="label_completed">Completed</th>
+      		<th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
+      		<th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">%&nbsp;Proj.</th>
 	      </tal:block>
 
 	      <tal:block tal:repeat="state python: here.getWfStates()">
-		<th tal:content="string: ${state} (%)" tal:attributes="class python: 'state-' + putils.normalizeString(state)"/>
+		      <th>
+		       <span tal:content="state" tal:attributes="class python: 'state-' + putils.normalizeString(state)" i18n:domain="plone" i18n:translate=""/>
+           <span>(%)</span>
 	      </tal:block>
 	    </tr>
 	  </thead>

@@ -63,7 +63,8 @@
                   <td tal:content="python: ecab_utils.getFullNameById(item.Creator())"/>
       
                   <td>
-                    <span i18n:translate=""
+                    <span i18n:domain="plone"
+                        i18n:translate=""
                         tal:condition="item_state_title"
                         tal:content="item_state_title"
                         tal:attributes="class item_wf_state_class" />

@@ -50,7 +50,7 @@ localSchema = Schema((
     LinesField(
         'completedStates',
         searchable = False,
-        vocabulary = 'getWfStates',
+        vocabulary = 'getWfStatesDisplayList',
         multiValued = True,
         widget = MultiSelectionWidget(
             label = "Completed States",
@@ -209,6 +209,18 @@ class ECFolder(ATFolder):
     def getWfStates(self):
         wtool = self.portal_workflow
         return wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+
+    #security.declarePrivate('FIXME')
+    def getWfStatesDisplayList(self):
+        wtool = self.portal_workflow
+        
+        dl = DisplayList(())
+        stateKeys = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+        
+        for key in stateKeys:
+            dl.add(key, wtool.getWorkflowById('ec_assignment_workflow').states[key].title)
+
+        return dl
 
 
     #security.declarePrivate('FIXME')

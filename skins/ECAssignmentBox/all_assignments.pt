@@ -140,7 +140,10 @@
                                     wtool here/portal_workflow;">
                       <tal:block tal:repeat="assignment summary">
                         <tr tal:define="oddrow repeat/assignment/odd;
-                                        wf_state_class python: 'state-' + putils.normalizeString(wtool.getInfoFor(assignment, 'review_state', ''));"
+                                item_type assignment/portal_type;
+                                item_wf_state assignment/review_state|python: wtool.getInfoFor(assignment, 'review_state', '');
+                                item_state_title python:wtool.getTitleForStateOnType(item_wf_state, item_type);
+                                item_wf_state_class  python:'state-' + normalizeString(item_wf_state);"
                             tal:attributes="class python: test(oddrow, 'odd', 'even')">
                           <td tal:content="python: here.toPortalTime(assignment.CreationDate(), True)"/>
                           <td>
@@ -148,8 +151,8 @@
                                tal:content="python: ecab_utils.getFullNameById(assignment.Creator())"/>
                           </td>
                           <td>
-                            <span tal:content="python: wtool.getInfoFor(assignment, 'review_state', '')"
-                                  tal:attributes="class wf_state_class"
+                            <span tal:content="item_state_title"
+                                  tal:attributes="class item_wf_state_class"
                                   i18n:domain="plone" i18n:translate=""/>
                           </td>
                           <td>

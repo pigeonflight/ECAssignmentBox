@@ -40,16 +40,22 @@
 	    </span>
 
 	    <b i18n:translate="label_completed_states">Completed States:</b>
-	    <tal:nothing repeat="state python: here.completedStates">
-	      <span tal:content="state" i18n:domain="plone" i18n:translate=""/><span>,<span/>
-	    </tal:nothing>
-	    <!-- <span tal:omit-tag="" tal:replace="python: ', '.join(here.completedStates)"/> -->
+	    <tal:nothing define="statesDL here/getWfStatesDisplayList;"
+	        repeat="state python: here.completedStates">
+	        
+        <span tal:omit-tag="" 
+              tal:content="python: statesDL.getValue(state, default=state)" 
+	            i18n:domain="plone" 
+	            i18n:translate=""
+	      /><span tal:condition="not:repeat/state/end"
+	            tal:replace="string:,"/>
+	     </tal:nothing>
 	  </span>
 	</p>
 
 	<table class="listing">
 	  <thead>
-	    <tr>
+	    <tr tal:define="states here/getWfStatesDisplayList;">
 	      <th i18n:translate="label_user">User</th>
 
 	      <tal:block tal:condition="here/completedStates">
@@ -58,9 +64,12 @@
       		<th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">%&nbsp;Proj.</th>
 	      </tal:block>
 
-	      <tal:block tal:repeat="state python: here.getWfStates()">
+	      <tal:block tal:repeat="state python: states.keys()">
 		      <th>
-		       <span tal:content="state" tal:attributes="class python: 'state-' + putils.normalizeString(state)" i18n:domain="plone" i18n:translate=""/>
+		       <span tal:content="python: states.getValue(state, default=state)" 
+		             tal:attributes="class python: 'state-' + putils.normalizeString(state)" 
+		             i18n:domain="plone" 
+		             i18n:translate=""/>
            <span>(%)</span>
 	      </tal:block>
 	    </tr>

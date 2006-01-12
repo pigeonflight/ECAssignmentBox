@@ -16,6 +16,10 @@ msgstr ""
 "Domain: eduComponents\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+msgid "decimal_separator"
+msgstr ","
+
+
 #: .\skins\ECAssignmentBox\eca_add.cpy
 msgid "Neither answer nor uploaded file found."
 msgstr "Leerer Antworttext. Bitte machen Sie eine Eingabe."
@@ -138,6 +142,33 @@ msgstr "Geben Sie hier Ihren Antworttext ein"
 # Original: "or upload a file (existing content will be replaced)."
 msgid "help_upload_file"
 msgstr "oder laden Sie eine Datei hoch (der bestehende Text wird ersetzt)."
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <td colspan="3"
+#.     i18n:translate="label_average_grade">Average Grade</td>
+# Original: "Average Grade"
+msgid "label_average_grade"
+msgstr "Durschnittsnote"
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <td colspan="3"
+#.     i18n:translate="label_median_grade">Median Grade</td>
+# Original: "Median Grade"
+msgid "label_median_grade"
+msgstr "Median der Noten"
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <p tal:condition="avg"
+#.   i18n:translate="grade_statistics_help" class="discreet">Average
+#.   and median grades are calculated from all assignments in this
+#.   assignment box which are in the state <em>graded</em> and which
+#.   have a grade assigned.</p>
+# Original: "Average and median grades are calculated from all assignments in this assignment box which are in the state <em>graded</em> and which have a grade assigned."
+msgid "grade_statistics_help"
+msgstr "Durchschnittsnote und Median errechnen sich aus allen Einreichungen zu dieser Aufgabe, die den Status <em>Benotet</em> haben und bei denen eine Note eingetragen ist."
 
 
 #: .\skins\ECAssignmentBox\ecab_assignments.pt
@@ -368,7 +399,7 @@ msgstr "Diese Aufgabe bearbeiten"
 #. </i>
 # Original: "Submission not permitted: An earlier submission is under review or has already been accepted."
 msgid "submission_cannot_resubmit"
-msgstr "Einreichung nicht möglich: Eine frühere Einreichung wird gerade gerüft oder ist bereits akzeptiert worden."
+msgstr "Einreichung nicht möglich: Eine frühere Einreichung wird gerade geprüft oder ist bereits akzeptiert worden."
 
 
 #: .\skins\ECAssignmentBox\ecfolder_view.pt

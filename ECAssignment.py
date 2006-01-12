@@ -50,12 +50,28 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
         searchable = True,
         primary = True,
         widget = FileWidget(
-            description = "The answer for this assignment",
-            description_msgid = "help_answer",
             label = "Answer",
             label_msgid = "label_answer",
+            description = "The submission for this assignment",
+            description_msgid = "help_answer",
             i18n_domain = I18N_DOMAIN,
             macro = 'answer_widget',
+        ),
+    ),
+
+    TextField(
+        'remarks',
+        default_content_type = 'text/structured',
+        default_output_type = 'text/html',
+        allowable_content_types = TEXT_TYPES,
+        accessor = 'getRemarksIfAllowed',
+        widget = TextAreaWidget(
+            label = "Remarks",
+            label_msgid = "label_remarks",
+            description = "Your remarks for this assignment (they will not be shown to the student)",
+            description_msgid = "help_remarks",
+            i18n_domain = I18N_DOMAIN,
+            rows = 8,
         ),
     ),
 
@@ -78,9 +94,12 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
     StringField(
         'mark',
         searchable = True,
+        accessor = 'getGradeIfAllowed',
         widget=StringWidget(
             label = 'Grade',
+            label_msgid = 'label_grade',
             description = "The grade awarded for this assignment",
+            description_msgid = "help_grade",
             i18n_domain = I18N_DOMAIN,
         ),
     ),
@@ -179,11 +198,15 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     
     # FIXME: deprecated, use get_data or data in page templates
     def getAsPlainText(self):
-        """Return the file contents as plain text.
+        """
+        Return the file contents as plain text.
         Cf. <http://www.bozzi.it/plone/>,
         <http://plone.org/Members/syt/PortalTransforms/user_manual>;
         see also portal_transforms in the ZMI for available
-        transformations."""
+        transformations.
+        
+        @return file content as plain text or None
+        """
         ptTool = getToolByName(self, 'portal_transforms')
         f = self.getField('file')
         #source = ''
@@ -209,9 +232,49 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         else:
             return None
     
+    
     security.declarePublic('evaluate')
     def evaluate(self, parent):
+        """
+        Will be called if a new assignment is added to this assignment box to
+        evaluate it. Please do not confuse this with the validation of the
+        input values.
+        For ECAssignment this mehtod returns nothing but it can be 
+        overwritten in subclasses, e.g. ECAutoAssignmentBox.
+        
+        @return None
+        """
         return None
 
+    
+    security.declarePublic('getGradeIfAllowed')
+    def getGradeIfAllowed(self):
+        """
+        The accessor for field grade. Returns the grade if this assigment is in
+        state graded or current user has manager role.
+        
+        @return string value of the given grade or nothing
+        """
+        wtool = self.portal_workflow
+        state = wtool.getInfoFor(self, 'review_state', '')
+        
+        currentUser = self.portal_membership.getAuthenticatedMember()
+        isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
+
+        if state == 'graded' or isReviewer:
+            return self.mark
+
+    def getRemarksIfAllowed(self):
+        """
+        The accessor for field remarks. Returns the remarks if current user 
+        has manager role and can is creator of this assignment.
+        
+        @return remarks as string
+        """
+        
+        #currentUser = self.portal_membership.getAuthenticatedMember()
+        #userId = currentUser.getId()
+        
+        return None
 
 registerATCT(ECAssignment, PROJECTNAME)

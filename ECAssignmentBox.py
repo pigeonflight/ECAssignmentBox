@@ -20,6 +20,7 @@ from Products.ATContentTypes.content.folder import ATFolder
 # local imports
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
+from Statistics import Statistics
 
 ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
     TextField(
@@ -181,6 +182,61 @@ class ECAssignmentBox(ATFolder):
                     continue
                 summary.append(item)
         return summary
+
+    def getNumericGrades(self):
+        """
+        Add documentation here
+        """
+        wtool = self.portal_workflow
+        items = self.contentValues(filter={'portal_type':
+                                           self.allowed_content_types})
+        grades = []
+
+        for item in items:
+            state = wtool.getInfoFor(item, 'review_state')
+            if state not in ('graded'):
+                continue
+            
+            if not item.mark:
+                continue
+
+            grades.append(item.mark)
+
+        for i in range(0, len(grades)):
+            try:
+                grades[i] = float(grades[i])
+            except ValueError:
+                return None
+
+        return grades
+
+    security.declarePublic('getAverageGrade')
+    def getAverageGrade(self):
+        """
+        Add documentation here
+        """
+        grades = self.getNumericGrades()
+
+        try:
+            stats = Statistics(grades)
+        except:
+            return None
+        
+        return stats.mean
+
+    security.declarePublic('getMedianGrade')
+    def getMedianGrade(self):
+        """
+        Add documentation here
+        """
+        grades = self.getNumericGrades()
+        
+        try:
+            stats = Statistics(grades)
+        except:
+            return None
+        
+        return stats.median
 
 
 registerATCT(ECAssignmentBox, PROJECTNAME)

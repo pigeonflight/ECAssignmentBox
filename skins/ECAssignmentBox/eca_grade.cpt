@@ -16,7 +16,7 @@
           tal:define="errors         options/state/getErrors | nothing;
                       Iterator       python:modules['Products.Archetypes'].IndexIterator;
                       readFieldNames python:['file'];
-                      editFieldNames python:['feedback', 'mark'];">
+                      editFieldNames python:['remarks', 'feedback', 'mark'];">
   
         <!-- show header information -->
         <metal:use use-macro="here/base_macros/macros/eca_view_head" />

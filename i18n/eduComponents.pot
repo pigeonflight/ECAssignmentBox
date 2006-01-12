@@ -3,8 +3,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-01-10 13:25+0000\n"
+"Project-Id-Version: ECAssignmentBox\n"
+"POT-Creation-Date: 2006-01-12 07:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 #: .\skins\ECAssignmentBox\eca_add.cpy
 msgid "Neither answer nor uploaded file found."
 msgstr ""
+
 
 #: .\skins\ECAssignmentBox\eca_add_validate.vpy
 msgid "The submission period has expired. Your submission was rejected."
@@ -73,11 +74,11 @@ msgstr ""
 
 
 #: .\skins\ECAssignmentBox\ecab_view.cpt
-#. <div class="formHelp" i18n:translate="help_answer">
+#. <div class="formHelp" i18n:translate="help_submit_answer">
 #.               Enter your answer for this assignment
 #. </div>
 # Original: "Enter your answer for this assignment"
-msgid "help_answer"
+msgid "help_submit_answer"
 msgstr ""
 
 
@@ -96,16 +97,6 @@ msgstr ""
 #. </a>
 # Original: "[Download]"
 msgid "label_action_download"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
-#. <a href="item_url" i18n:translate="label_action_edit" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('edit'))">
-#.  [Edit]
-#. </a>
-# Original: "[Edit]"
-# Original: "[Edit]"
-msgid "label_action_edit"
 msgstr ""
 
 
@@ -141,29 +132,11 @@ msgstr ""
 
 
 #: .\skins\ECAssignmentBox\ecab_view.cpt
-#. <label for="answer" i18n:translate="label_answer">
+#. <label for="answer" i18n:translate="label_submit_answer">
 #.  Answer
 #. </label>
 # Original: "Answer"
-msgid "label_answer"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <label for="auto_feedback" i18n:translate="label_auto_feedback">
-#.  Auto-feedback:
-#. </label>
-# Original: "Auto-feedback:"
-# Original: "Auto-feedback:"
-msgid "label_auto_feedback"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <input class="standalone" i18n:attributes="value label_cancel;" name="form.button.cancel" tabindex="" tal:attributes="tabindex tabindex/next" type="submit" value="Cancel"/>
-# Original: "Cancel"
-# Original: "Cancel"
-msgid "label_cancel"
+msgid "label_submit_answer"
 msgstr ""
 
 
@@ -196,9 +169,9 @@ msgstr ""
 
 #: .\skins\ECAssignmentBox\by_student.pt
 #. <b i18n:translate="label_completed_states">
-#.  Completed States
+#.  Completed States:
 #. </b>
-# Original: "Completed States"
+# Original: "Completed States:"
 msgid "label_completed_states"
 msgstr ""
 
@@ -221,16 +194,6 @@ msgid "label_datetime"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/assignment_view.pt
-#. <label for="feedback" i18n:translate="label_feedback">
-#.  Feedback:
-#. </label>
-# Original: "Feedback:"
-# Original: "Feedback:"
-msgid "label_feedback"
-msgstr ""
-
-
 #: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_mark">
 #.  Grade
@@ -247,7 +210,7 @@ msgstr ""
 #. </p>
 #: .\skins\ECAssignmentBox\by_student.pt
 #. <b i18n:translate="label_n_boxes">
-#.  Published assignment boxes inside this folder
+#.  Published assignment boxes inside this folder:
 #. </b>
 # Original: "Published assignment boxes inside this folder: <span tal:replace=\"n_boxes\"/>"
 msgid "label_n_boxes"
@@ -256,24 +219,10 @@ msgstr ""
 
 #: .\skins\ECAssignmentBox\by_student.pt
 #. <b i18n:translate="label_projected_assignments">
-#.  Projected Number of Assignments
+#.  Projected Number of Assignments:
 #. </b>
-# Original: "Projected Number of Assignments"
+# Original: "Projected Number of Assignments:"
 msgid "label_projected_assignments"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignment_view.pt
-#. <label for="source" i18n:translate="label_source">
-#.  Source:
-#. </label>
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <label for="source" i18n:translate="label_source">
-#.  Text:
-#. </label>
-# Original: "Text:"
-# Original: "Source:"
-msgid "label_source"
 msgstr ""
 
 
@@ -296,13 +245,6 @@ msgstr ""
 #. </h1>
 # Original: "Submissions"
 msgid "label_submissions"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <input class="context" i18n:attributes="value label_submit;" name="form.button.submit" tabindex="" tal:attributes="tabindex tabindex/next" type="submit" value="Submit"/>
-# Original: "Submit"
-msgid "label_submit"
 msgstr ""
 
 
@@ -330,16 +272,6 @@ msgstr ""
 #. </a>
 # Original: "Work on this assignment"
 msgid "label_work_on"
-msgstr ""
-
-
-#: ./skins/ECAssignmentBox/assignment_view.pt
-#. <span i18n:translate="msg_marked_with">
-#.  Your assignment was graded:
-#. </span>
-# Original: "Your assignment was graded:"
-# Original: "Your assignment was marked:"
-msgid "msg_marked_with"
 msgstr ""
 
 
@@ -397,3 +329,101 @@ msgstr ""
 msgid "upload_file_label"
 msgstr ""
 
+
+#: .\ECAssignment.py
+msgid "label_answer"
+msgstr ""
+
+#: .\ECAssignment.py
+msgid "help_answer"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "label_remarks"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "help_remarks"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "label_feedback"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "help_feedback"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "label_grade"
+msgstr ""
+
+
+#: .\ECAssignment.py
+msgid "help_grade"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "label_directions"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "help_directions"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "label_completed_states"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "help_completed_states"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "label_projected_assignments"
+msgstr ""
+
+
+#: .\ECFolder.py
+msgid "help_projected_assignments"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "label_assignment_text"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "help_assignment_text"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "label_submission_period_start"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "help_submission_period_start"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "label_submission_period_end"
+msgstr ""
+
+
+#: .\ECAssignmetBox.py
+msgid "help_submission_period_end"
+msgstr ""

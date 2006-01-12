@@ -22,6 +22,7 @@ msgstr ""
 msgid "Assignments"
 msgstr "Einreichungen"
 
+
 #: ECFolder.py
 #. Statistics
 # Original: "Statistics"
@@ -30,34 +31,18 @@ msgstr "Statistiken"
 
 
 #: ECAssignmentWorkflow.py
-#. submitted
-# Original: "submitted"
-msgid "submitted"
-msgstr "eingereicht"
-
-#: ECAssignmentWorkflow.py
 #. Submitted
 # Original: "Submitted"
 msgid "Submitted"
 msgstr "Eingereicht"
 
-#: ECAssignmentWorkflow.py
-#. pending
-# Original: "pending"
-msgid "pending"
-msgstr "wartend"
 
 #: ECAssignmentWorkflow.py
 #. Pending
 # Original: "Pending"
 msgid "Pending"
-msgstr "Wartend"
+msgstr "In Prüfung"
 
-#: ECAssignmentWorkflow.py
-#. superseded
-# Original: "superseded"
-msgid "superseded"
-msgstr "ersetzt"
 
 #: ECAssignmentWorkflow.py
 #. Superseded
@@ -65,11 +50,6 @@ msgstr "ersetzt"
 msgid "Superseded"
 msgstr "Ersetzt"
 
-#: ECAssignmentWorkflow.py
-#. rejected
-# Original: "rejected"
-msgid "rejected"
-msgstr "abgewiesen"
 
 #: ECAssignmentWorkflow.py
 #. Rejected
@@ -77,11 +57,6 @@ msgstr "abgewiesen"
 msgid "Rejected"
 msgstr "Abgewiesen"
 
-#: ECAssignmentWorkflow.py
-#. accepted
-# Original: "accepted"
-msgid "accepted"
-msgstr "akzeptiert"
 
 #: ECAssignmentWorkflow.py
 #. Accepted
@@ -89,11 +64,6 @@ msgstr "akzeptiert"
 msgid "Accepted"
 msgstr "Akzeptiert"
 
-#: ECAssignmentWorkflow.py
-#. graded
-# Original: "graded"
-msgid "graded"
-msgstr "benotet"
 
 #: ECAssignmentWorkflow.py
 #. Graded
@@ -103,22 +73,11 @@ msgstr "Benotet"
 
 
 #: ECAssignmentWorkflow.py
-#. review
-# Original: "review"
-msgid "review"
-msgstr "prüfen"
-
-#: ECAssignmentWorkflow.py
 #. Review
 # Original: "Review"
 msgid "Review"
 msgstr "Prüfen"
 
-#: ECAssignmentWorkflow.py
-#. accept
-# Original: "accept"
-msgid "accept"
-msgstr "akzeptieren"
 
 #: ECAssignmentWorkflow.py
 #. Accept
@@ -126,11 +85,6 @@ msgstr "akzeptieren"
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: ECAssignmentWorkflow.py
-#. grade
-# Original: "grade"
-msgid "grade"
-msgstr "benoten"
 
 #: ECAssignmentWorkflow.py
 #. Grade
@@ -138,14 +92,25 @@ msgstr "benoten"
 msgid "Grade"
 msgstr "Benoten"
 
-#: ECAssignmentWorkflow.py
-#. supersede
-# Original: "supersede"
-msgid "supersede"
-msgstr "abweisen"
 
 #: ECAssignmentWorkflow.py
 #. Supersede
 # Original: "Supersede"
 msgid "Supersede"
 msgstr "Abweisen"
+
+
+#: .\skins\ecab_view.cpt
+#: .\skins\eca_grade.cpt
+msgid "Cancel"
+msgstr "Abbrechen"
+
+
+#: .\skins\ecab_view.cpt
+msgid "Submit"
+msgstr "Einreichen"
+
+
+#: .\skins\eca_grade.cpt
+msgid "Save"
+msgstr "Speichern"

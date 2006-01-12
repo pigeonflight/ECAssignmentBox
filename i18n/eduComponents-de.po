@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ECAssignmentBox\n"
-"POT-Creation-Date: 2006-01-10 13:25+0000\n"
+"POT-Creation-Date: 2006-01-12 07:47+0000\n"
 "PO-Revision-Date: 2005-11-03 15:35+0100\n"
-"Last-Translator: Michael Piotrowski <mxp@iws.cs.uni-magdeburg.de>\n"
+"Last-Translator: Mario Amelung <amelung@iws.cs.uni-magdeburg.de>\n"
 "Language-Team: WDOK <amelung@iws.cs.uni-magdeburg.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -72,12 +72,62 @@ msgid "go_to_submission"
 msgstr "Zur Einreichung von"
 
 
+#: .\ECAssignment.py
+msgid "help_answer"
+msgstr "Die studentische Einreichung zu dieser Aufgabe"
+
+
+#: .\ECAssignmetBox.py
+msgid "help_assignment_text"
+msgstr "Fügen Sie hier den Aufgabentext und Hinweise ein"
+
+
+#: .\ECFolder.py
+msgid "help_completed_states"
+msgstr "Wählen Sie die Zustände, die anzeigen, dass die Bearbeitung einer Aufgabe abgeschlossen ist"
+
+
+#: .\ECFolder.py
+msgid "help_directions"
+msgstr "Anweisungen/Hinweise für alle Aufgaben in diesem Ordner"
+
+
+#: .\ECAssignment.py
+msgid "help_feedback"
+msgstr "Rückmeldung an den Studenten zu dieser Einreichung"
+
+
+#: .\ECAssignment.py
+msgid "help_grade"
+msgstr "Benotung zu dieser Einreichung"
+
+
+#: .\ECFolder.py
+msgid "help_projected_assignments"
+msgstr "Anzahl der geplanten Aufgaben in diesem Ordner"
+
+
+#: .\ECAssignment.py
+msgid "help_remarks"
+msgstr "Ihre Anmerkungen zu dieser Einreichung (diese werden dem Studenten nicht angezeigt)"
+
+
+#: .\ECAssignmetBox.py
+msgid "help_submission_period_end"
+msgstr "Zeitpunkt, ab dem keine Einreichungen mehr erlaubt sind"
+
+
+#: .\ECAssignmetBox.py
+msgid "help_submission_period_start"
+msgstr "Zeitpunkt, ab dem Einreichungen zu dieser Aufgabe erlaubt sind"
+
+
 #: .\skins\ECAssignmentBox\ecab_view.cpt
-#. <div class="formHelp" i18n:translate="help_answer">
+#. <div class="formHelp" i18n:translate="help_submit_answer">
 #.               Enter your answer for this assignment
 #. </div>
 # Original: "Enter your answer for this assignment"
-msgid "help_answer"
+msgid "help_submit_answer"
 msgstr "Geben Sie hier Ihren Antworttext ein"
 
 
@@ -97,15 +147,6 @@ msgstr "oder laden Sie eine Datei hoch (der bestehende Text wird ersetzt)."
 # Original: "[Download]"
 msgid "label_action_download"
 msgstr "[Herunterladen]"
-
-
-#: ./skins/ECAssignmentBox/assignmentbox_submissions.pt
-#. <a href="item_url" i18n:translate="label_action_edit" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('edit'))">
-#.  [Edit]
-#. </a>
-# Original: "[Edit]"
-msgid "label_action_edit"
-msgstr "[Bearbeiten]"
 
 
 #: .\skins\ECAssignmentBox\ecab_assignments.pt
@@ -139,29 +180,14 @@ msgid "label_actions"
 msgstr "Aktionen"
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
-#. <label for="answer" i18n:translate="label_answer">
-#.  Answer
-#. </label>
-# Original: "Answer"
+#: .\ECAssignment.py
 msgid "label_answer"
 msgstr "Antwort"
 
 
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <label for="auto_feedback" i18n:translate="label_auto_feedback">
-#.  Auto-feedback:
-#. </label>
-# Original: "Auto-feedback:"
-msgid "label_auto_feedback"
-msgstr "Automatische Rückmeldung:"
-
-
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <input class="standalone" i18n:attributes="value label_cancel;" name="form.button.cancel" tabindex="" tal:attributes="tabindex tabindex/next" type="submit" value="Cancel"/>
-# Original: "Cancel"
-msgid "label_cancel"
-msgstr "Abbruch"
+#: .\ECAssignmetBox.py
+msgid "label_assignment_text"
+msgstr "Aufgabentext"
 
 
 #: .\skins\ECAssignmentBox\by_student.pt
@@ -191,11 +217,9 @@ msgid "label_completed_proj"
 msgstr "%&nbsp;geplant"
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
-#. <b i18n:translate="label_completed_states">
-#.  Completed States
-#. </b>
-# Original: "Completed States"
+#: .\ECFolder.py
+# Original: "Completed States:"
+#, fuzzy
 msgid "label_completed_states"
 msgstr "Als abgschlossen betrachtete Zustände:"
 
@@ -216,6 +240,21 @@ msgstr "Datum"
 # Original: "submitted at"
 msgid "label_datetime"
 msgstr "eingereicht am"
+
+
+#: .\ECFolder.py
+msgid "label_directions"
+msgstr "Hinweise"
+
+
+#: .\ECAssignment.py
+msgid "label_feedback"
+msgstr "Rückmeldung"
+
+
+#: .\ECAssignment.py
+msgid "label_grade"
+msgstr "Note"
 
 
 #: .\skins\ECAssignmentBox\all_assignments.pt
@@ -241,27 +280,15 @@ msgid "label_n_boxes"
 msgstr "Veröffentlichte Aufgaben in diesem Ordner: <span tal:replace=\"n_boxes\"/>"
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
-#. <b i18n:translate="label_projected_assignments">
-#.  Projected Number of Assignments:
-#. </b>
+#: .\ECFolder.py
 # Original: "Projected Number of Assignments:"
 msgid "label_projected_assignments"
 msgstr "Geplante Anzahl an Aufgaben:"
 
 
-#: ./skins/ECAssignmentBox/assignment_view.pt
-#. <label for="source" i18n:translate="label_source">
-#.  Source:
-#. </label>
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <label for="source" i18n:translate="label_source">
-#.  Text:
-#. </label>
-# Original: "Source:"
-#, fuzzy
-msgid "label_source"
-msgstr "Text:"
+#: .\ECAssignment.py
+msgid "label_remarks"
+msgstr "Anmerkung"
 
 
 #: .\skins\ECAssignmentBox\all_assignments.pt
@@ -271,6 +298,16 @@ msgstr "Text:"
 # Original: "State"
 msgid "label_state"
 msgstr "Status"
+
+
+#: .\ECAssignmetBox.py
+msgid "label_submission_period_end"
+msgstr "Ende der Einreichungsfrist"
+
+
+#: .\ECAssignmetBox.py
+msgid "label_submission_period_start"
+msgstr "Beginn der Einreichungsfrist"
 
 
 #: .\skins\ECAssignmentBox\by_student.pt
@@ -286,11 +323,13 @@ msgid "label_submissions"
 msgstr "Eingereichte Lösungen"
 
 
-#: ./skins/ECAssignmentBox/assignment_edit.cpt
-#. <input class="context" i18n:attributes="value label_submit;" name="form.button.submit" tabindex="" tal:attributes="tabindex tabindex/next" type="submit" value="Submit"/>
-# Original: "Submit"
-msgid "label_submit"
-msgstr "Einreichen"
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#. <label for="answer" i18n:translate="label_submit_answer">
+#.  Answer
+#. </label>
+# Original: "Answer"
+msgid "label_submit_answer"
+msgstr "Antwort"
 
 
 #: .\skins\ECAssignmentBox\all_assignments.pt
@@ -320,16 +359,6 @@ msgid "label_work_on"
 msgstr "Diese Aufgabe bearbeiten"
 
 
-#: ./skins/ECAssignmentBox/assignment_view.pt
-#. <span i18n:translate="msg_marked_with">
-#.  Your assignment was graded:
-#. </span>
-# Original: "Your assignment was marked:"
-#, fuzzy
-msgid "msg_marked_with"
-msgstr "Bewertung:"
-
-
 #: .\skins\ECAssignmentBox\ecab_view.cpt
 #. <i i18n:translate="submission_cannot_resubmit" tal:condition="python: (not canResubmit) and (not hasExpired)">
 #.             Submission not permitted: An earlier submission is under review
@@ -337,7 +366,7 @@ msgstr "Bewertung:"
 #. </i>
 # Original: "Submission not permitted: An earlier submission is under review or has already been accepted."
 msgid "submission_cannot_resubmit"
-msgstr "Einreichung nicht möglich: Eine frühere Einreichung wird bewerted oder ist bereits akzeptiert worden."
+msgstr "Einreichung nicht möglich: Eine frühere Einreichung wird gerade gerüft oder ist bereits akzeptiert worden."
 
 
 #: .\skins\ECAssignmentBox\ecfolder_view.pt
@@ -385,7 +414,12 @@ msgid "upload_file_label"
 msgstr "Datei"
 
 #- Removed msgids:
-#  Cancel Submit
+# 
 
 #- Added msgids:
-# 
+#  label_answer help_answer label_remarks help_remarks label_feedback
+# help_feedback label_grade help_grade label_directions help_directions
+# help_completed_states help_projected_assignments label_assignment_text
+# help_assignment_text label_submission_period_start
+# help_submission_period_start label_submission_period_end
+# help_submission_period_end

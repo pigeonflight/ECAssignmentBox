@@ -41,7 +41,7 @@
           Up one level
         </a>
         
-        <!-- TODO: add collapsible box with direction text from ecfolder -->
+        <!-- TODO: add collapsible box with directions text from ecfolder -->
   
         <div class="documentDescription"
              tal:content="structure here/Description"
@@ -60,8 +60,8 @@
   
           <!-- text field -->
           <div class="field">
-            <label for="answer" i18n:translate="label_answer">Answer</label>
-            <div class="formHelp" i18n:translate="help_answer">
+            <label for="answer" i18n:translate="label_submit_answer">Answer</label>
+            <div class="formHelp" i18n:translate="help_submit_answer">
               Enter your answer for this assignment
             </div>
             <textarea cols="30"

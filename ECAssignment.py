@@ -267,13 +267,16 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     def getRemarksIfAllowed(self):
         """
         The accessor for field remarks. Returns the remarks if current user 
-        has manager role and can is creator of this assignment.
+        has reviewer permissions.
         
         @return remarks as string
         """
         
-        #currentUser = self.portal_membership.getAuthenticatedMember()
-        #userId = currentUser.getId()
+        currentUser = self.portal_membership.getAuthenticatedMember()
+        isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
+        
+        if isReviewer:
+            return self.remarks
         
         return None
 

@@ -251,7 +251,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     def getGradeIfAllowed(self):
         """
         The accessor for field grade. Returns the grade if this assigment is in
-        state graded or current user has manager role.
+        state graded or current user has reviewer permissions.
         
         @return string value of the given grade or nothing
         """
@@ -261,10 +261,11 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         currentUser = self.portal_membership.getAuthenticatedMember()
         isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
 
-        if state == 'graded':
-            return self.mark
-        elif isReviewer:
-            return '(' + self.mark + ')'
+        if self.mark:
+            if state == 'graded':
+                return self.mark
+            elif isReviewer:
+                return '(' + self.mark + ')'
 
     def getRemarksIfAllowed(self):
         """

@@ -13,7 +13,7 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          define="fieldNames python:['file', 'feedback', 'mark']">
+          define="fieldNames python:['file', 'remarks', 'feedback', 'mark']">
 
         <!-- show header information -->
         <metal:use use-macro="here/base_macros/macros/eca_view_head" />

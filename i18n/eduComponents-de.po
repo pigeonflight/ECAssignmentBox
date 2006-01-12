@@ -217,11 +217,13 @@ msgid "label_completed_proj"
 msgstr "%&nbsp;geplant"
 
 
-#: .\ECFolder.py
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b i18n:translate="label_completed_states">
+#.  Completed States:
+#. </b>
 # Original: "Completed States:"
-#, fuzzy
 msgid "label_completed_states"
-msgstr "Als abgschlossen betrachtete Zustände:"
+msgstr "Als abgeschlossen betrachtete Zustände:"
 
 
 #: .\skins\ECAssignmentBox\all_assignments.pt

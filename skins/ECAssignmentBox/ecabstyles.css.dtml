@@ -33,6 +33,12 @@ thead tr td {
   border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
 }
 
+tfoot {
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  border-color: &dtml-globalBorderColor;;
+}
+
 dd.ec-listing {
   margin-left: 16px
 }

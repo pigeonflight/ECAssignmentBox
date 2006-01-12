@@ -72,8 +72,9 @@
                   </td>
       
                   <td style="text-align: right">
-                    <span tal:condition="python: (item_wf_state == 'graded') and (item.getMark())"
-                        tal:content="item/mark"/>
+                    <span tal:define="field python:item.getField('mark');
+                                      accessor python:field.getAccessor(item);"
+                        tal:content="python: accessor()"/>
                   </td>
       
                   <td>

@@ -3,6 +3,8 @@ from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import UniqueObject, getToolByName
 
+from config import I18N_DOMAIN
+
 class ECABTool(UniqueObject, SimpleItem):
     """Various utility methods."""
 
@@ -10,6 +12,20 @@ class ECABTool(UniqueObject, SimpleItem):
     portal_type = meta_type = 'ECAssignmentBox Utility Tool'
     
     security = ClassSecurityInfo()
+
+    security.declarePublic('localizeNumber')
+    def localizeNumber(self, format, number):
+        """A simple method for localized formatting of decimal
+        numbers.  Theoretically, one could use locale.format(), but it
+        isn't portable enough."""
+        if type(number) not in (int, long, float):
+            return number
+        
+        decimalSeparator = self.translate(msgid = 'decimal_separator',
+                                          domain = I18N_DOMAIN,
+                                          default = '.')
+        retval = format % number
+        return retval.replace('.', decimalSeparator)
     
     security.declarePublic('getFullNameById')
     def getFullNameById(self, id):

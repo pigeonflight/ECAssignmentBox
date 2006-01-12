@@ -100,17 +100,17 @@ msgid "Supersede"
 msgstr "Abweisen"
 
 
-#: .\skins\ecab_view.cpt
-#: .\skins\eca_grade.cpt
+#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: .\skins\ECAssignmentBox\eca_grade.cpt
 msgid "Cancel"
 msgstr "Abbrechen"
 
 
-#: .\skins\ecab_view.cpt
+#: .\skins\ECAssignmentBox\ecab_view.cpt
 msgid "Submit"
 msgstr "Einreichen"
 
 
-#: .\skins\eca_grade.cpt
+#: .\skins\ECAssignmentBox\eca_grade.cpt
 msgid "Save"
 msgstr "Speichern"

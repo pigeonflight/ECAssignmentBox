@@ -1,9 +1,24 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2005 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
+#
+# ECAssignmentBox is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# ECAssignmentBox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ECAssignmentBox; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 from DateTime import DateTime
 
 from AccessControl import ClassSecurityInfo
@@ -31,17 +46,17 @@ from Products.ECAssignmentBox.validators import *
 isPositive = PositiveNumberValidator("isPositive")
 validation.register(isPositive)
 
-localSchema = Schema((
+ECFolderSchema = Schema((
     TextField(
-        'directionText',
+        'directions',
         default_content_type = 'text/structured',
         default_output_type = 'text/html',
         allowable_content_types = TEXT_TYPES,
         widget = TextAreaWidget(
             label = 'Directions',
-            label_msgid = 'label_direction_text',
-            description = 'Some content that all assignment boxes in this folder refer to',
-            description_msgid = 'help_direction_text',
+            label_msgid = 'label_directions',
+            description = 'Instructions/directions that all assignment boxes in this folder refer to',
+            description_msgid = 'help_directions',
             i18n_domain = I18N_DOMAIN,
             rows = 8,
         ),
@@ -78,11 +93,11 @@ localSchema = Schema((
 
 ))
 
-ECFolderSchema = ATFolderSchema.copy() + localSchema
+ECFolderSchema = ATFolderSchema.copy() + ECFolderSchema
 finalizeATCTSchema(ECFolderSchema, folderish=True, moveDiscussion=False)
 
 class ECFolder(ATFolder):
-    """A simple folderish archetype for holding ECAssignments"""
+    """A simple folderish container for ECAssignmentBoxes"""
 
     __implements__ = (ATFolder.__implements__,)
     security = ClassSecurityInfo()
@@ -121,7 +136,6 @@ class ECFolder(ATFolder):
         })
 
     # -- methods ---------------------------------------------------------------
-
 #    security.declarePrivate('manage_afterAdd')
 #    def manage_afterAdd(self, item, container):
 #        ATFolder.manage_afterAdd(self, item, container)
@@ -132,6 +146,16 @@ class ECFolder(ATFolder):
     
     #security.declarePrivate('summarize')
     def summarize(self, published=True):
+        """
+        Returns an dictionary containing summarized states of all assignments 
+        for current user - or all users if manager - in all subfolders.  By 
+        default, only published boxes and folders are considered.  Set 
+        published=False to count all boxes.
+
+        @param published only published boxes and folders are considered
+        @return a dictionary containing user-id as key and summarized states as 
+                value
+        """
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type': 
                                             self.allowed_content_types})
@@ -169,8 +193,12 @@ class ECFolder(ATFolder):
         return students
   
     
-    #security.declarePrivate('FIXME')
+    #security.declarePrivate('rework')
     def rework(self, dict):
+        """
+        @param dict summarize assignments only in published assignment boxes
+        @return an array
+        """
         array = []
         mtool = self.portal_membership
 
@@ -183,8 +211,13 @@ class ECFolder(ATFolder):
 
     #security.declarePrivate('FIXME')
     def summarizeCompletedAssignments(self, summary=None):
-        """Returns a dictionary containing the number of assignments
-        in a completed state per student"""
+        """
+        Returns a dictionary containing the number of assignments
+        in a completed state per student.
+        
+        @param summary 
+        @return a dictionary
+        """
         if not self.completedStates:
             return None
 
@@ -205,13 +238,20 @@ class ECFolder(ATFolder):
         return retval
 
 
-    #security.declarePrivate('FIXME')
+    #security.declarePrivate('getWfStates')
     def getWfStates(self):
+        """
+        @return a list containing all state keys in ec_assignment_workflow
+        """
         wtool = self.portal_workflow
         return wtool.getWorkflowById('ec_assignment_workflow').states.keys()
 
-    #security.declarePrivate('FIXME')
+    #security.declarePrivate('getWfStatesDisplayList')
     def getWfStatesDisplayList(self):
+        """
+        @return a DisplayList containing all state keys and state titles in 
+                ec_assignment_workflow
+        """
         wtool = self.portal_workflow
         
         dl = DisplayList(())
@@ -223,11 +263,15 @@ class ECFolder(ATFolder):
         return dl
 
 
-    #security.declarePrivate('FIXME')
+    #security.declarePrivate('countContainedBoxes')
     def countContainedBoxes(self, published=True):
-        """Count the assignment boxes contained in this folder and its
+        """
+        Count the assignment boxes contained in this folder and its
         subfolders.  By default, only published boxes and folders are
         considered.  Set published=False to count all boxes.
+
+        @param published 
+        @return an integer
         """
         n_boxes = 0
         wtool = self.portal_workflow

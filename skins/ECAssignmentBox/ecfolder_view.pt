@@ -34,8 +34,8 @@
           tal:content="structure here/Description"
           tal:condition="here/Description"/>
           
-        <tal:nothing condition="here/directionText|nothing">
-          <div tal:content="structure here/getDirectionText"/>
+        <tal:nothing condition="here/directions|nothing">
+          <div tal:content="structure here/getDirections"/>
           <hr/>
         </tal:nothing>
       

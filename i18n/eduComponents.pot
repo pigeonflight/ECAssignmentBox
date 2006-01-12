@@ -17,6 +17,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: eduComponents\n"
 
+msgid "decimal_separator"
+msgstr ""
+
+
 #: .\skins\ECAssignmentBox\eca_add.cpy
 msgid "Neither answer nor uploaded file found."
 msgstr ""
@@ -88,6 +92,33 @@ msgstr ""
 #. </div>
 # Original: "or upload a file (existing content will be replaced)."
 msgid "help_upload_file"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <td colspan="3"
+#.     i18n:translate="label_average_grade">Average Grade</td>
+# Original: "Average Grade"
+msgid "label_average_grade"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <td colspan="3"
+#.     i18n:translate="label_median_grade">Median Grade</td>
+# Original: "Median Grade"
+msgid "label_median_grade"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#. <p tal:condition="avg"
+#.   i18n:translate="grade_statistics_help" class="discreet">Average
+#.   and median grades are calculated from all assignments in this
+#.   assignment box which are in the state <em>graded</em> and which
+#.   have a grade assigned.</p>
+# Original: "Average and median grades are calculated from all assignments in this assignment box which are in the state <em>graded</em> and which have a grade assigned."
+msgid "grade_statistics_help"
 msgstr ""
 
 

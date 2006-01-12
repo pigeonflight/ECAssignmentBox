@@ -71,6 +71,7 @@
 		             i18n:domain="plone" 
 		             i18n:translate=""/>
            <span>(%)</span>
+          </th>
 	      </tal:block>
 	    </tr>
 	  </thead>

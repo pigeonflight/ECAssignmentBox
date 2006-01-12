@@ -261,8 +261,10 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         currentUser = self.portal_membership.getAuthenticatedMember()
         isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
 
-        if state == 'graded' or isReviewer:
+        if state == 'graded':
             return self.mark
+        elif isReviewer:
+            return '(' + self.mark + ')'
 
     def getRemarksIfAllowed(self):
         """
@@ -275,7 +277,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         currentUser = self.portal_membership.getAuthenticatedMember()
         isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
         
-        if isReviewer:
+        if isReviewer and hasattr(self, 'remarks'):
             return self.remarks
         
         return None

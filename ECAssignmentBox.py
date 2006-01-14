@@ -183,9 +183,46 @@ class ECAssignmentBox(ATFolder):
                 summary.append(item)
         return summary
 
+    def getGradeForStudent(self, student):
+        """
+        Your documentation here
+        """
+        submissions = self.contentValues(filter={'Creator': student})
+        if submissions:
+            submission = submissions[0]
+            field = submission.getField('mark')
+            return field.getAccessor(submission)()
+
+    def getGradesByStudent(self):
+        """
+        Collect the grades for all assignments in this box which are
+        in the `graded' state and which were assigned a *numeric*
+        grade.  Return an empty dictionary if no grades were assigned.
+        Return a dictionary with student: grade entries if grades were
+        assigned.  Return None if non-numeric grades were assigned.
+
+        @return a dictionary with user ID as key and grade as value
+        """
+        wtool = self.portal_workflow
+        items = self.contentValues()
+        summary = {}
+
+        for item in items:
+            if wtool.getInfoFor(item, 'review_state') == 'graded' \
+                   and item.mark:
+                try:
+                    summary[item.Creator()] = float(item.mark)
+                except ValueError:
+                    return None
+        
+        return summary
+
     def getNumericGrades(self):
         """
         Add documentation here
+
+        @return a list containing all grades assigned to graded
+        submissions in this box
         """
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type':
@@ -209,34 +246,6 @@ class ECAssignmentBox(ATFolder):
                 return None
 
         return grades
-
-    security.declarePublic('getAverageGrade')
-    def getAverageGrade(self):
-        """
-        Add documentation here
-        """
-        grades = self.getNumericGrades()
-
-        try:
-            stats = Statistics(grades)
-        except:
-            return None
-        
-        return stats.mean
-
-    security.declarePublic('getMedianGrade')
-    def getMedianGrade(self):
-        """
-        Add documentation here
-        """
-        grades = self.getNumericGrades()
-        
-        try:
-            stats = Statistics(grades)
-        except:
-            return None
-        
-        return stats.median
 
 
 registerATCT(ECAssignmentBox, PROJECTNAME)

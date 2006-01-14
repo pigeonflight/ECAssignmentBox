@@ -207,6 +207,31 @@ msgid "label_completed_states"
 msgstr ""
 
 
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <p i18n:translate="help_overall_average_grade">The following numbers are
+#.   based on <span i18n:name="count" tal:replace="python: len(raw)"/>
+#.   submissions.
+#. </p>
+# Original: "The following numbers are based on ${count} submissions."
+msgid "help_overall_average_grade"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b><span tal:omit-tag=""
+#.     i18n:translate="label_overall_average_grade">Overall average grade</span>:</b>
+# Original: "Overall average grade"
+msgid "label_overall_average_grade"
+msgstr ""
+
+
+#: .\skins\ECAssignmentBox\by_student.pt
+#. <b><span i18n:translate="label_overall_median_grade">Overall median grade</span>:</b>
+# Original: "Overall median grade"
+msgid "label_overall_median_grade"
+msgstr ""
+
+
 #: .\skins\ECAssignmentBox\all_assignments.pt
 #. <th i18n:translate="label_date">
 #.  Date

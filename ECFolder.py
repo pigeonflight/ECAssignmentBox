@@ -191,7 +191,54 @@ class ECFolder(ATFolder):
                         wtool.getInfoFor(assignment, 'review_state', ''))] += 1
 
         return students
-  
+    
+    def summarizeGrades(self, published=True):
+        """
+        Create a dictionary listing all grades for the contained
+        assignments by student, i.e., the keys are user IDs, the
+        values are lists of grades.  Example:
+
+        {'freddy': [3.0, 3.0], 'dina': [2.0, 2.0, 2.0]}
+        
+        @return a dictionary
+        """
+        wtool = self.portal_workflow
+        items = self.contentValues(filter={'portal_type': 
+                                            self.allowed_content_types})
+        students = {}
+        
+        for item in items:
+            if published:
+                review_state = wtool.getInfoFor(item, 'review_state')
+                if review_state not in ('published'):
+                    continue
+            
+            grades = {}
+            
+            if item.portal_type == 'ECFolder':
+                grades = item.summarizeGrades(published)
+            elif self.ecab_utils.isAssignmentBoxType(item):
+                grades = item.getGradesByStudent()
+
+            # No grades were assigned--no problem.
+            if grades == {}:
+                continue
+            
+            # Non-numeric grades were assigned: Immediately return
+            # None, as we can't calculate meaningful statistics in
+            # this case.
+            if grades == None:
+                return None
+            
+            for student in grades:
+                if student not in students:
+                    students[student] = []
+                if type(grades[student]) is list:
+                    students[student].extend(grades[student])
+                else:
+                    students[student].append(grades[student])
+            
+        return students
     
     #security.declarePrivate('rework')
     def rework(self, dict):

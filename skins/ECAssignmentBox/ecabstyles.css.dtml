@@ -39,6 +39,12 @@ tfoot {
   border-color: &dtml-globalBorderColor;;
 }
 
+tfoot tr {
+  border-width: 1px 0px 0px 0px;
+  border-style: dotted;
+  border-color: &dtml-globalBorderColor;;
+}
+
 dd.ec-listing {
   margin-left: 16px
 }

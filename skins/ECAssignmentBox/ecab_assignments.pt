@@ -33,8 +33,10 @@
 	  types         types | here/show_content_types | default_types;
 	  raw_items     python: here.contentValues(filter={'portal_type': types });
 	  items         python: auth_filter(raw_items, skip='View');
-	  avg           here/getAverageGrade;"
+	  grades        here/getNumericGrades;"
           tal:condition="items">
+
+	  <p tal:content="here/getGradesByStudent"/>
      
           <table class="listing">
             <thead>
@@ -47,14 +49,14 @@
               </tr>
             </thead>
 
-	    <tfoot tal:condition="avg">
+	    <tfoot tal:condition="grades">
               <tr>
 		<td colspan="3"
 		  i18n:translate="label_average_grade">Average Grade</td>
 		<td
 		  style="text-align: right"
 		  tal:content="python: ecab_utils.localizeNumber('%.2f',
-		                                                  avg)"/>
+		  ecab_utils.calculateMean(grades))"/>
 		<td/>
 	      </tr>
               <tr>
@@ -63,7 +65,7 @@
 		<td
 		  style="text-align: right"
 		  tal:content="python: ecab_utils.localizeNumber('%.2f',
-		                       here.getMedianGrade())"/>
+		  ecab_utils.calculateMedian(grades))"/>
 		<td/>
 	      </tr>
 	    </tfoot>
@@ -124,7 +126,7 @@
             </tbody>
           </table>
 
-	  <p tal:condition="avg"
+	  <p tal:condition="grades"
 	    i18n:translate="grade_statistics_help" class="discreet">Average
 	    and median grades are calculated from all assignments in this
 	    assignment box which are in the state <em>graded</em> and which

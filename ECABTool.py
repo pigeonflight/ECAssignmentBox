@@ -3,6 +3,8 @@ from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import UniqueObject, getToolByName
 
+from Statistics import Statistics
+
 from config import I18N_DOMAIN
 
 class ECABTool(UniqueObject, SimpleItem):
@@ -88,5 +90,20 @@ class ECABTool(UniqueObject, SimpleItem):
                        Creator=id)
         return rawresult
 
+    def calculateMean(self, list):
+        try:
+            stats = Statistics(list)
+        except:
+            return None
+
+        return stats.mean
+
+    def calculateMedian(self, list):
+        try:
+            stats = Statistics(list)
+        except:
+            return None
+
+        return stats.median
 
 InitializeClass(ECABTool)

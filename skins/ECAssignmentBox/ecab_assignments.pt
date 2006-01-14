@@ -36,8 +36,6 @@
 	  grades        here/getNumericGrades;"
           tal:condition="items">
 
-	  <p tal:content="here/getGradesByStudent"/>
-     
           <table class="listing">
             <thead>
               <tr>

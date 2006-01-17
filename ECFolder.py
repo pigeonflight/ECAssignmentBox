@@ -97,22 +97,20 @@ ECFolderSchema = ATFolderSchema.copy() + ECFolderSchema
 finalizeATCTSchema(ECFolderSchema, folderish=True, moveDiscussion=False)
 
 class ECFolder(ATFolder):
-    """A simple folderish container for ECAssignmentBoxes"""
+    """A container for assignment boxes"""
+
+    schema         = ECFolderSchema
+    
+    content_icon   = "folder-box-16.png"
+    portal_type    = meta_type = "ECFolder"
+    archetype_name = "ECFolder"
+    immediate_view = 'ecfolder_view'
+    default_view   = 'ecfolder_view'
+    #suppl_views    = () #('all_assignments', 'by_student',)
+    allowed_content_types = []
 
     __implements__ = (ATFolder.__implements__,)
     security = ClassSecurityInfo()
-
-    schema = ECFolderSchema
-    
-    content_icon = "folder-box-16.png"
-    portal_type = meta_type = "ECFolder"
-    archetype_name = "ECFolder"
-    suppl_views = () #('all_assignments', 'by_student',)
-    allowed_content_types = []
-
-
-    default_view = 'ecfolder_view'
-    immediate_view = 'ecfolder_view'
 
     # -- actions ---------------------------------------------------------------
     actions = updateActions(ATFolder, (

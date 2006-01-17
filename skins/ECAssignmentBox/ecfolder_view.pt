@@ -82,7 +82,7 @@
                       <span i18n:translate="submission_period_ends">
                         Submission period ends: 
                       </span>
-                      <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
+                      <span tal:content="python: item.toLocalizedTime(item.getSubmission_period_end(), True)"/>
                     </div>
   
                     <div class="documentByLine"
@@ -90,7 +90,7 @@
                       <span i18n:translate="submission_period_ended">
                         Submission period ended: 
                       </span>
-                      <span tal:content="python: item.toPortalTime(item.getSubmission_period_end(), True)"/>
+                      <span tal:content="python: item.toLocalizedTime(item.getSubmission_period_end(), True)"/>
                     </div>
                   </tal:block>
 

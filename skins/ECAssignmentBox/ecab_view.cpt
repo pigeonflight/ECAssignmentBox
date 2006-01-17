@@ -28,7 +28,7 @@
           <span i18n:translate="submission_period_ends">
             Submission period ends: 
           </span>
-          <span tal:content="python: here.toPortalTime(here.getSubmission_period_end(), True)"/>
+          <span tal:content="python: here.toLocalizedTime(here.getSubmission_period_end(), True)"/>
         </div>
   
         <a class="link-parent"

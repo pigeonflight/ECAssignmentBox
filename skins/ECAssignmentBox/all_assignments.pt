@@ -145,7 +145,7 @@
                                 item_state_title python:wtool.getTitleForStateOnType(item_wf_state, item_type);
                                 item_wf_state_class  python:'state-' + normalizeString(item_wf_state);"
                             tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                          <td tal:content="python: here.toPortalTime(assignment.CreationDate(), True)"/>
+                          <td tal:content="python: here.toLocalizedTime(assignment.CreationDate(), True)"/>
                           <td>
                             <a tal:attributes="href python: 'all_assignments?userName=%s' % assignment.Creator()"
                                tal:content="python: ecab_utils.getFullNameById(assignment.Creator())"/>

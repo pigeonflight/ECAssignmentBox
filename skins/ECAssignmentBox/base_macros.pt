@@ -87,7 +87,7 @@
 
       <div class="documentByLine">
         <span i18n:translate="label_datetime">submitted at</span>
-        <span tal:content="python: here.toPortalTime(here.CreationDate(), 1)"/>
+        <span tal:content="python: here.toLocalizedTime(here.CreationDate(), 1)"/>
       </div>
 
       <a class="link-parent"

@@ -9,4 +9,4 @@ View = 0:Authenticated
 validators=
 
 [actions]
-action.failure=traverse_to:string:assignmentbox_view
+action.failure=traverse_to:string:ecab_view

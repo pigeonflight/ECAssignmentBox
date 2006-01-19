@@ -67,7 +67,7 @@ result = qca.evaluate(context)
 if not result:
     # The submission was evaluated.
     msg = context.translate(
-        msgid   = 'submission_success_evaluation_success',
+        msgid   = 'submission_saved',
         domain  = I18N_DOMAIN,
         default = 'Your submission has been saved.')
 else:

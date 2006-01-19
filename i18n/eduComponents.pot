@@ -483,3 +483,10 @@ msgstr ""
 #: .\ECAssignmetBox.py
 msgid "help_submission_period_end"
 msgstr ""
+
+
+#: .\skins\ECAssignmentBox\eca_add.cpy
+# Original: "Your submission has been saved."
+msgid "submission_saved"
+msgstr ""
+

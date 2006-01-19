@@ -471,6 +471,12 @@ msgstr "Einreichungen sind noch nicht möglich."
 msgid "upload_file_label"
 msgstr "Datei"
 
+
+#: .\skins\ECAssignmentBox\eca_add.cpy
+# Original: "Your submission has been saved."
+msgid "submission_saved"
+msgstr "Ihre Einreichung wurde gespeichert."
+
 #- Removed msgids:
 # 
 

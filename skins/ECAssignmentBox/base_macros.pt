@@ -10,13 +10,15 @@
 
     <!-- base view macro -->
     <metal:define define-macro="base_view">
-      <tal:view define="mode      string:view;
-                        use_label python:True;
-                        accessor  python:field.getAccessor(here);
-                        object    python:accessor();"
-             condition="object | object/get_data | object/data | nothing" >
-        <metal:use use-macro="here/widgets/field/macros/view" />
-      </tal:view>
+      <tal:condition condition="field">
+	<tal:view define="mode      string:view;
+			  use_label python:True;
+			  accessor  python:field.getAccessor(here);
+			  object    python:accessor();"
+	       condition="object | object/get_data | object/data | nothing" >
+	  <metal:use use-macro="here/widgets/field/macros/view" />
+	</tal:view>
+      </tal:condition>
     </metal:define>
 
   

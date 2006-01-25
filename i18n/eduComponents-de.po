@@ -477,6 +477,37 @@ msgstr "Datei"
 msgid "submission_saved"
 msgstr "Ihre Einreichung wurde gespeichert."
 
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "Please select one or more items."
+msgstr "Bitte wählen Sie einen oder mehrere Einträge."
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${titles}) has been changed."
+msgstr "Der Status von (${titles}) wurde geändert."
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${title}) has been changed."
+msgstr "Der Status von (${title}) wurde geändert."
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${itemCount}) items has been changed."
+msgstr "Der Status von (${itemCount}) Einreichungen wurden geändert."
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${titles}) could not be changed."
+msgstr "Der Status von (${titles}) konnte nicht geändert werden."
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "Changing state for (${titles}) caused an exception."
+msgstr "Die Statusänderung für (${titles}) verursachte einen Fehler."
+
+
 #- Removed msgids:
 # 
 

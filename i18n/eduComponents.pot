@@ -3,45 +3,45 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: ECAssignmentBox\n"
-"POT-Creation-Date: 2006-01-12 07:47+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
-"Preferred-Encodings: utf-8 latin1\n"
-"Domain: eduComponents\n"
+"Project-Id-Version: ECAssignmentBox/n"
+"POT-Creation-Date: 2006-01-12 07:47+0000/n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE/n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>/n"
+"Language-Team: LANGUAGE <LL@li.org>/n"
+"MIME-Version: 1.0/n"
+"Content-Type: text/plain; charset=utf-8/n"
+"Content-Transfer-Encoding: 8bit/n"
+"Plural-Forms: nplurals=1; plural=0/n"
+"Language-Code: en/n"
+"Language-Name: English/n"
+"Preferred-Encodings: utf-8 latin1/n"
+"Domain: eduComponents/n"
 
 msgid "decimal_separator"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\eca_add.cpy
+#: ./skins/ECAssignmentBox/eca_add.cpy
 msgid "Neither answer nor uploaded file found."
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\eca_add_validate.vpy
+#: ./skins/ECAssignmentBox/eca_add_validate.vpy
 msgid "The submission period has expired. Your submission was rejected."
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\eca_add_validate.vpy
+#: ./skins/ECAssignmentBox/eca_add_validate.vpy
 msgid "You need to be logged in with your username and password."
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\eca_add.cpy
+#: ./skins/ECAssignmentBox/eca_add.cpy
 msgid "Your submission has been saved."
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\base_macros.pt
+#: ./skins/ECAssignmentBox/base_macros.pt
 #. <a i18n:translate="assignment_of" tal:attributes="name here/getId">
 #.           Assignment of
 #. </a>
@@ -50,7 +50,7 @@ msgid "assignment_of"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\base_macros.pt
+#: ./skins/ECAssignmentBox/base_macros.pt
 #. <dt class="collapsibleHeader" i18n:translate="assignment_text">
 #.           Assignment text
 #. </dt>
@@ -59,7 +59,7 @@ msgid "assignment_text"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\base_macros.pt
+#: ./skins/ECAssignmentBox/base_macros.pt
 #. <a class="link-parent" i18n:translate="back_to_overview" tal:attributes="href string: #${here/aq_parent/id}">
 #.         Back to the assignment text
 #. </a>
@@ -68,7 +68,7 @@ msgid "back_to_overview"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\base_macros.pt
+#: ./skins/ECAssignmentBox/base_macros.pt
 #. <span i18n:translate="go_to_submission">
 #.  Go to the submission of
 #. </span>
@@ -77,7 +77,7 @@ msgid "go_to_submission"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <div class="formHelp" i18n:translate="help_submit_answer">
 #.               Enter your answer for this assignment
 #. </div>
@@ -86,7 +86,7 @@ msgid "help_submit_answer"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <div class="formHelp" i18n:translate="help_upload_file">
 #.              or upload a file (existing content will be replaced).
 #. </div>
@@ -95,7 +95,7 @@ msgid "help_upload_file"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <td colspan="3"
 #.     i18n:translate="label_average_grade">Average Grade</td>
 # Original: "Average Grade"
@@ -103,7 +103,7 @@ msgid "label_average_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <td colspan="3"
 #.     i18n:translate="label_median_grade">Median Grade</td>
 # Original: "Median Grade"
@@ -111,7 +111,7 @@ msgid "label_median_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <p tal:condition="avg"
 #.   i18n:translate="grade_statistics_help" class="discreet">Average
 #.   and median grades are calculated from all assignments in this
@@ -122,7 +122,7 @@ msgid "grade_statistics_help"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_download" tal:attributes="href python: '%s/at_download/file' % (item.getId(),)">
 #.  [Download]
 #. </a>
@@ -131,7 +131,7 @@ msgid "label_action_download"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_grade" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('grade'))">
 #.                         [Grade]
 #. </a>
@@ -140,11 +140,11 @@ msgid "label_action_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_view" tal:attributes="href python: assignment.reference_url()">
 #.                               [View]
 #. </a>
-#: .\skins\ECAssignmentBox\ecab_assignments.pt
+#: ./skins/ECAssignmentBox/ecab_assignments.pt
 #. <a href="item_url" i18n:translate="label_action_view" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))">
 #.  [View]
 #. </a>
@@ -153,7 +153,7 @@ msgid "label_action_view"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <th i18n:translate="label_actions">
 #.  Actions
 #. </th>
@@ -162,7 +162,7 @@ msgid "label_actions"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <label for="answer" i18n:translate="label_submit_answer">
 #.  Answer
 #. </label>
@@ -171,7 +171,7 @@ msgid "label_submit_answer"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <th i18n:translate="label_completed">
 #.  Completed
 #. </th>
@@ -180,7 +180,7 @@ msgid "label_completed"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <th i18n:translate="label_completed_curr">
 #.  %Curr.
 #. </th>
@@ -189,7 +189,7 @@ msgid "label_completed_curr"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <th i18n:translate="label_completed_proj" tal:condition="here/projectedAssignments">
 #.  %Proj.
 #. </th>
@@ -198,7 +198,7 @@ msgid "label_completed_proj"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <b i18n:translate="label_completed_states">
 #.  Completed States:
 #. </b>
@@ -207,7 +207,7 @@ msgid "label_completed_states"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <p i18n:translate="help_overall_average_grade">The following numbers are
 #.   based on <span i18n:name="count" tal:replace="python: len(raw)"/>
 #.   submissions.
@@ -217,7 +217,7 @@ msgid "help_overall_average_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <b><span tal:omit-tag=""
 #.     i18n:translate="label_overall_average_grade">Overall average grade</span>:</b>
 # Original: "Overall average grade"
@@ -225,14 +225,14 @@ msgid "label_overall_average_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <b><span i18n:translate="label_overall_median_grade">Overall median grade</span>:</b>
 # Original: "Overall median grade"
 msgid "label_overall_median_grade"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <th i18n:translate="label_date">
 #.  Date
 #. </th>
@@ -241,7 +241,7 @@ msgid "label_date"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\base_macros.pt
+#: ./skins/ECAssignmentBox/base_macros.pt
 #. <span i18n:translate="label_datetime">
 #.  submitted at
 #. </span>
@@ -250,7 +250,7 @@ msgid "label_datetime"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <th i18n:translate="label_mark">
 #.  Grade
 #. </th>
@@ -259,21 +259,21 @@ msgid "label_mark"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <p i18n:translate="label_n_boxes">
 #.               Published assignment boxes inside this folder:
 #.  <span tal:replace="n_boxes"/>
 #. </p>
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <b i18n:translate="label_n_boxes">
 #.  Published assignment boxes inside this folder:
 #. </b>
-# Original: "Published assignment boxes inside this folder: <span tal:replace=\"n_boxes\"/>"
+# Original: "Published assignment boxes inside this folder: <span tal:replace=/"n_boxes/"/>"
 msgid "label_n_boxes"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <b i18n:translate="label_projected_assignments">
 #.  Projected Number of Assignments:
 #. </b>
@@ -282,7 +282,7 @@ msgid "label_projected_assignments"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <th i18n:translate="label_state">
 #.  State
 #. </th>
@@ -291,11 +291,11 @@ msgid "label_state"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <span i18n:translate="label_submissions">
 #.  Submissions
 #. </span>
-#: .\skins\ECAssignmentBox\by_student.pt
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <h1 class="documentFirstHeading" i18n:translate="label_submissions">
 #. 	  Students
 #. </h1>
@@ -304,7 +304,7 @@ msgid "label_submissions"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\all_assignments.pt
+#: ./skins/ECAssignmentBox/all_assignments.pt
 #. <th i18n:translate="label_user">
 #.  User
 #. </th>
@@ -313,7 +313,7 @@ msgid "label_user"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#: ./skins/ECAssignmentBox/ecfolder_view.pt
 #. <a href="/assignments" i18n:translate="label_view_assignments" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))">
 #.                           View submitted assignments
 #. </a>
@@ -322,7 +322,7 @@ msgid "label_view_assignments"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#: ./skins/ECAssignmentBox/ecfolder_view.pt
 #. <a href="/view" i18n:translate="label_work_on" tal:attributes="href item/absolute_url">
 #.                           Work on this assignment
 #. </a>
@@ -331,7 +331,7 @@ msgid "label_work_on"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <i i18n:translate="submission_cannot_resubmit" tal:condition="python: (not canResubmit) and (not hasExpired)">
 #.             Submission not permitted: An earlier submission is under review
 #.             or has already been accepted.
@@ -341,7 +341,7 @@ msgid "submission_cannot_resubmit"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecfolder_view.pt
+#: ./skins/ECAssignmentBox/ecfolder_view.pt
 #. <span i18n:translate="submission_period_ended">
 #.                         Submission period ended:
 #. </span>
@@ -350,7 +350,7 @@ msgid "submission_period_ended"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <span i18n:translate="submission_period_ends">
 #.             Submission period ends:
 #. </span>
@@ -359,7 +359,7 @@ msgid "submission_period_ends"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <i i18n:translate="submission_period_expired" tal:condition="hasExpired">
 #.             The submission period has expired.
 #. </i>
@@ -368,7 +368,7 @@ msgid "submission_period_expired"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <i i18n:translate="submission_period_not_effective" tal:condition="not: isEffective">
 #.             The submission period is not effective.
 #. </i>
@@ -377,7 +377,7 @@ msgid "submission_period_not_effective"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\ecab_view.cpt
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <label for="file" i18n:translate="upload_file_label">
 #.  File
 #. </label>
@@ -386,107 +386,136 @@ msgid "upload_file_label"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "label_answer"
 msgstr ""
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "help_answer"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "label_remarks"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "help_remarks"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "label_feedback"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "help_feedback"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "label_grade"
 msgstr ""
 
 
-#: .\ECAssignment.py
+#: ./ECAssignment.py
 msgid "help_grade"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "label_directions"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "help_directions"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "label_completed_states"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "help_completed_states"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "label_projected_assignments"
 msgstr ""
 
 
-#: .\ECFolder.py
+#: ./ECFolder.py
 msgid "help_projected_assignments"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "label_assignment_text"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "help_assignment_text"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "label_submission_period_start"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "help_submission_period_start"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "label_submission_period_end"
 msgstr ""
 
 
-#: .\ECAssignmetBox.py
+#: ./ECAssignmetBox.py
 msgid "help_submission_period_end"
 msgstr ""
 
 
-#: .\skins\ECAssignmentBox\eca_add.cpy
+#: ./skins/ECAssignmentBox/eca_add.cpy
 # Original: "Your submission has been saved."
 msgid "submission_saved"
 msgstr ""
 
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "Please select one or more items."
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${titles}) has been changed."
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${title}) has been changed."
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${itemCount}) items has been changed."
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "State for (${titles}) could not be changed."
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
+msgid "Changing state for (${titles}) caused an exception."
+msgstr ""

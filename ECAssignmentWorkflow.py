@@ -261,7 +261,7 @@ def setupAssignment_workflow(wf):
     tdef = wf.transitions['supersede']
     tdef.setProperties(title="""Replace assignment with a newer submission""",
                        new_state_id="""superseded""",
-                       trigger_type=0,
+                       trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
                        actbox_name="""Supersede""",

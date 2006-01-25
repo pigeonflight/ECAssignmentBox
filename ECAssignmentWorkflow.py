@@ -33,6 +33,8 @@ from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, TRIGGER_USER_ACTI
 
 from Products.CMFCore.permissions import ManageProperties
 
+from Products.ECAssignmentBox.config import *
+
 def setupAssignment_workflow(wf):
     """Assignment Workflow definition"""
 
@@ -259,7 +261,7 @@ def setupAssignment_workflow(wf):
     tdef = wf.transitions['supersede']
     tdef.setProperties(title="""Replace assignment with a newer submission""",
                        new_state_id="""superseded""",
-                       trigger_type=1,
+                       trigger_type=0,
                        script_name="""""",
                        after_script_name="""""",
                        actbox_name="""Supersede""",
@@ -342,5 +344,5 @@ def createAssignment_workflow(id):
     return ob
 
 addWorkflowFactory(createAssignment_workflow,
-                   id='ec_assignment_workflow',
-                   title='Assignment workflow [EC]')
+                   id = ECA_WORKFLOW_ID,
+                   title= ECA_WORKFLOW_TITLE)

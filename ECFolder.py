@@ -286,26 +286,28 @@ class ECFolder(ATFolder):
     #security.declarePrivate('getWfStates')
     def getWfStates(self):
         """
-        @return a list containing all state keys in ec_assignment_workflow
+        @deprecated use getWfStates in ecab_utils instead
         """
-        wtool = self.portal_workflow
-        return wtool.getWorkflowById('ec_assignment_workflow').states.keys()
+        utils = self.ecab_utils
+        return utils.getWfStates(ECA_WORKFLOW_ID)
+
 
     #security.declarePrivate('getWfStatesDisplayList')
     def getWfStatesDisplayList(self):
         """
-        @return a DisplayList containing all state keys and state titles in 
-                ec_assignment_workflow
+        @deprecated use getWfStatesDisplayList in ecab_utils instead
         """
-        wtool = self.portal_workflow
-        
-        dl = DisplayList(())
-        stateKeys = wtool.getWorkflowById('ec_assignment_workflow').states.keys()
-        
-        for key in stateKeys:
-            dl.add(key, wtool.getWorkflowById('ec_assignment_workflow').states[key].title)
+        utils = self.ecab_utils
+        return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
 
-        return dl
+
+    #security.declarePrivate('getWfTransitionsDisplayList')
+    def getWfTransitionsDisplayList(self):
+        """
+        @deprecated use getWfTransitionsDisplayList in ecab_utils instead
+        """
+        utils = self.ecab_utils
+        return utils.getWfTransitionsDisplayList(ECA_WORKFLOW_ID)
 
 
     #security.declarePrivate('countContainedBoxes')

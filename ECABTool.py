@@ -1,11 +1,35 @@
+# -*- coding: utf-8 -*-
+# $Id$
+#
+# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+#
+# This file is part of ECAssignmentBox.
+#
+# ECAssignmentBox is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# ECAssignmentBox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ECAssignmentBox; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import UniqueObject, getToolByName
 
-from Statistics import Statistics
+from Products.Archetypes.atapi import *
+from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
-from config import I18N_DOMAIN
+# local imports
+from Products.ECAssignmentBox.Statistics import Statistics
+from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
 
 class ECABTool(UniqueObject, SimpleItem):
     """Various utility methods."""
@@ -28,9 +52,12 @@ class ECABTool(UniqueObject, SimpleItem):
                                           default = '.')
         retval = format % number
         return retval.replace('.', decimalSeparator)
+
     
     security.declarePublic('getFullNameById')
     def getFullNameById(self, id):
+        """
+        """
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         
@@ -54,8 +81,11 @@ class ECABTool(UniqueObject, SimpleItem):
             
         return sn + ', ' + givenName
 
+
     security.declarePublic('getUserPropertyById')
     def getUserPropertyById(self, id, property=''):
+        """
+        """
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         
@@ -66,11 +96,18 @@ class ECABTool(UniqueObject, SimpleItem):
         
         return value
 
+
     security.declarePublic('isAssignmentBoxType')
     def isAssignmentBoxType(self, obj):
+        """
+        """
         return hasattr(obj, 'getAssignmentsSummary')
 
+
+    #security.declarePublic('findAssignments')
     def findAssignments(self, context, id):
+        """
+        """
         ct = getToolByName(self, 'portal_catalog')
         ntp = getToolByName(self, 'portal_properties').navtree_properties
         currentPath = None
@@ -90,7 +127,11 @@ class ECABTool(UniqueObject, SimpleItem):
                        Creator=id)
         return rawresult
 
+
+    #security.declarePublic('calculateMean')
     def calculateMean(self, list):
+        """
+        """
         try:
             stats = Statistics(list)
         except:
@@ -98,12 +139,64 @@ class ECABTool(UniqueObject, SimpleItem):
 
         return stats.mean
 
+
+    #security.declarePublic('calculateMedian')
     def calculateMedian(self, list):
+        """
+        """
         try:
             stats = Statistics(list)
         except:
             return None
 
         return stats.median
+
+
+    #security.declarePrivate('getWfStates')
+    def getWfStates(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return a list containing all state keys in assignment's workflow
+        """
+        wtool = self.portal_workflow
+        return wtool.getWorkflowById(wfName).states.keys()
+
+
+    #security.declarePrivate('getWfStatesDisplayList')
+    def getWfStatesDisplayList(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return a DisplayList containing all state keys and state titles in 
+                assignment's workflow
+        """
+        dl = DisplayList(())
+        
+        stateKeys = self.getWfStates(wfName)
+        
+        for key in stateKeys:
+            dl.add(key, wf.states[key].title)
+
+        #return dl.sortedByValue()
+        return dl
+
+
+    #security.declarePrivate('getWfTransitionsDisplayList')
+    def getWfTransitionsDisplayList(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return a DisplayList containing all transition keys and titles in 
+                assignment's workflow
+        """
+        dl = DisplayList(())
+
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+        transKeys = wf.transitions.keys()
+        
+        for key in transKeys:
+            # trigger type must be TRIGGER_USER_ACTION, 
+            # i.e., transition can be initiated by a user
+            if wf.transitions[key].trigger_type == TRIGGER_USER_ACTION:
+                dl.add(key, wf.transitions[key].actbox_name)
+
+        #return dl.sortedByValue()
+        return dl
 
 InitializeClass(ECABTool)

@@ -18,7 +18,7 @@
     <metal:main fill-slot="main" tal:define="
       n_boxes    python: here.countContainedBoxes();
       ecab_utils nocall:portal/ecab_utils;
-      states     here/getWfStatesDisplayList;
+      states     ecab_utils/getWfStatesDisplayList;
       grades     python: here.summarizeGrades();">
       <tal:main-macro metal:define-macro="main">
 
@@ -66,17 +66,16 @@
 	      <tal:block tal:condition="here/completedStates">
       		<th i18n:translate="label_completed">Completed</th>
       		<th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
-      		<th i18n:translate="label_completed_proj"
-		  tal:condition="here/projectedAssignments">%&nbsp;Proj.</th>
+      		<th tal:condition="here/projectedAssignments"
+		  i18n:translate="label_completed_proj">%&nbsp;Proj.</th>
 	      </tal:block>
 
 	      <tal:block tal:repeat="state python: states.keys()">
-		<th>
+		<th tal:attributes="class python: 'state-' + putils.normalizeString(state)">
 		  <span tal:content="python: states.getValue(state, default=state)"
-		    tal:attributes="class python: 'state-' + putils.normalizeString(state)"
+		    tal:omit-tag=""
 		    i18n:domain="plone"
-		    i18n:translate=""/>
-		  <span>(%)</span>
+		    i18n:translate=""/> (%)
 		</th>
 	      </tal:block>
 	    </tr>

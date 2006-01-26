@@ -96,13 +96,16 @@
                   </metal:recurse>
 
                   <table class="listing"
-                      tal:define="items python: elt.getAssignmentsSummary(id=userName);
-                                  wtool here/portal_workflow;"
                       tal:condition="python: ecab_utils.isAssignmentBoxType(elt)">
 
                     <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
 
-                    <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
+                    <tal:block define="
+                        items python: elt.getAssignmentsSummary(id=userName);
+                        wtool here/portal_workflow;">
+
+                      <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
+                    </tal:block>
 
                   </table>
                 </tal:block>

@@ -1,9 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xml:lang="en" lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       metal:use-macro="here/main_template/macros/master"
-      lang="en"
       i18n:domain="eduComponents">
 
   <body>
@@ -13,67 +16,36 @@
     </metal:block>
 
     <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main">
+      <tal:main-macro metal:define-macro="main"
+          define="userName request/userName | nothing;
+              permission python: modules['AccessControl'].getSecurityManager().checkPermission;
+              isReviewer python: bool(permission('Review portal content', here));">
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
         <div tal:define="global ecab_utils nocall:portal/ecab_utils;
-                getPersonalPortrait nocall:mtool/getPersonalPortrait;
-                userName request/userName | nothing;
-                getHomeUrl nocall:mtool/getHomeUrl;
-                searchMembers nocall: mtool/searchMembers;
-                email python:request.get('email', member.getProperty('email',''));
+                n_boxes python: here.countContainedBoxes();">
+
+<!--
                 auth_filter nocall: modules/ZTUtils/LazyFilter;
+                searchMembers nocall: mtool/searchMembers;
                 default_types python: here.allowed_content_types;
                 types types | here/show_content_types | default_types;
                 raw_items python: here.contentValues(filter={'portal_type': types});
-                items python: auth_filter(raw_items, skip='View');
-                n_boxes python: here.countContainedBoxes();"
+                items python: auth_filter(raw_items, skip='View');"
             tal:condition="items">
+-->
 
-          <h1 class="documentFirstHeading">
-            <span tal:condition="userName" tal:omit-tag="">
-              <span tal:replace="python: ecab_utils.getFullNameById(userName)">
-                user name
-              </span>:
-            </span>
-            <span i18n:translate="label_submissions">Submissions</span>
-          </h1>
+          <metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
 
-          <!-- show user details -->
-          <dl class="collapsible collapsedBlockCollapsible" 
-              tal:condition="userName">
-            <dt class="collapsibleHeader">Student details</dt>
-            <dd class="collapsibleContent">
-              <div class="card"
-                  tal:define="home python: getHomeUrl(userName, verifyPermission=1);
-                              portrait python: getPersonalPortrait(userName);"
-              >
-                <a href="#" tal:attributes="href home">
-                   <img src="#" alt="" tal:replace="structure python: portrait.tag(width=75, height=100, border=0)"/>
-                 </a>
-              </div>
-              <div tal:define="
-                  fullname python: ecab_utils.getFullNameById(userName);
-                  email python: ecab_utils.getUserPropertyById(userName, 'email');
-                  studentid python: ecab_utils.getUserPropertyById(userName, 'employeeNumber');
-                  major python: ecab_utils.getUserPropertyById(userName, 'departmentNumber');"
-              >
-                <p><b>Name:</b> <span tal:content="fullname"/></p>
-                <p><b>E-Mail:</b> <a href="mailto:" tal:attributes="href string: mailto:${email}" tal:content="email"/></p>
-                <p tal:condition="studentid"><b>Student ID:</b> <span tal:replace="studentid"/></p>
-                <p tal:condition="major"><b>Major:</b> <span tal:replace="major"/></p>
-              </div>
-              <div class="visualClear"/>
-            </dd>
-          </dl>
-          <!-- -->
+          <metal:use use-macro="here/base_macros/macros/user_details" />
 
-          <div>
-            <p i18n:translate="label_n_boxes">
-              Published assignment boxes inside this folder: <span tal:replace="n_boxes"/>
-            </p>
-          </div>
+          <p>
+            <span i18n:translate="label_n_boxes">
+              Published assignment boxes inside this folder:
+            </span>  
+            <span tal:omit-tag="" tal:content="n_boxes"/>
+          </p>
 
           <!-- start showing folder title and items -->
           <tal:contain define="location nocall:here; level python:1;">
@@ -97,14 +69,14 @@
                   <metal:recurse 
                       tal:condition="elt/isPrincipiaFolderish"
                       tal:define="
-                        location nocall:elt;
-                        level python: level + 1;
-                        use_view_action site_properties/typesUseViewActionInListings;
-                        item_url elt/getURL|elt/absolute_url;
-                        item_wf_state_class python:'state-' + normalizeString(item_wf_state);
-                        item_title_or_id elt/pretty_title_or_id;
-                        item_type elt/portal_type;
-                        item_type_class python: 'contenttype-' + normalizeString(item_type);"
+                        location            nocall: elt;
+                        level               python: level + 1;
+                        use_view_action     site_properties/typesUseViewActionInListings;
+                        item_url            elt/getURL|elt/absolute_url;
+                        item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
+                        item_title_or_id    elt/pretty_title_or_id;
+                        item_type           elt/portal_type;
+                        item_type_class     python: 'contenttype-' + normalizeString(item_type);"
                   >
 
                     <div class="visualIconPadding">
@@ -124,57 +96,21 @@
                   </metal:recurse>
 
                   <table class="listing"
+                      tal:define="items python: elt.getAssignmentsSummary(id=userName);
+                                  wtool here/portal_workflow;"
                       tal:condition="python: ecab_utils.isAssignmentBoxType(elt)">
-                    <thead>
-                      <tr>
-                       <th i18n:translate="label_date">Date</th>
-                       <th i18n:translate="label_user">User</th>
-                       <th i18n:translate="label_state">State</th>
-                       <th i18n:translate="label_mark">Grade</th>
-                       <th i18n:translate="label_actions">Actions</th>
-                      </tr>
-                    </thead>
 
-                    <tbody 
-                        tal:define="summary python: elt.getAssignmentsSummary(id=userName);
-                                    wtool here/portal_workflow;">
-                      <tal:block tal:repeat="assignment summary">
-                        <tr tal:define="oddrow repeat/assignment/odd;
-                                item_type assignment/portal_type;
-                                item_wf_state assignment/review_state|python: wtool.getInfoFor(assignment, 'review_state', '');
-                                item_state_title python:wtool.getTitleForStateOnType(item_wf_state, item_type);
-                                item_wf_state_class  python:'state-' + normalizeString(item_wf_state);"
-                            tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                          <td tal:content="python: here.toLocalizedTime(assignment.CreationDate(), True)"/>
-                          <td>
-                            <a tal:attributes="href python: 'all_assignments?userName=%s' % assignment.Creator()"
-                               tal:content="python: ecab_utils.getFullNameById(assignment.Creator())"/>
-                          </td>
-                          <td>
-                            <span tal:content="item_state_title"
-                                  tal:attributes="class item_wf_state_class"
-                                  i18n:domain="plone" i18n:translate=""/>
-                          </td>
-                          <td>
-			    <span tal:define="field python:assignment.getField('mark')"
-			          tal:content="python: field.getAccessor(assignment)()"/>
-                          </td>
-                          <td align="center">
-                            <a href="item_url"
-                               tal:attributes="href python: assignment.reference_url()"
-                               i18n:translate="label_action_view">
-                              [View]
-                            </a>
-                          </td>
-                        </tr>
-                      </tal:block>
-                    </tbody>
+                    <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+
+                    <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
+
                   </table>
                 </tal:block>
               </div>
+
             </metal:recurse>
           </tal:hidemacro>
-          <!-- end -->
+          <!-- end list items -->
 
         </div>
       </tal:main-macro>

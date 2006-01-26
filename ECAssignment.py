@@ -78,7 +78,6 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
         default_content_type = 'text/structured',
         default_output_type = 'text/html',
         allowable_content_types = TEXT_TYPES,
-        accessor = 'getRemarksIfAllowed',
         widget = TextAreaWidget(
             label = "Remarks",
             label_msgid = "label_remarks",
@@ -87,6 +86,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             i18n_domain = I18N_DOMAIN,
             rows = 8,
         ),
+        read_permission = permissions.ModifyPortalContent,
     ),
 
     TextField(
@@ -109,6 +109,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
         'mark',
         searchable = True,
         accessor = 'getGradeIfAllowed',
+        edit_accessor = 'getGradeForEdit',
         widget=StringWidget(
             label = 'Grade',
             label_msgid = 'label_grade',
@@ -282,22 +283,15 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             elif isReviewer:
                 return '(' + self.mark + ')'
 
-    #security.declarePublic('getRemarksIfAllowed')
-    def getRemarksIfAllowed(self):
+
+    #security.declarePublic('getGradeForEdit')
+    def getGradeForEdit(self):
         """
-        The accessor for field remarks. Returns the remarks if current user 
-        has reviewer permissions.
+        The edit_accessor for field grade. Returns the grade for this assignment.
         
-        @return remarks as string
+        @return string value of the given grade or nothing
         """
-        
-        currentUser = self.portal_membership.getAuthenticatedMember()
-        isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
-        
-        if isReviewer and hasattr(self, 'remarks'):
-            return self.remarks
-        
-        return None
+        return self.mark
 
 
 registerATCT(ECAssignment, PROJECTNAME)

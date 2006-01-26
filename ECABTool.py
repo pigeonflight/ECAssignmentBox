@@ -198,7 +198,7 @@ class ECABTool(UniqueObject, SimpleItem):
             if wf.transitions[key].trigger_type == TRIGGER_USER_ACTION:
                 dl.add(key, wf.transitions[key].actbox_name)
 
-        #return dl.sortedByValue()
-        return dl
+        return dl.sortedByValue()
+        #return dl
 
 InitializeClass(ECABTool)

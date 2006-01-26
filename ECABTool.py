@@ -168,7 +168,9 @@ class ECABTool(UniqueObject, SimpleItem):
                 assignment's workflow
         """
         dl = DisplayList(())
-        
+
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
         stateKeys = self.getWfStates(wfName)
         
         for key in stateKeys:

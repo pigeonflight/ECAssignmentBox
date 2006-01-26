@@ -1,3 +1,6 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
@@ -11,13 +14,13 @@
     <!-- base view macro -->
     <metal:define define-macro="base_view">
       <tal:condition condition="field">
-	<tal:view define="mode      string:view;
-			  use_label python:True;
-			  accessor  python:field.getAccessor(here);
-			  object    python:accessor();"
-	       condition="object | object/get_data | object/data | nothing" >
-	  <metal:use use-macro="here/widgets/field/macros/view" />
-	</tal:view>
+    	  <tal:view define="mode string:view;
+    			    use_label python:True;
+    			    accessor  python:field.getAccessor(here);
+    			    object    python:accessor();"
+            condition="object | object/get_data | object/data | nothing" >
+    	    <metal:use use-macro="here/widgets/field/macros/view" />
+      	</tal:view>
       </tal:condition>
     </metal:define>
 
@@ -97,6 +100,174 @@
          i18n:translate="back_to_overview">
         Back to the assignment text
       </a>
+    </metal:define>
+
+    <!-- headline in all assignments templates -->
+    <metal:define define-macro="all_assignments_heading">
+      <h1 class="documentFirstHeading">
+        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>:
+
+        <span tal:define="userName request/userName | nothing;"
+            tal:condition="userName" 
+            tal:replace="python: ecab_utils.getFullNameById(userName)" 
+            tal:omit-tag="" />
+      </h1>
+    </metal:define>
+
+
+    <!-- header of table in all assignments templates -->
+    <metal:define define-macro="all_assignments_thead">
+      <thead>
+        <tr>
+          <th class="nosort">
+            <input class="noborder"
+                type="checkbox"
+                src="select_all_icon.gif"
+                name="selectButton"
+                title="Select all items"
+                onClick="toggleSelect(this, 'paths:list');"
+                tal:attributes="src string:$portal_url/select_all_icon.gif"
+                alt="Select all items"
+                i18n:attributes="title label_select_all_items; alt label_select_all_items;"
+            />
+          </th>
+          <th i18n:translate="label_date">Date</th>
+          <th i18n:translate="label_user">User</th>
+          <th i18n:translate="label_state">State</th>
+          <th i18n:translate="label_mark">Grade</th>
+          <th i18n:translate="label_actions">Actions</th>
+        </tr>
+      </thead>
+    </metal:define>
+
+    <!-- body of table in all assignments templates -->
+    <metal:define define-macro="all_assignments_tbody">
+      <tbody>
+        <tal:block tal:repeat="item items">
+	        <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
+	            tal:define="oddrow      repeat/item/odd;
+	                item_type           item/portal_type;
+	                item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
+	                item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
+	                item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);
+                  item_id             item/getId;
+                  item_title_or_id    item/pretty_title_or_id;
+                  item_url            item/getURL|item/absolute_url;
+                  item_path           item/getPath | python:'/'.join(item.getPhysicalPath());
+                  hasGetUrl           python:hasattr(item.aq_explicit, 'getURL');
+                  item_rel_url        python: hasGetUrl and item.getURL(relative=1);"
+              tal:attributes="class python: test(oddrow, 'odd', 'even')">
+
+            <td>
+              <input type="checkbox"
+                  class="noborder"
+                  name="paths:list" 
+                  id="#"
+                  value=""
+                  tal:attributes="value item_path;
+                      id      string:cb_$item_id;
+                      checked python:test(request.get('ids_checked', False), 'checked', None);
+                      alt     string:Select $item_title_or_id;
+                      title   string:Select $item_title_or_id" />
+              
+              <input type="hidden" name="obj_paths:list" value=""
+                     tal:attributes="value item_rel_url" />
+
+            </td>
+
+            <td tal:content="python: here.toLocalizedTime(item.CreationDate(), True)"/>
+
+            <td>
+              <a tal:attributes="href python: '%s?userName=%s' % (template.id, item.Creator())"
+                 tal:content="python: ecab_utils.getFullNameById(item.Creator())"/>
+            </td>
+
+            <td>
+              <span i18n:domain="plone"
+                  i18n:translate=""
+                  tal:condition="item_state_title"
+                  tal:content="item_state_title"
+                  tal:attributes="class item_wf_state_class" />
+              <span tal:condition="not: item_state_title">&nbsp;</span>
+            </td>
+
+            <td style="text-align: right">
+    			    <span tal:define="field python: item.getField('mark')"
+     			          tal:content="python: field.getAccessor(item)()"/>
+            </td>
+
+            <td style="text-align: center">
+              <a href="item_url"
+                  tal:attributes="href python: '%s/%s' % (item_path, item.getTypeInfo().getActionById('view'))"
+                  i18n:translate="label_action_view">[View]</a>
+
+              <tal:block condition="isReviewer">
+                <a href="item_url"
+                    tal:attributes="href python: '%s/%s' % (item_path, item.getTypeInfo().getActionById('grade'))"
+                    i18n:translate="label_action_grade">
+                  [Grade]
+                </a>
+              </tal:block>
+
+            	<a href="item_url"
+            	    tal:attributes="href python: '%s/at_download/file' % (item_path,)"
+            	    i18n:translate="label_action_download">[Download]</a>
+            </td>
+          </tr>
+        </tal:block>
+      </tbody>
+    </metal:define>
+
+    <!-- shows user details -->
+    <metal:define define-macro="user_details">
+    <div class="reviewHistory">
+      <dl class="collapsible collapsedBlockCollapsible"
+          tal:define="
+            userName            request/userName | nothing;
+            getPersonalPortrait nocall: mtool/getPersonalPortrait;
+            getHomeUrl          nocall: mtool/getHomeUrl;
+            email               python: request.get('email', member.getProperty('email', ''));"
+          tal:condition="userName">
+  
+        <dt class="collapsibleHeader" i18n:translate="label_student_details">Student details</dt>
+        <dd class="collapsibleContent">
+          <div class="card"
+              tal:define="home python: getHomeUrl(userName, verifyPermission = 1);
+                          portrait python: getPersonalPortrait(userName);"
+          >
+            <a href="#" tal:attributes="href home">
+               <img src="#" alt="" tal:replace="structure python: portrait.tag(width=75, height=100, border=0)"/>
+             </a>
+          </div>
+          <div tal:define="
+              fullname  python: ecab_utils.getFullNameById(userName);
+              email     python: ecab_utils.getUserPropertyById(userName, 'email');
+              studentid python: ecab_utils.getUserPropertyById(userName, 'employeeNumber');
+              major     python: ecab_utils.getUserPropertyById(userName, 'departmentNumber');"
+          >
+            <p>
+              <b i18n:translate="label_name">Name:</b>
+              <span tal:content="fullname"/>
+            </p>
+            <p>
+              <b i18n:translate="label_email">E-Mail:</b>
+              <a href="" tal:attributes="href string: mailto:${email}" tal:content="email"/>
+            </p>
+            <p tal:condition="studentid">
+              <b i18n:translate="label_student_id">Student ID:</b>
+              <span tal:replace="studentid"/>
+            </p>
+            <p tal:condition="major">
+              <b i18n:translate="label_major">Major:</b>
+              <span tal:replace="major"/>
+            </p>
+          </div>
+
+          <div class="visualClear"/>
+
+        </dd>
+      </dl>
+    </div>
     </metal:define>
 
   </body>

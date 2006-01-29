@@ -257,7 +257,6 @@ msgstr "Aufgabentext"
 #.  Average Grade
 #. </td>
 # Original: "Avg. Grade"
-#, fuzzy
 msgid "label_average_grade"
 msgstr "Durschnittsnote"
 
@@ -454,6 +453,39 @@ msgstr "Details zum Studenten"
 # Original: "Student ID:"
 msgid "label_student_id"
 msgstr "Matrikel-Nr:"
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: star.png"
+#.      alt="Released"
+#.      title="This assignment has been released for viewing"
+#.      i18n:attributes="alt   label_released;
+#. 		      title tooltip_released_icon"/>
+# Original: "Released"
+msgid "label_released"
+msgstr "Freigegeben"
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: star.png"
+#.      alt="Released"
+#.      title="This assignment has been released for viewing"
+#.      i18n:attributes="alt   label_released;
+#. 		      title tooltip_released_icon"/>
+# Original: "This assignment has been released for viewing"
+msgid "tooltip_released_icon"
+msgstr "Diese Einreichung ist zur Ansicht freigegeben"
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: comment.png"
+#.   alt="Feedback"
+#.   title="Feedback available"
+#.   i18n:attributes="alt   label_feedback;
+#.                    title tooltip_feedback_icon"/>
+# Original: "Feedback available"
+msgid "tooltip_feedback_icon"
+msgstr "Rückmeldung verfügbar"
 
 
 #: ./ECAssignmetBox.py

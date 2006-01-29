@@ -292,6 +292,27 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         @return string value of the given grade or nothing
         """
         return self.mark
+    
+
+    #security.declarePublic('getViewerNames')
+    def getViewerNames(self):
+        """
+        Get the names of the users and/or groups which have the local
+        role `ECAssignment Viewer'.  This allows reviewers to quickly
+        check who may view an assignment.
+        
+        @return list of user and/or group names
+        """
+        principalIds = self.users_with_local_role('ECAssignment Viewer')
+        names = []
+        
+        for id in principalIds:
+            if self.portal_groups.getGroupById(id):
+                names.append(self.portal_groups.getGroupById(id).getGroupName())
+            else:
+                names.append(self.ecab_utils.getFullNameById(id))
+
+        return names
 
 
 registerATCT(ECAssignment, PROJECTNAME)

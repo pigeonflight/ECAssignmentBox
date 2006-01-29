@@ -53,14 +53,10 @@
             tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
           <table class="listing">
-
             <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
-
-            <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
-
       	    <tfoot tal:condition="grades">
               <tr>
-            		<td colspan="4"
+            		<td colspan="5"
             		  i18n:translate="label_average_grade">Average Grade</td>
             		<td
             		  style="text-align: right"
@@ -69,7 +65,7 @@
             		<td/>
             	</tr>
               <tr>
-            		<td colspan="4"
+            		<td colspan="5"
             		  i18n:translate="label_median_grade">Median Grade</td>
             		<td
             		  style="text-align: right"
@@ -78,15 +74,15 @@
             		<td/>
               </tr>
             </tfoot>
-
+            <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
           </table>
 
-	        <p tal:condition="grades"
-	            i18n:translate="grade_statistics_help" class="discreet">
-	          Average and median grades are calculated from all assignments
-	          in this assignment box which are in the state <em>graded</em> and
-	          which have a grade assigned.
-	        </p>
+	  <p tal:condition="grades"
+	    i18n:translate="grade_statistics_help" class="discreet">
+	      Average and median grades are calculated from all assignments
+	      in this assignment box which are in the state <em>graded</em> and
+	      which have a grade assigned.
+	  </p>
 
 
           <div class="formControls" tal:condition="python: isReviewer">

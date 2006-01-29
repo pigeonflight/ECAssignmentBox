@@ -460,6 +460,39 @@ msgid "label_student_id"
 msgstr ""
 
 
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: star.png"
+#.      alt="Released"
+#.      title="This assignment has been released for viewing"
+#.      i18n:attributes="alt   label_released;
+#. 		      title tooltip_released_icon"/>
+# Original: "Released"
+msgid "label_released"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: star.png"
+#.      alt="Released"
+#.      title="This assignment has been released for viewing"
+#.      i18n:attributes="alt   label_released;
+#. 		      title tooltip_released_icon"/>
+# Original: "This assignment has been released for viewing"
+msgid "tooltip_released_icon"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+#. <img tal:attributes="src string: comment.png"
+#.   alt="Feedback"
+#.   title="Feedback available"
+#.   i18n:attributes="alt   label_feedback;
+#.                    title tooltip_feedback_icon"/>
+# Original: "Feedback available"
+msgid "tooltip_feedback_icon"
+msgstr ""
+
+
 #: ./ECAssignmetBox.py
 msgid "label_submission_period_end"
 msgstr ""

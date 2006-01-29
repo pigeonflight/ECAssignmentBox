@@ -165,7 +165,7 @@
 		name="paths:list" 
 		id="#"
 		value=""
-		tal:attributes="value   item_path;
+		tal:attributes="value   item_url;
 		                id      string:cb_$item_id;
 		                checked python:test(request.get('ids_checked', False), 'checked', None);
 		                alt     string:Select $item_title_or_id;
@@ -227,19 +227,19 @@
 
             <td style="text-align: center">
               <a href="item_url"
-                  tal:attributes="href python: '%s/%s' % (item_path, item.getTypeInfo().getActionById('view'))"
+                  tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('view'))"
                   i18n:translate="label_action_view">[View]</a>
 
               <tal:block condition="isReviewer">
                 <a href="item_url"
-                    tal:attributes="href python: '%s/%s' % (item_path, item.getTypeInfo().getActionById('grade'))"
+                    tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('grade'))"
                     i18n:translate="label_action_grade">
                   [Grade]
                 </a>
               </tal:block>
 
             	<a href="item_url"
-            	    tal:attributes="href python: '%s/at_download/file' % (item_path,)"
+            	    tal:attributes="href python: '%s/at_download/file' % (item_url,)"
             	    i18n:translate="label_action_download">[Download]</a>
             </td>
           </tr>

@@ -165,7 +165,7 @@
 		name="paths:list" 
 		id="#"
 		value=""
-		tal:attributes="value   item_url;
+		tal:attributes="value   item_path;
 		                id      string:cb_$item_id;
 		                checked python:test(request.get('ids_checked', False), 'checked', None);
 		                alt     string:Select $item_title_or_id;

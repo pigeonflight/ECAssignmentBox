@@ -395,6 +395,19 @@ msgstr ""
 
 
 #: ./skins/ECAssignmentBox/by_student.pt
+#. <input class="context"
+#.   tabindex="#"
+#.   type="submit"
+#.   name="exportStatistics:method"
+#.   value="Export"
+#.   tal:attributes="tabindex tabindex/next;"
+#.   i18n:attributes="value"/>
+# Original: "Export"
+msgid "Export"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/by_student.pt
 #. <span i18n:translate="label_overall_average_grade" tal:omit-tag="">
 #.  Overall average grade
 #. </span>

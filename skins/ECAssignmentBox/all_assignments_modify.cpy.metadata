@@ -1,0 +1,9 @@
+[default]
+title = Modifiy assignments state
+
+[validators]
+validators=
+
+[actions]
+action.success=traverse_to:string:all_assignments
+action.failure=traverse_to:string:all_assignments

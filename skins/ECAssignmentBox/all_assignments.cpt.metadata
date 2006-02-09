@@ -1,0 +1,12 @@
+[default]
+title = View all ECAssignments
+
+[security]
+View = 0:Authenticated
+
+[validators]
+validators=
+
+[actions]
+action.success=traverse_to:string:all_assignments_modify
+action.failure=traverse_to:string:all_assignments

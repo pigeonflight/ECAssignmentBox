@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006 Otto-von-Guericke-UniversitÃ¤t Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -109,9 +109,9 @@ class ECAssignmentBox(ATFolder):
     # -- actions ---------------------------------------------------------------
     actions = updateActions(ATFolder, (
         {
-        'action':      "string:$object_url/ecab_assignments",
+        'action':      "string:$object_url/all_assignments",
         'category':    "object",
-        'id':          'assignments',
+        'id':          'all_assignments',
         'name':        'Assignments',
         'permissions': (permissions.View,),
         'condition'  : 'python:1'

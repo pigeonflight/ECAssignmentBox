@@ -1,9 +1,0 @@
-[default]
-title = Modifiy assignments state
-
-[validators]
-validators=
-
-[actions]
-action.success=traverse_to:string:ecab_assignments
-action.failure=traverse_to:string:ecab_assignments

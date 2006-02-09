@@ -27,7 +27,7 @@ msgstr ""
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "Changing state for (${titles}) caused an exception."
+msgid "Changing state for "${titles}" caused an exception."
 msgstr ""
 
 
@@ -47,17 +47,17 @@ msgstr ""
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${titles}) could not be changed."
+msgid "State for "${titles}" could not be changed."
 msgstr ""
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${titles}) has been changed."
+msgid "State for "${titles}" has been changed."
 msgstr ""
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${title}) has been changed."
+msgid "State for "${titles}" has been changed."
 msgstr ""
 
 

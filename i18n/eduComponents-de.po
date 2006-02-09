@@ -17,8 +17,8 @@ msgstr ""
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "Changing state for (${titles}) caused an exception."
-msgstr "Die Statusänderung für (${titles}) verursachte einen Fehler."
+msgid "Changing state for \"${titles}\" caused an exception."
+msgstr "Die Statusänderung für \"${titles}\" verursachte einen Fehler."
 
 
 #: ./skins/ECAssignmentBox/eca_add.cpy
@@ -37,18 +37,18 @@ msgstr "Der Status von ${itemCount} Einträgen wurde geändert."
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${titles}) could not be changed."
-msgstr "Der Status von (${titles}) konnte nicht geändert werden."
+msgid "State for \"${titles}\" could not be changed."
+msgstr "Der Status von \"${titles}\" konnte nicht geändert werden."
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${titles}) has been changed."
-msgstr "Der Status von (${titles}) wurde geändert."
+msgid "State for \"${titles}\" has been changed."
+msgstr "Der Status von \"${titles}\" wurde geändert."
 
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
-msgid "State for (${title}) has been changed."
-msgstr "Der Status von (${title}) wurde geändert."
+msgid "State for \"${titles}\" has been changed."
+msgstr "Der Status von \"${titles}\" wurde geändert."
 
 
 #: ./skins/ECAssignmentBox/eca_add_validate.vpy

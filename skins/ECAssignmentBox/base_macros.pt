@@ -52,7 +52,7 @@
          href=""
          tal:define="parent_url python:here.navigationParent(here, template_id)"
          tal:condition="parent_url"
-         tal:attributes="href parent_url"
+         tal:attributes="href python: '%s/%s' % (parent_url, 'all_assignments')"
          i18n:domain="plone"
          i18n:translate="go_to_parent_url">
         Up one level
@@ -105,11 +105,11 @@
     <!-- headline in all assignments templates -->
     <metal:define define-macro="all_assignments_heading">
       <h1 class="documentFirstHeading">
-        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>:
+        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
 
         <span tal:define="userName request/userName | nothing;"
             tal:condition="userName" 
-            tal:replace="python: ecab_utils.getFullNameById(userName)" 
+            tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
             tal:omit-tag="" />
       </h1>
     </metal:define>

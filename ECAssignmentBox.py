@@ -87,7 +87,7 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
 finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
 
 class ECAssignmentBox(ATFolder):
-    """A simple folderish archetype for holding ECAssignments"""
+    """Allows the creation, submission and grading of online assignments."""
 
     __implements__ = (ATFolder.__implements__)
 
@@ -106,7 +106,7 @@ class ECAssignmentBox(ATFolder):
     default_view = 'ecab_view'
     immediate_view = 'ecab_view'
 
-    # -- actions ---------------------------------------------------------------
+    # -- actions --------------------------------------------------------------
     actions = updateActions(ATFolder, (
         {
         'action':      "string:$object_url/all_assignments",
@@ -122,7 +122,7 @@ class ECAssignmentBox(ATFolder):
         'view': 'ecab_view',
         })
 
-    # -- methods ---------------------------------------------------------------
+    # -- methods --------------------------------------------------------------
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
         BaseFolder.manage_afterAdd(self, item, container)

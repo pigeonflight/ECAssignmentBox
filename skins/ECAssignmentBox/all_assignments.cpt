@@ -35,33 +35,32 @@
             tal:condition="items">
 -->
 
-          <metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
+	<metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
           
-	        <a class="link-parent"
-	            tal:define="
-	                parent     python: here.aq_parent;
-	                template   python: parent.getTypeInfo().getActionById(template_id, '');
-	                parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
-	            tal:condition="parent_url"
-	            tal:attributes="href python: '%s/%s' % (parent_url, template)"
-	            i18n:domain="plone"
-	            i18n:translate="go_to_parent_url">
-	          Up one level
-	        </a>
-	
-          <metal:use use-macro="here/base_macros/macros/user_details" />
+	<a class="link-parent"
+	  tal:define="parent     python: here.aq_parent;
+	              template   python: parent.getTypeInfo().getActionById(template_id, '');
+	              parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
+	  tal:condition="parent_url"
+	  tal:attributes="href python: '%s/%s' % (parent_url, template)"
+	  i18n:domain="plone"
+	  i18n:translate="go_to_parent_url">
+	  Up one level
+	</a>
 
-          <p tal:condition="python: not ecab_utils.isAssignmentBoxType(here)">
-            <span i18n:translate="label_n_boxes">
-              Published assignment boxes inside this folder:
-            </span>
-            <span tal:omit-tag="" tal:content="here/countContainedBoxes"/>
-          </p>
+	<p tal:condition="python: not ecab_utils.isAssignmentBoxType(here)">
+	  <b i18n:translate="label_n_boxes">
+	    Published assignment boxes inside this folder:
+	  </b>
+	  <span tal:omit-tag="" tal:content="here/countContainedBoxes"/>
+	</p>
 
-          <form action=""
-            method="post"
-            name="allAssignmentsEditForm"
-            tal:attributes="action string:${here/absolute_url}/${template/getId}">
+	<metal:use use-macro="here/base_macros/macros/user_details" />
+
+	<form action=""
+	  method="post"
+	  name="allAssignmentsEditForm"
+	  tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
           <!-- start showing folder title and items -->
           <tal:contain define="location nocall:here; level python:1;">

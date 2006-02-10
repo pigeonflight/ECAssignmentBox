@@ -25,6 +25,40 @@ msgstr ""
 msgid "."
 msgstr ""
 
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Assignment Box Settings"
+msgid "heading_ecab_prefs"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Settings that affect the behavior of all assignment boxes in this site."
+msgid "description_ecab_prefs"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Student attributes mapping"
+msgid "legend_ecab_attr_mapping"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Here you can specify user attributes which should be used
+# to retrieve additional student information.  The available user
+# attributes are listed in <code>portal_memberdata</code> in the Zope
+# Management Interface.  On your site, some of them are:
+# ${properties}".  Additional user attributes may be available, e.g.,
+# if the user data for your site is stored in an LDAP directory.
+msgid "help_ecab_attr_mapping"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores the student ID."
+msgid "help_student_id_attr"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores a student's major."
+msgid "help_major_attr"
+msgstr ""
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "Changing state for "${titles}" caused an exception."

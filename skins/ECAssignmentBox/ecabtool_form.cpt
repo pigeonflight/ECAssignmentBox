@@ -14,7 +14,7 @@
         tal:define="errors  options/state/getErrors;
             ecab_utils nocall:portal/ecab_utils;">
 
-      <h1 i18n:translate="heading_ecab_prefs">ECAssignmentBox preferences</h1>
+      <h1 i18n:translate="heading_ecab_prefs">Assignment Box Settings</h1>
 
       <a href=""
         class="link-parent"
@@ -23,7 +23,8 @@
         Up to Plone Setup
       </a>
 
-      <p i18n:translate="description_ecab_prefs">ECAssignmentBox settings.</p>
+      <p i18n:translate="description_ecab_prefs">Settings that affect the
+	behavior of all assignment boxes in this site.</p>
 
       <form action=""
           name="ecab_prefs"
@@ -31,19 +32,33 @@
           tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
         <fieldset>
-          <legend i18n:translate="legend_ecab_prefs">
-            Mapping
+          <legend i18n:translate="legend_ecab_attr_mapping">
+            Student attributes mapping
           </legend>
 
+	  <p i18n:translate="help_ecab_attr_mapping">Here you can specify user
+	    attributes which should be used to retrieve additional student
+	    information.  The available user attributes are listed in
+	    <code>portal_memberdata</code> in the Zope Management Interface.
+	    On your site, some of them are:
+
+	    <span i18n:name="properties"
+	      tal:replace="python: ', '.join(filter(lambda p: here.portal_memberdata.getPropertyType(p) in ('string', 'int'),
+	                                            here.portal_memberdata.propertyIds()))"/>.
+
+	    Additional user attributes may be available, e.g., if the user data
+	    for your site is stored in an LDAP directory.
+	  </p>
+
           <div class="field"
-              tal:define="student_id_attr  request/student_id_attr | ecab_utils/student_id_attr;
-              error errors/student_id_attr | nothing;"
-              tal:attributes="class  python:test(error, 'field error', 'field');">
+	    tal:define="student_id_attr  request/student_id_attr | ecab_utils/student_id_attr;
+	    error errors/student_id_attr | nothing;"
+	    tal:attributes="class python:test(error, 'field error', 'field');">
 
             <label i18n:translate="label_student_id">Student ID</label>
 
             <div class="formHelp" i18n:translate="help_student_id_attr">
-              TODO.
+              The user attribute which stores the student ID.
             </div>
 
             <div tal:condition="error" 
@@ -65,7 +80,7 @@
             <label i18n:translate="label_major">Major</label>
 
             <div class="formHelp" i18n:translate="help_major_attr">
-              TODO.
+              The user attribute which stores a student's major.
             </div>
 
             <div tal:condition="error" 
@@ -105,3 +120,13 @@
     </div>
   </body>
 </html>
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-local-catalogs:("/usr/local/lib/sgml/XHTML11.cat")
+sgml-validate-command:"xmllint \\-\\-valid \\-\\-noout %s %s"
+sgml-indent-step:2
+sgml-indent-data:t
+fill-column:79
+End:
+-->

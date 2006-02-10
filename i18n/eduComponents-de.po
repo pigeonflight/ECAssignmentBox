@@ -98,6 +98,42 @@ msgid "decimal_separator"
 msgstr ","
 
 
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Assignment Box Settings"
+msgid "heading_ecab_prefs"
+msgstr "Assignment-Box-Einstellungen"
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Settings that affect the behavior of all assignment boxes in this site."
+msgid "description_ecab_prefs"
+msgstr "Für alle Assignment Boxes gültige Einstellungen."
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Student attributes mapping"
+msgid "legend_ecab_attr_mapping"
+msgstr "Abbildung von zusätzlichen Attributen für Studenten"
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "Here you can specify user attributes which should be used
+# to retrieve additional student information.  The available user
+# attributes are listed in <code>portal_memberdata</code> in the Zope
+# Management Interface.  On your site, some of them are:
+# ${properties}".  Additional user attributes may be available, e.g.,
+# if the user data for your site is stored in an LDAP directory.
+msgid "help_ecab_attr_mapping"
+msgstr "Hier können Benutzerattribute angegeben werden, die benutzt werden sollen, um zusätzliche Informationen zu Studenten zu finden. Die verfügbaren Attribute sind in <code>portal_memberdata</code> im Zope Management Interface aufgeführt. Hier eine Auswahl: ${properties}. Weitere Attribute sind möglicherweise verfügbar, z. B. wenn die Benutzerdaten in einem LDAP-Verzeichnis gespeichert sind."
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores the student ID."
+msgid "help_student_id_attr"
+msgstr "Das Attribut, das die Matrikelnummer enthält."
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores a student's major."
+msgid "help_major_attr"
+msgstr "Das Attribut, das den Studiengang enthält."
+
+
 #: ./skins/ECAssignmentBox/base_macros.pt
 #. <span i18n:translate="go_to_submission">
 #.  Go to the submission of
@@ -465,7 +501,7 @@ msgstr "Details zum Studenten"
 #. </b>
 # Original: "Student ID:"
 msgid "label_student_id"
-msgstr "Matrikel-Nr:"
+msgstr "Matrikel-Nr.:"
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt

@@ -34,7 +34,7 @@ from Products.CMFCore import utils
 from Products.CMFCore.DirectoryView import registerDirectory
 
 from Products.ECAssignmentBox.config import SKINS_DIR, GLOBALS, PROJECTNAME
-from Products.ECAssignmentBox.config import ADD_CONTENT_PERMISSION
+from Products.ECAssignmentBox.config import ADD_CONTENT_PERMISSION, TOOL_ICON
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
@@ -66,5 +66,5 @@ def initialize(context):
     ToolInit(PROJECTNAME + ' Tool',
              tools = tools,
              product_name = PROJECTNAME,
-             icon = 'tool.png'
+             icon = TOO_ICON
              ).initialize(context)

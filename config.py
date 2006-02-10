@@ -46,6 +46,7 @@ DEPENDENCIES = ['Archetypes',]
 TOOL_NAME  = "ecab_utils"
 TOOL_TITLE = "ECAssignmentBox Utility Tool"
 TOOL_META  = "ECAssignmentBox Utility Tool"
+TOOL_ICON  = "tool.png"
 
 ICONMAP = {'application/pdf' : 'pdf.gif',
            'image'           : 'image_icon.gif'}

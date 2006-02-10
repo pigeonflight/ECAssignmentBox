@@ -21,7 +21,8 @@
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-from OFS.SimpleItem import SimpleItem
+#from OFS.SimpleItem import SimpleItem
+from OFS.Folder import Folder
 from Products.CMFCore.utils import UniqueObject, getToolByName
 
 from Products.Archetypes.atapi import *
@@ -31,7 +32,7 @@ from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 from Products.ECAssignmentBox.Statistics import Statistics
 from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
 
-class ECABTool(UniqueObject, SimpleItem):
+class ECABTool(UniqueObject, Folder):
     """Various utility methods."""
 
     id = 'ecab_utils'
@@ -39,6 +40,35 @@ class ECABTool(UniqueObject, SimpleItem):
     
     security = ClassSecurityInfo()
 
+    student_id_attr = ''
+    major_attr = ''
+
+    # manage options
+    manage_options = (
+        (Folder.manage_options[0],)
+        + Folder.manage_options[2:]
+        )
+
+    # set properties
+    _properties = Folder._properties + (
+        {'id':'student_id_attr',
+         'type':'ustring',
+         'mode':'w',
+        },
+        {'id':'major_attr',
+         'type':'ustring',
+         'mode':'w',
+        },
+    )
+
+    # -- constructor -----------------------------------------------------------
+    def __init__(self):
+        """
+        """
+        pass
+
+
+    # -- methods ---------------------------------------------------------------
     security.declarePublic('localizeNumber')
     def localizeNumber(self, format, number):
         """A simple method for localized formatting of decimal

@@ -29,6 +29,33 @@ from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 # ECAssignmentBox
 from Products.ECAssignmentBox.config import *
 
+def addPrefsPanel(self, out):
+    """
+    """
+    cp = getToolByName(self, 'portal_controlpanel', None)
+    if not cp:
+        out.write("No control panel found. Skipping installation of the setup panel.\n")
+    else:
+        cp.addAction(id = TOOL_NAME,
+                     name = TOOL_TITLE,
+                     action = 'string:${portal_url}/ecabtool_form',
+                     permission = 'Manage portal',
+                     category = 'Products',
+                     appId = PROJECTNAME,
+                     imageUrl = TOOL_ICON,
+                     description = '')
+
+    out.write("Added '%s' to the preferences panel.\n" % TOOL_TITLE)
+
+
+def removePrefsPanel(self):
+    """
+    """
+    cp = getToolByName(self, 'portal_controlpanel', None)
+    if cp:
+        cp.unregisterApplication(PROJECTNAME)
+
+
 def install(self):
     out = StringIO()
 
@@ -52,6 +79,9 @@ def install(self):
     tool.title = TOOL_TITLE
     print >> out, "Added ecab_utils to the portal root folder.\n"
 
+    # register tool to preferences panel
+    addPrefsPanel(self, out)
+
     return out.getvalue()
 
 def install_workflow(self, out):
@@ -70,3 +100,20 @@ def install_workflow(self, out):
     wf_tool.updateRoleMappings()
     
     print >> out, "Successfully installed ECAssignment workflow."
+
+
+def uninstall(self):
+    """ 
+    Uninstalls the product.
+    """
+    out = StringIO()
+
+    removePrefsPanel(self)
+
+    # FIXME: use method
+    if hasattr(self, TOOL_NAME):
+        self.manage_delObjects([TOOL_NAME])
+        out.write('Removed %s.\n' % TOOL_NAME)
+
+    print >> out, "Successfully uninstalled %s." % PROJECTNAME
+    return out.getvalue()

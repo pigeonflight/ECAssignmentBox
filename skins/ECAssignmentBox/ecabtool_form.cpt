@@ -24,7 +24,7 @@
       </a>
 
       <p i18n:translate="description_ecab_prefs">Settings that affect the
-	behavior of all assignment boxes in this site.</p>
+	behavior of all assignment boxes on this site.</p>
 
       <form action=""
           name="ecab_prefs"

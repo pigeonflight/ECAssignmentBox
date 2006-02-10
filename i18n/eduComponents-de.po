@@ -101,12 +101,12 @@ msgstr ","
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
 # Original: "Assignment Box Settings"
 msgid "heading_ecab_prefs"
-msgstr "Assignment-Box-Einstellungen"
+msgstr "ECAssignmentBox-Einstellungen"
 
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
-# Original: "Settings that affect the behavior of all assignment boxes in this site."
+# Original: "Settings that affect the behavior of all assignment boxes on this site."
 msgid "description_ecab_prefs"
-msgstr "Für alle Assignment Boxes gültige Einstellungen."
+msgstr "Für alle Aufgaben gültige Einstellungen."
 
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
 # Original: "Student attributes mapping"

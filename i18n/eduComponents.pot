@@ -31,7 +31,7 @@ msgid "heading_ecab_prefs"
 msgstr ""
 
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
-# Original: "Settings that affect the behavior of all assignment boxes in this site."
+# Original: "Settings that affect the behavior of all assignment boxes on this site."
 msgid "description_ecab_prefs"
 msgstr ""
 

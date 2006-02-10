@@ -14,7 +14,7 @@ Download
 
 Prerequisites
 
- To use LlsMultipleChoice you need a Plone 2.1.x installation.  Check
+ To use ECAssignmentBox you need a Plone 2.1.x installation.  Check
  "plone.org":http://plone.org/products/plone for Plone's
  prerequisites.
 
@@ -65,20 +65,20 @@ License
  ECAssignmentBox is licensed under the
  "GPL":http://opensource.org/licenses/gpl-license.
 
- Copyright © 2005 Otto-von-Guericke-Universität Magdeburg
+ Copyright © 2006 Otto-von-Guericke-Universität Magdeburg
 
- LlsMultipleChoice is free software; you can redistribute it and/or modify
+ ECAssignmentBox is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- LlsMultipleChoice is distributed in the hope that it will be useful,
+ ECAssignmentBox is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with LlsMultipleChoice; if not, write to the Free Software
+ along with ECAssignmentBox; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 

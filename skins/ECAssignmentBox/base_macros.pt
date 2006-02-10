@@ -271,8 +271,8 @@
 	      <tbody tal:define="
 		fullname  python: ecab_utils.getFullNameById(userName);
 		email     python: ecab_utils.getUserPropertyById(userName, 'email');
-		studentid python: ecab_utils.getUserPropertyById(userName, 'employeeNumber');
-		major     python: ecab_utils.getUserPropertyById(userName, 'departmentNumber');">
+		studentid python: ecab_utils.getUserPropertyById(userName, ecab_utils.student_id_attr);
+		major     python: ecab_utils.getUserPropertyById(userName, ecab_utils.major_attr);">
 		<tr>
 		  <th i18n:translate="label_name">Name</th>
 		  <td tal:content="fullname"/>

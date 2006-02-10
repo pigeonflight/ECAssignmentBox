@@ -66,5 +66,5 @@ def initialize(context):
     ToolInit(PROJECTNAME + ' Tool',
              tools = tools,
              product_name = PROJECTNAME,
-             icon = TOO_ICON
+             icon = TOOL_ICON
              ).initialize(context)

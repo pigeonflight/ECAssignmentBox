@@ -286,7 +286,7 @@
 		  <td tal:content="studentid"/>
 		</tr>
 		<tr tal:condition="major">
-		  <th>Major</th>
+		  <th i18n:translate="label_major">Major</th>
 		  <td tal:content="major"/>
 		</tr>
 	      </tbody>

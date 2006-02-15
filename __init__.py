@@ -33,8 +33,7 @@ from Products.Archetypes.public import process_types, listTypes
 from Products.CMFCore import utils
 from Products.CMFCore.DirectoryView import registerDirectory
 
-from Products.ECAssignmentBox.config import SKINS_DIR, GLOBALS, PROJECTNAME
-from Products.ECAssignmentBox.config import ADD_CONTENT_PERMISSION, TOOL_ICON
+from Products.ECAssignmentBox.config import *
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
@@ -52,11 +51,19 @@ def initialize(context):
     utils.ContentInit(
         PROJECTNAME + ' Content',
         content_types      = content_types,
-        permission         = ADD_CONTENT_PERMISSION,
+        permission         = DEFAULT_ADD_CONTENT_PERMISSION,
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
-
+    
+    # Add permissions to allow control on a per-class basis
+    for i in range(0, len(content_types)):
+        content_type = content_types[i].__name__
+        if content_type in ADD_CONTENT_PERMISSIONS:
+            context.registerClass(meta_type    = ftis[i]['meta_type'],
+                                  constructors = (constructors[i],),
+                                  permission   = ADD_CONTENT_PERMISSIONS[content_type])
+    
     # Tools
     import ECABTool
     from Products.CMFPlone.utils import ToolInit

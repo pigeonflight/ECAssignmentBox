@@ -19,7 +19,7 @@
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from Products.CMFCore.CMFCorePermissions import AddPortalContent
+from Products.CMFCore.CMFCorePermissions import setDefaultRoles, AddPortalContent
 from Products.Archetypes.public import DisplayList
 
 GLOBALS = globals()
@@ -48,15 +48,25 @@ TOOL_TITLE = "Assignment Box Settings"
 TOOL_META  = "ECAssignmentBox Utility Tool"
 TOOL_ICON  = "tool.png"
 
-ADD_CONTENT_PERMISSION = AddPortalContent
+# Permissions
+DEFAULT_ADD_CONTENT_PERMISSION = AddPortalContent
+setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner',))
 
+ADD_CONTENT_PERMISSIONS = {
+    'ECFolder':        'eduComponents: Add ECFolder',
+    'ECAssignmentBox': 'eduComponents: Add Assignment Box',
+}
+
+setDefaultRoles('eduComponents: Add ECFolder',       ('Manager', 'Owner',))
+setDefaultRoles('eduComponents: Add Assignment Box', ('Manager', 'Owner',))
+
+# Supported formats in text areas
 TEXT_TYPES = (
     'text/structured',
     'text/x-rst',
     'text/html',
     'text/plain',
     )
-
 
 # Some LOG levels
 BLATHER=-100

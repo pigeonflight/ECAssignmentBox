@@ -83,19 +83,19 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
                            "be submitted"),
             label_msgid = "label_submission_period_end",
             description_msgid = "help_submission_period_end",
-            i18n_domain = I18N_DOMAIN
+            i18n_domain = I18N_DOMAIN,
         ),
     ),
 
-    BooleanField('sendNotificationEmails',
+    BooleanField('sendNotificationEmail',
         default=False,
         widget=BooleanWidget(
-            label="Send notification emails",
-            description="If selected, tracker managers will receive an email each time a new issue or response is posted, and issue submitters will receive an email when there is a new response and when an issue has been resolved, awaiting confirmation.",
-            label_msgid='Poi_label_sendNotificationEmails',
-            description_msgid='Poi_help_sendNotificationEmails',
-            i18n_domain='Poi',
-        )
+            label="Send notification e-mail messages",
+            description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
+            label_msgid='label_sendNotificationEmail',
+            description_msgid='help_sendNotificationEmail',
+            i18n_domain=I18N_DOMAIN,
+        ),
     ),
     
 ) # , marshall = PrimaryFieldMarshaller()
@@ -122,6 +122,9 @@ class ECAssignmentBox(ATFolder):
     suppl_views = None
     default_view = 'ecab_view'
     immediate_view = 'ecab_view'
+
+    typeDescription = "Allows the creation, submission and grading of online assignments."
+    typeDescMsgId = 'description_edit_ecab'
 
     # -- actions --------------------------------------------------------------
     actions = updateActions(ATFolder, (
@@ -301,7 +304,7 @@ class ECAssignmentBox(ATFolder):
         Send a notification e-mail to the specified list of addresses.
         """
         
-        if not self.getSendNotificationEmails() or not addresses:
+        if not self.getSendNotificationEmail() or not addresses:
             return
         
         portal_url  = getToolByName(self, 'portal_url')

@@ -2,10 +2,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ECAssignmentBox\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"PO-Revision-Date: 2005-11-03 15:35+0100\n"
+"POT-Creation-Date: 2005-11-03 15:35+0100\n"
+"PO-Revision-Date: 2006-03-09 15:45+0100\n"
 "Last-Translator: Mario Amelung <amelung@iws.cs.uni-magdeburg.de>\n"
-"Language-Team: WDOK <amelung@iws.cs.uni-magdeburg.de>\n"
+"Language-Team: eduComponents <educomponents@uni-magdeburg.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -545,6 +545,18 @@ msgstr "Ende der Einreichungsfrist"
 #: ./ECAssignmetBox.py
 msgid "label_submission_period_start"
 msgstr "Beginn der Einreichungsfrist"
+
+
+#: ./ECAssignmentBox.py
+# Original: "Send notification e-mail messages"
+msgid "label_sendNotificationEmail"
+msgstr "Benachrichtigung bei Einreichungen"
+
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted."
+msgid "help_sendNotificationEmail"
+msgstr "Wenn dieses Feld ausgewählt ist, wird der Eigentümer dieser Aufgabe über Einreichungen per E-Mail benachrichtigt."
 
 
 #: ./skins/ECAssignmentBox/by_student.pt

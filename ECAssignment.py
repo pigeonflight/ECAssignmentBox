@@ -146,6 +146,9 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     default_view   = 'eca_view'
     immediate_view = 'eca_view'
 
+    typeDescription = "A submission to an assignment box."
+    typeDescMsgId = 'description_edit_eca'
+
     # -- actions ---------------------------------------------------------------
     actions = updateActions(ATCTContent, (
         {

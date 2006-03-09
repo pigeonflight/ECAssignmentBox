@@ -52,7 +52,7 @@ ECFolderSchema = Schema((
         default_content_type = 'text/structured',
         default_output_type = 'text/html',
         allowable_content_types = TEXT_TYPES,
-        widget = TextAreaWidget(
+        widget = RichWidget(
             label = 'Directions',
             label_msgid = 'label_directions',
             description = 'Instructions/directions that all assignment boxes in this folder refer to',
@@ -108,6 +108,9 @@ class ECFolder(ATFolder):
     default_view   = 'ecfolder_view'
     #suppl_views    = () #('all_assignments', 'by_student',)
     allowed_content_types = []
+
+    typeDescription = "A container for assignment boxes."
+    typeDescMsgId = 'description_edit_ecf'
 
     __implements__ = (ATFolder.__implements__,)
     security = ClassSecurityInfo()

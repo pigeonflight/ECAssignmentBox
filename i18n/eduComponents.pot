@@ -166,7 +166,7 @@ msgid "help_answer"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "help_assignment_text"
 msgstr ""
 
@@ -213,12 +213,12 @@ msgid "help_remarks"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "help_submission_period_end"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "help_submission_period_start"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgid "label_answer"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "label_assignment_text"
 msgstr ""
 
@@ -540,13 +540,25 @@ msgid "tooltip_feedback_icon"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "label_submission_period_end"
 msgstr ""
 
 
-#: ./ECAssignmetBox.py
+#: ./ECAssignmentBox.py
 msgid "label_submission_period_start"
+msgstr ""
+
+
+#: ./ECAssignmentBox.py
+# Original: "Send notification e-mail messages"
+msgid "label_sendNotificationEmail"
+msgstr ""
+
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted."
+msgid "help_sendNotificationEmail"
 msgstr ""
 
 

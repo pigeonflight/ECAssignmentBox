@@ -653,6 +653,19 @@ msgstr "Ihre Einreichung wurde gespeichert."
 msgid "upload_file_label"
 msgstr "Datei"
 
+
+#: ./skins/ECAssignmentBox/ECAssignment.py
+# Original: "[${id}] Submission to "${box_title}" by ${student}"
+msgid "email_new_submission_subject"
+msgstr "[${id}] Einreichung zu \"${box_title}\" von ${student}"
+
+
+#: ./skins/ECAssignmentBox/ECAssignment.py
+# Original: "${student} has made a submission to the assignment "${box_title}".\n\n<${url}>\n\n-- \n${product} ${version}"
+msgid "email_new_submission_content"
+msgstr "${student} hat eine Lösung zur Aufgabe \"${box_title}\" eingereicht.\n\n<${url}>\n\n-- \n${product} ${version}"
+
+
 #- Removed msgids:
 #  "State for (${itemCount}) items has been changed."
 

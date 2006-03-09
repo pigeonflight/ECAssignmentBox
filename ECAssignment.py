@@ -25,6 +25,7 @@ import re
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import permissions
+from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -190,6 +191,57 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                         wtool.doActionFor(a, 'supersede',
                                           comment='Superseded by %s'
                                           % self.getId())
+
+        self.sendNotificationEmail()
+    
+    def sendNotificationEmail(self):
+        """
+        When this assignment is created, send a notification email to
+        the owner of the assignment box, unless emailing is turned off.
+        """
+        portal_url = getToolByName(self, 'portal_url')
+        portal = portal_url.getPortalObject()
+        portal_language = portal.getProperty('default_language', None)
+        portal_qi = getToolByName(self, 'portal_quickinstaller')
+
+        productVersion = portal_qi.getProductVersion(PROJECTNAME)
+        box = self.aq_parent
+        
+        submitterId   = self.Creator()
+        submitterName = self.ecab_utils.getFullNameById(submitterId)
+        submissionURL = self.ecab_utils.normalizeURL(self.absolute_url())
+
+        addresses = box.getNotificationEmailAddresses()
+        prefLang = self.ecab_utils.getUserPropertyById(box.Creator(),
+                                                       'language')
+        if not prefLang:
+            prefLang = portal_language
+        
+        default_subject = '[${id}] Submission to "${box_title}" by ${student}'
+        subject = self.translate(domain='eduComponents',
+                                 msgid='email_new_submission_subject',
+                                 target_language=prefLang,
+                                 mapping={'id': PROJECTNAME,
+                                          'box_title': box.Title(),
+                                          'student': submitterName},
+                                 default=default_subject)
+
+        default_mailText = '${student} has made a submission to ' \
+                           'the assignment "${box_title}".\n\n' \
+                           '<${url}>\n\n' \
+                           '-- \n' \
+                           '${product} ${version}'
+        mailText = self.translate(domain='eduComponents',
+                                  msgid='email_new_submission_content',
+                                  target_language=prefLang,
+                                  mapping={'box_title': box.Title(),
+                                           'student': submitterName,
+                                           'url': submissionURL,
+                                           'product': PROJECTNAME,
+                                           'version': productVersion},
+                                  default=default_mailText)
+
+        box.sendNotificationEmail(addresses, subject, mailText)
 
 
     # FIXME: deprecated, set security

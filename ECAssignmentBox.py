@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006 Otto-von-Guericke-UniversitÃ¤t Magdeburg
+# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -24,12 +24,17 @@ from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore import permissions
+from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import updateActions, updateAliases
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.content.folder import ATFolder
+
+from ZODB.POSException import ConflictError
+from email.MIMEText import MIMEText
+from email.Header import Header
 
 # local imports
 from Products.ECAssignmentBox.config import *
@@ -81,6 +86,18 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
             i18n_domain = I18N_DOMAIN
         ),
     ),
+
+    BooleanField('sendNotificationEmails',
+        default=False,
+        widget=BooleanWidget(
+            label="Send notification emails",
+            description="If selected, tracker managers will receive an email each time a new issue or response is posted, and issue submitters will receive an email when there is a new response and when an issue has been resolved, awaiting confirmation.",
+            label_msgid='Poi_label_sendNotificationEmails',
+            description_msgid='Poi_help_sendNotificationEmails',
+            i18n_domain='Poi',
+        )
+    ),
+    
 ) # , marshall = PrimaryFieldMarshaller()
 )
 
@@ -260,6 +277,63 @@ class ECAssignmentBox(ATFolder):
                 return None
 
         return grades
+
+    security.declarePrivate('getNotificationEmailAddresses')
+    def getNotificationEmailAddresses(self):
+        """
+        Get the e-mail addresses to which notification messages should
+        be sent.  May return an empty list if notification is turned
+        off.  Currently returns only the address of the Creator of the
+        assignment box.
+        """
+        if not self.getSendNotificationEmails():
+            return []
+        
+        addresses = []
+        addresses.append(self.ecab_utils.getUserPropertyById(self.Creator(),
+                                                             'email'))
+        return addresses
+        
+
+    security.declarePrivate('sendNotificationEmail')
+    def sendNotificationEmail(self, addresses, subject, text):
+        """
+        Send a notification e-mail to the specified list of addresses.
+        """
+        
+        if not self.getSendNotificationEmails() or not addresses:
+            return
+        
+        portal_url  = getToolByName(self, 'portal_url')
+        plone_utils = getToolByName(self, 'plone_utils')
+
+        portal      = portal_url.getPortalObject()
+        mailHost    = plone_utils.getMailHost()
+        charset     = plone_utils.getSiteEncoding()
+        fromAddress = portal.getProperty('email_from_address', None)
+        
+        if fromAddress is None:
+            log('Cannot send notification e-mail: E-mail sender address or name not set')
+            return
+        
+        message = MIMEText(text, 'plain', charset)
+        subjHeader = Header(subject, charset)
+        message['Subject'] = subjHeader
+
+        # This is a hack to suppress deprecation messages about send()
+        # in SecureMailHost; the proposed alternative, secureSend(),
+        # sucks.
+        mailHost._v_send = 1
+        
+        for address in addresses:
+            try:
+                mailHost.send(message = str(message),
+                              mto = address,
+                              mfrom = fromAddress,)
+            except ConflictError:
+                raise
+            except:
+                log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
 
 
 registerATCT(ECAssignmentBox, PROJECTNAME)

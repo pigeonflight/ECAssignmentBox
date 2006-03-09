@@ -28,6 +28,10 @@ from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.Archetypes.atapi import *
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
+from urlparse import urlsplit, urlunsplit
+from socket import gethostname, getfqdn
+from string import split, join
+
 # local imports
 from Products.ECAssignmentBox.Statistics import Statistics
 from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
@@ -230,5 +234,28 @@ class ECABTool(UniqueObject, Folder):
 
         return dl.sortedByValue()
         #return dl
+
+
+    def normalizeURL(self, url):
+        """
+        Takes a URL (as returned by absolute_url(), for example) and
+        replaces the hostname with the actual, fully-qualified
+        hostname.
+        """
+        url_parts = urlsplit(url)
+        hostpart  = url_parts[1]
+
+        (hostname, port) = split(hostpart, ':')
+
+        if hostname == 'localhost' or hostname == '127.0.0.1':
+            hostname = getfqdn(gethostname())
+        else:
+            hostname = getfqdn(hostname)
+
+        hostpart = join((hostname, port), ':')
+        url = urlunsplit((url_parts[0], hostpart, \
+                          url_parts[2], url_parts[3], url_parts[4]))
+        return url
+
 
 InitializeClass(ECABTool)

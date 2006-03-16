@@ -32,10 +32,6 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.content.folder import ATFolder
 
-from ZODB.POSException import ConflictError
-from email.MIMEText import MIMEText
-from email.Header import Header
-
 # local imports
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
@@ -289,54 +285,13 @@ class ECAssignmentBox(ATFolder):
         off.  Currently returns only the address of the Creator of the
         assignment box.
         """
-        if not self.getSendNotificationEmails():
+        if not self.getSendNotificationEmail():
             return []
         
         addresses = []
         addresses.append(self.ecab_utils.getUserPropertyById(self.Creator(),
                                                              'email'))
         return addresses
-        
-
-    security.declarePrivate('sendNotificationEmail')
-    def sendNotificationEmail(self, addresses, subject, text):
-        """
-        Send a notification e-mail to the specified list of addresses.
-        """
-        
-        if not self.getSendNotificationEmail() or not addresses:
-            return
-        
-        portal_url  = getToolByName(self, 'portal_url')
-        plone_utils = getToolByName(self, 'plone_utils')
-
-        portal      = portal_url.getPortalObject()
-        mailHost    = plone_utils.getMailHost()
-        charset     = plone_utils.getSiteEncoding()
-        fromAddress = portal.getProperty('email_from_address', None)
-        
-        if fromAddress is None:
-            log('Cannot send notification e-mail: E-mail sender address or name not set')
-            return
-        
-        message = MIMEText(text, 'plain', charset)
-        subjHeader = Header(subject, charset)
-        message['Subject'] = subjHeader
-
-        # This is a hack to suppress deprecation messages about send()
-        # in SecureMailHost; the proposed alternative, secureSend(),
-        # sucks.
-        mailHost._v_send = 1
-        
-        for address in addresses:
-            try:
-                mailHost.send(message = str(message),
-                              mto = address,
-                              mfrom = fromAddress,)
-            except ConflictError:
-                raise
-            except:
-                log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
 
 
 registerATCT(ECAssignmentBox, PROJECTNAME)

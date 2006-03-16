@@ -177,7 +177,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         'view': 'eca_view',
         })
 
-    # -- methods ---------------------------------------------------------------
+    # -- methods --------------------------------------------------------------
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
         """
@@ -197,18 +197,22 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         self.sendNotificationEmail()
     
+    
     def sendNotificationEmail(self):
         """
         When this assignment is created, send a notification email to
         the owner of the assignment box, unless emailing is turned off.
         """
+        box = self.aq_parent
+        if not box.getSendNotificationEmail():
+            return
+
         portal_url = getToolByName(self, 'portal_url')
         portal = portal_url.getPortalObject()
         portal_language = portal.getProperty('default_language', None)
         portal_qi = getToolByName(self, 'portal_quickinstaller')
 
         productVersion = portal_qi.getProductVersion(PROJECTNAME)
-        box = self.aq_parent
         
         submitterId   = self.Creator()
         submitterName = self.ecab_utils.getFullNameById(submitterId)
@@ -244,7 +248,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        box.sendNotificationEmail(addresses, subject, mailText)
+        self.ecab_utils.sendEmail(addresses, subject, mailText)
 
 
     # FIXME: deprecated, set security

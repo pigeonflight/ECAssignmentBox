@@ -32,6 +32,10 @@ from urlparse import urlsplit, urlunsplit
 from socket import gethostname, getfqdn
 from string import split, join
 
+from ZODB.POSException import ConflictError
+from email.MIMEText import MIMEText
+from email.Header import Header
+
 # local imports
 from Products.ECAssignmentBox.Statistics import Statistics
 from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
@@ -257,5 +261,45 @@ class ECABTool(UniqueObject, Folder):
                           url_parts[2], url_parts[3], url_parts[4]))
         return url
 
+
+    security.declarePrivate('sendEmail')
+    def sendEmail(self, addresses, subject, text):
+        """
+        Send an e-mail message to the specified list of addresses.
+        """
+        
+        if not addresses:
+            return
+        
+        portal_url  = getToolByName(self, 'portal_url')
+        plone_utils = getToolByName(self, 'plone_utils')
+
+        portal      = portal_url.getPortalObject()
+        mailHost    = plone_utils.getMailHost()
+        charset     = plone_utils.getSiteEncoding()
+        fromAddress = portal.getProperty('email_from_address', None)
+        
+        if fromAddress is None:
+            log('Cannot send notification e-mail: E-mail sender address or name not set')
+            return
+        
+        message = MIMEText(text, 'plain', charset)
+        subjHeader = Header(subject, charset)
+        message['Subject'] = subjHeader
+
+        # This is a hack to suppress deprecation messages about send()
+        # in SecureMailHost; the proposed alternative, secureSend(),
+        # sucks.
+        mailHost._v_send = 1
+        
+        for address in addresses:
+            try:
+                mailHost.send(message = str(message),
+                              mto = address,
+                              mfrom = fromAddress,)
+            except ConflictError:
+                raise
+            except:
+                log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
 
 InitializeClass(ECABTool)

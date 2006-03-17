@@ -31,3 +31,13 @@
 
   </body>
 </html>
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-local-catalogs:("/usr/local/lib/sgml/XHTML11.cat")
+sgml-validate-command:"xmllint \\-\\-valid \\-\\-noout %s %s"
+sgml-indent-step:2
+sgml-indent-data:t
+fill-column:79
+End:
+-->

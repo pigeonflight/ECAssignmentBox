@@ -20,6 +20,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from urllib import quote
+from StringIO import StringIO
+from textwrap import TextWrapper
 import re
 
 from AccessControl import ClassSecurityInfo
@@ -270,6 +272,29 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         #return util.getFullNameById(self, self.Creator())
         return self.ecab_utils.getFullNameById(self.Creator())
 
+    # EXPERIMENTAL
+    def get_data(self):
+        """
+        If wrapAnswer is set for the box, plain text entered in the
+        text area is stored as one line per paragraph. For display
+        inside a <pre> element it should be wrapped.
+
+        @return file content
+        """
+        box = self.aq_parent
+        
+        if box.getWrapAnswer() and self.getContentType('file') == 'text/plain':
+            file = StringIO(self.getField('file').get(self))
+            wrap = TextWrapper()
+            result = ''
+
+            for line in file:
+                result += wrap.fill(line) + '\n'
+
+            return result
+        else:
+            return self.getField('file').get(self)
+        
     
     # FIXME: deprecated, use get_data or data in page templates
     def getAsPlainText(self):

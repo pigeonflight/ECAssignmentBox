@@ -83,6 +83,17 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
+    BooleanField('wrapAnswer',
+        default=True,
+        widget=BooleanWidget(
+            label="Enable word wrap in the Answer text area",
+            description="If selected, text entered in the Answer field will be word-wrapped.  Disable word wrap if students are supposed to enter program code or similar notations.",
+            label_msgid='label_wrapAnswer',
+            description_msgid='help_wrapAnswer',
+            i18n_domain=I18N_DOMAIN,
+        ),
+    ),
+
     BooleanField('sendNotificationEmail',
         default=False,
         widget=BooleanWidget(

@@ -87,15 +87,17 @@
               
                 <tal:block 
                     define="
-                      item_type     elt/portal_type;
+                      item_type           elt/portal_type;
                       item_url            elt/getURL|elt/absolute_url;
                       item_wf_state elt/review_state | python: wtool.getInfoFor(elt, 'review_state', '');
                       item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
                       item_title_or_id    elt/pretty_title_or_id;
                       use_view_action     site_properties/typesUseViewActionInListings;
                       item_type_class     python: 'contenttype-' + normalizeString(item_type);
-"
-                    condition="python: ((elt.isPrincipiaFolderish and item_wf_state == 'published') or (not elt.isPrincipiaFolderish))">
+                      grades              elt/getNumericGrades;"
+                    condition="python: ((elt.isPrincipiaFolderish
+		               and item_wf_state == 'published')
+		               or (not elt.isPrincipiaFolderish))">
 
                   <span tal:attributes="class item_type_class"
                       tal:condition="python:item_type != 'Link'">
@@ -123,9 +125,10 @@
                   </metal:recurse>
 
                   <table class="listing"
-                      tal:condition="python: ecab_utils.isAssignmentBoxType(elt)">
+		    tal:condition="python: ecab_utils.isAssignmentBoxType(elt)">
 
-                    <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+		    <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+                    <metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
 
                     <tal:block define="
                         items python: elt.getAssignmentsSummary(id=userName);

@@ -141,6 +141,37 @@
       </thead>
     </metal:define>
 
+    <!-- -->
+    <metal:define define-macro="all_assignments_tfoot">
+      <tfoot tal:condition="grades">
+	<tr>
+	  <td colspan="5"
+	    i18n:translate="label_average_grade">Average Grade</td>
+	  <td
+	    style="text-align: right"
+	    tal:content="python: ecab_utils.localizeNumber('%.2f',
+	                         ecab_utils.calculateMean(grades))"/>
+	  <td/>
+	</tr>
+	<tr>
+	  <td colspan="5"
+	    i18n:translate="label_median_grade">Median Grade</td>
+	  <td
+	    style="text-align: right"
+	    tal:content="python: ecab_utils.localizeNumber('%.2f',
+	                         ecab_utils.calculateMedian(grades))"/>
+	  <td/>
+	</tr>
+	<tr>
+	  <td colspan="7" i18n:translate="grade_statistics_help"
+	    class="discreet">
+	    Average and median grades are calculated from all assignments
+	    in this assignment box which are in the state <em>graded</em> and
+	    which have a grade assigned.</td>
+	</tr>
+      </tfoot>
+    </metal:define>
+
     <!-- body of table in all assignments templates -->
     <metal:define define-macro="all_assignments_tbody">
       <tbody>

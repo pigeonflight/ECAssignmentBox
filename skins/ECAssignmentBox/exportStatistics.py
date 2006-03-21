@@ -69,7 +69,7 @@ for row in table:
 
 ###############################################################################
 
-filename = '%s_%s.%s' % (context.pathQuote(context.getId()),
+filename = '%s_%s.%s' % (ecab_utils.pathQuote(context.getId()),
                          'statistics', format)
 
 # RESPONSE.setHeader('Content-Disposition', 'inline') # Useful for debugging

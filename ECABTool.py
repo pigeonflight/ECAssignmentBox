@@ -302,4 +302,23 @@ class ECABTool(UniqueObject, Folder):
             except:
                 log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
 
+
+    def pathQuote(self, string=''):
+        """
+        Returns a string which is save to use as a filename.
+        
+        @param string some string
+        """
+        
+        SPACE_REPLACER = '_'
+        # Replace any character not in [a-zA-Z0-9_-] with SPACE_REPLACER
+        ALLOWED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
+        ret = ''
+        for c in string:
+            if(c in ALLOWED_CHARS):
+                ret += c
+            else:
+                ret += SPACE_REPLACER
+        return ret
+
 InitializeClass(ECABTool)

@@ -37,9 +37,12 @@ from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 from Statistics import Statistics
 
+from Products.ECAssignmentBox.PlainTextField import PlainTextField
+
 ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
     TextField(
         'assignment_text',
+        required=True,
         default_output_type = 'text/html',
         default_content_type = 'text/structured',
         allowable_content_types = TEXT_TYPES,
@@ -50,6 +53,17 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
             description_msgid = 'help_assignment_text',
             i18n_domain = I18N_DOMAIN,
             rows=10,
+        ),
+    ),
+
+    PlainTextField('answerTemplate',
+        widget=RichWidget(
+            label = 'Answer template',
+            label_msgid = 'label_answer_template',
+            description = 'Enter an answer template',
+            description_msgid = 'help_answer_template',
+            i18n_domain = I18N_DOMAIN,
+            rows=8,
         ),
     ),
 
@@ -104,7 +118,7 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
             i18n_domain=I18N_DOMAIN,
         ),
     ),
-    
+                                                        
 ) # , marshall = PrimaryFieldMarshaller()
 )
 

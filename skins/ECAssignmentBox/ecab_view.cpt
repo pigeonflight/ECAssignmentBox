@@ -55,6 +55,13 @@
   
         <div class="field" tal:content="structure here/getAssignment_text"/>
       
+        <a href="" 
+          tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
+          i18n:translate="label_download_answer_template"
+          tal:condition="here/getAnswerTemplate">
+          Download answer template
+        </a>
+      
         <hr/>
   
         <form action=""
@@ -75,7 +82,8 @@
               wrap="off"
               name="answer"
               tabindex=""
-              tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"></textarea>
+              tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"
+              tal:content="here/getAnswerTemplate | nothing"></textarea>
           </div>
   
          <!-- upload file button -->

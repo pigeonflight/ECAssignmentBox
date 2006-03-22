@@ -69,27 +69,34 @@ class ECABTool(UniqueObject, Folder):
         },
     )
 
-    # -- constructor -----------------------------------------------------------
+    # -- constructor ----------------------------------------------------------
     def __init__(self):
         """
         """
         pass
 
 
-    # -- methods ---------------------------------------------------------------
+    # -- methods --------------------------------------------------------------
     security.declarePublic('localizeNumber')
-    def localizeNumber(self, format, number):
-        """A simple method for localized formatting of decimal
-        numbers.  Theoretically, one could use locale.format(), but it
-        isn't portable enough."""
-        if type(number) not in (int, long, float):
-            return number
-        
+    def localizeNumber(self, format, value):
+        """
+        A simple method for localized formatting of decimal numbers,
+        similar to locale.format().
+        """
+
+        result = format % value
+        fields = result.split(".")
         decimalSeparator = self.translate(msgid = 'decimal_separator',
                                           domain = I18N_DOMAIN,
                                           default = '.')
-        retval = format % number
-        return retval.replace('.', decimalSeparator)
+        if len(fields) == 2:
+            result = fields[0] + decimalSeparator + fields[1]
+        elif len(fields) == 1:
+            result = fields[0]
+        else:
+            raise Error, "Too many decimal points in result string"
+
+        return result
 
     
     security.declarePublic('getFullNameById')

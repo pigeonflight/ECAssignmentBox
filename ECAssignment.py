@@ -113,6 +113,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
         searchable = True,
         accessor = 'getGradeIfAllowed',
         edit_accessor = 'getGradeForEdit',
+        mutator = 'setGrade',
         widget=StringWidget(
             label = 'Grade',
             label_msgid = 'label_grade',
@@ -362,20 +363,50 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
 
         if self.mark:
+            try:
+                value = self.mark
+                prec = len(value) - value.find('.') - 1
+                result = self.ecab_utils.localizeNumber("%.*f",
+                                                        (prec, float(value)))
+            except ValueError:
+                result = self.mark
+
             if state == 'graded':
-                return self.mark
+                return result
             elif isReviewer:
-                return '(' + self.mark + ')'
+                return '(' + result + ')'
 
 
     #security.declarePublic('getGradeForEdit')
     def getGradeForEdit(self):
         """
-        The edit_accessor for field grade. Returns the grade for this assignment.
+        The edit_accessor for field grade. Returns the grade for this
+        assignment.
         
         @return string value of the given grade or nothing
         """
-        return self.mark
+        try:
+            value = self.mark
+            prec = len(value) - value.find('.') - 1
+            return self.ecab_utils.localizeNumber("%.*f", (prec, float(value)))
+        except ValueError:
+            return self.mark
+
+
+    security.declarePrivate('setGrade')
+    def setGrade(self, value):
+        """
+        Mutator for the `mark' field.  Allows the input of localized numbers.
+        """
+        decimalSeparator = self.translate(msgid = 'decimal_separator',
+                                          domain = I18N_DOMAIN,
+                                          default = '.')
+
+        match = re.match('^[0-9]+' + decimalSeparator + '?[0-9]*$', value)
+        if match:
+            value = value.replace(decimalSeparator, '.')
+        
+        self.getField('mark').set(self, value)
     
 
     #security.declarePublic('getViewerNames')

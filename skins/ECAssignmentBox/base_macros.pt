@@ -90,9 +90,21 @@
         <span tal:replace="here/getCreatorFullName"/>
       </h1>
 
-      <div class="documentByLine">
+      <div class="documentByLine"
+        tal:define="item_type           here/portal_type;
+                    item_wf_state       here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
+	                  item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
+	                  item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);"
+      >
         <span i18n:translate="label_datetime">submitted at</span>
-        <span tal:content="python: here.toLocalizedTime(here.CreationDate(), 1)"/>
+        <span tal:content="python: here.toLocalizedTime(here.CreationDate(), 1)"/>,
+        <span i18n:translate="label_state">state</span>:
+        <span i18n:domain="plone"
+            i18n:translate=""
+            tal:condition="item_state_title"
+            tal:content="item_state_title"
+            tal:attributes="class item_wf_state_class" />
+        <span tal:condition="not: item_state_title">&nbsp;</span>
       </div>
 
       <a class="link-parent"
@@ -176,19 +188,19 @@
     <metal:define define-macro="all_assignments_tbody">
       <tbody>
         <tal:block tal:repeat="item items">
-	  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
-	    tal:define="oddrow      repeat/item/odd;
-	                item_type           item/portal_type;
-	                item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
-	                item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
-	                item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);
+      	  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
+      	    tal:define="oddrow      repeat/item/odd;
+      	                item_type           item/portal_type;
+      	                item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
+      	                item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
+      	                item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);
                         item_id             item/getId;
                         item_title_or_id    item/pretty_title_or_id;
                         item_url            item/getURL|item/absolute_url;
                         item_path           item/getPath | python:'/'.join(item.getPhysicalPath());
                         hasGetUrl           python:hasattr(item.aq_explicit, 'getURL');
                         item_rel_url        python: hasGetUrl and item.getURL(relative=1);"
-	    tal:attributes="class python: test(oddrow, 'odd', 'even')">
+      	    tal:attributes="class python: test(oddrow, 'odd', 'even')">
 
             <td>
               <input type="checkbox"

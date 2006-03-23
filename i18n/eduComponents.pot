@@ -678,3 +678,15 @@ msgstr ""
 # Original: "${student} has made a submission to the assignment "${box_title}".\n\n<${url}>\n\n-- \n${product} ${version}"
 msgid "email_new_submission_content"
 msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_viewt.py
+#. <a href="" 
+#.          tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
+#.          i18n:translate="label_download_answer_template"
+#.          tal:condition="here/getAnswerTemplate">
+#.          Download answer template
+#.        </a>
+# Original: Download answer template
+msgid "label_download_answer_template"
+msgstr ""

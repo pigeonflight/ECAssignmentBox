@@ -63,7 +63,8 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
             description = 'You can provide a template for the students\' answers',
             description_msgid = 'help_answer_template',
             i18n_domain = I18N_DOMAIN,
-            rows=8,
+            rows = 12,
+            format = 0,
         ),
     ),
 

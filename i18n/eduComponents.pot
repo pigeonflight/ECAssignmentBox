@@ -680,7 +680,7 @@ msgid "email_new_submission_content"
 msgstr ""
 
 
-#: ./skins/ECAssignmentBox/ecab_viewt.py
+#: ./skins/ECAssignmentBox/ecab_view.py
 #. <a href="" 
 #.          tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
 #.          i18n:translate="label_download_answer_template"
@@ -689,4 +689,24 @@ msgstr ""
 #.        </a>
 # Original: Download answer template
 msgid "label_download_answer_template"
+msgstr ""
+
+#: ./ECAssignmentBox.py
+# Original: "Enable word wrap in the Answer text area"
+msgid "label_wrapAnswer"
+msgstr ""
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, text entered in the Answer field will be word-wrapped.  Disable word wrap if students are supposed to enter program code or similar notations."
+msgid "help_wrapAnswer"
+msgstr ""
+
+#: ./ECAssignmentBox.py
+# Original: "Answer template"
+msgid "label_answer_template"
+msgstr ""
+
+#: ./ECAssignmentBox.py
+# Original: "You can provide a template for the students\' answers"
+msgid "help_answer_template"
 msgstr ""

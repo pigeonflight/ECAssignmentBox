@@ -678,7 +678,7 @@ msgid "email_new_submission_content"
 msgstr "${student} hat eine Lösung zur Aufgabe \"${box_title}\" eingereicht.\n\n<${url}>\n\n-- \n${product} ${version}"
 
 
-#: ./skins/ECAssignmentBox/ecab_viewt.py
+#: ./skins/ECAssignmentBox/ecab_view.py
 #. <a href="" 
 #.          tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
 #.          i18n:translate="label_download_answer_template"
@@ -687,5 +687,25 @@ msgstr "${student} hat eine Lösung zur Aufgabe \"${box_title}\" eingereicht.\n\
 #.        </a>
 # Original: Download answer template
 msgid "label_download_answer_template"
-msgstr "Lösungsvorlage herunterladen"
+msgstr "Antwortvorlage herunterladen"
+
+#: ./ECAssignmentBox.py
+# Original: "Enable word wrap in the Answer text area"
+msgid "label_wrapAnswer"
+msgstr "Automatischer Zeilenumbruch im Antwortfeld"
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, text entered in the Answer field will be word-wrapped.  Disable word wrap if students are supposed to enter program code or similar notations."
+msgid "help_wrapAnswer"
+msgstr "Wenn dieses Feld ausgewählt ist, wird automatischer Zeilenumbruch im Antwortfeld aktiviert. Für Aufgaben, bei denen Programmcode oder ähnliche Notationen erwartet werden, empfiehlt es sich, diese Option abzuschalten."
+
+#: ./ECAssignmentBox.py
+# Original: "Answer template"
+msgid "label_answer_template"
+msgstr "Antwortvorlage"
+
+#: ./ECAssignmentBox.py
+# Original: "You can provide a template for the students\' answers"
+msgid "help_answer_template"
+msgstr "Hier können Sie eine Vorlage für Antworten vorgeben"
 

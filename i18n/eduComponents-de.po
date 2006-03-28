@@ -294,7 +294,7 @@ msgstr "Aufgabentext"
 #. </td>
 # Original: "Avg. Grade"
 msgid "label_average_grade"
-msgstr "Durschnittsnote"
+msgstr "Durchschnittsnote"
 
 
 #: ./skins/ECAssignmentBox/by_student.pt

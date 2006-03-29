@@ -401,7 +401,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         decimalSeparator = self.translate(msgid = 'decimal_separator',
                                           domain = I18N_DOMAIN,
                                           default = '.')
-
+        value = value.strip()
+        
         match = re.match('^[0-9]+' + decimalSeparator + '?[0-9]*$', value)
         if match:
             value = value.replace(decimalSeparator, '.')

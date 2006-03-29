@@ -225,11 +225,11 @@ class ECFolder(ATFolder):
             if grades == {}:
                 continue
             
-            # Non-numeric grades were assigned: Immediately return
-            # None, as we can't calculate meaningful statistics in
-            # this case.
+            # Non-numeric grades were assigned: Immediately return,
+            # as we can't calculate meaningful statistics in this
+            # case.
             if grades == None:
-                return None
+                return {}
             
             for student in grades:
                 if student not in students:

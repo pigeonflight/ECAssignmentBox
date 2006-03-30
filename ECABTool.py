@@ -255,15 +255,21 @@ class ECABTool(UniqueObject, Folder):
         """
         url_parts = urlsplit(url)
         hostpart  = url_parts[1]
+        port      = ''
 
-        (hostname, port) = split(hostpart, ':')
+        if hostpart.find(':') != -1:
+            (hostname, port) = split(hostpart, ':')
+        else:
+            hostname = hostpart
 
         if hostname == 'localhost' or hostname == '127.0.0.1':
             hostname = getfqdn(gethostname())
         else:
             hostname = getfqdn(hostname)
 
-        hostpart = join((hostname, port), ':')
+        if port:
+            hostpart = join((hostname, port), ':')
+
         url = urlunsplit((url_parts[0], hostpart, \
                           url_parts[2], url_parts[3], url_parts[4]))
         return url

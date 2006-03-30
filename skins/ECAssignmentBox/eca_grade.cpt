@@ -15,8 +15,8 @@
       <tal:main-macro metal:define-macro="main"
           tal:define="errors         options/state/getErrors | nothing;
                       Iterator       python:modules['Products.Archetypes'].IndexIterator;
-                      readFieldNames python:['file'];
-                      editFieldNames python:['remarks', 'feedback', 'mark'];">
+                      readFieldNames here/getGradeModeReadFieldNames;
+                      editFieldNames here/getGradeModeEditFieldNames;">
   
         <!-- show header information -->
         <metal:use use-macro="here/base_macros/macros/eca_view_head" />

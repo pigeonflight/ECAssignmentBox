@@ -410,7 +410,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         self.getField('mark').set(self, value)
     
 
-    #security.declarePublic('getViewerNames')
+    security.declarePublic('getViewerNames')
     def getViewerNames(self):
         """
         Get the names of the users and/or groups which have the local
@@ -429,6 +429,40 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                 names.append(self.ecab_utils.getFullNameById(id))
 
         return names
+
+
+    security.declarePublic('getGradeModeReadFieldNames')
+    def getViewModeReadFieldNames(self):
+        """
+        Returns the names of the fields which are shown in view mode.
+        This method should be overridden in subclasses which need more fields.        
+
+        @return list of field names
+        """
+        return ['file', 'remarks', 'feedback', 'mark']
+
+
+    security.declarePublic('getGradeModeReadFieldNames')
+    def getGradeModeReadFieldNames(self):
+        """
+        Returns the names of the fields which are read only in grade mode.
+        This method should be overridden in subclasses which need more fields.        
+
+        @return list of field names
+        """
+        
+        return ['file']
+
+
+    security.declarePublic('getGradeModeEditFieldNames')
+    def getGradeModeEditFieldNames(self):
+        """
+        Returns the names of the fields which are editable in grade mode.
+        This method should be overridden in subclasses which need more fields.
+        
+        @return list of field names
+        """
+        return ['remarks', 'feedback', 'mark']
 
 
 registerATCT(ECAssignment, PROJECTNAME)

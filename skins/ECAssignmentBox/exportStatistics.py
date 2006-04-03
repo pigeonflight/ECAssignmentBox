@@ -6,6 +6,7 @@
 REQUEST  = context.REQUEST
 RESPONSE = REQUEST.RESPONSE
 
+from AccessControl import getSecurityManager
 ecab_utils = context.ecab_utils
 
 exportFormat = ['tab', '\t', '\n', '"', '"', '"']
@@ -16,6 +17,8 @@ strEnd       = exportFormat[4]
 escapeChar   = exportFormat[5]
 exportEncoding = 'iso-8859-15'
 siteEncoding   = context.getCharset()
+isReviewer     = getSecurityManager().checkPermission('Review portal content',
+                                                      context)
 
 def escape(string):
     escaped = ''
@@ -41,8 +44,10 @@ output += '%s\n' % '\t'.join(ecab_utils.getWfStates())
 for userName in data.keys():
     fullname  = ecab_utils.getFullNameById(userName)
     email     = ecab_utils.getUserPropertyById(userName, 'email')
-    studentid = ecab_utils.getUserPropertyById(userName, 'employeeNumber')
-    major     = ecab_utils.getUserPropertyById(userName, 'departmentNumber')
+    studentid = ecab_utils.getUserPropertyById(userName,
+                                               ecab_utils.student_id_attr)
+    major     = ecab_utils.getUserPropertyById(userName,
+                                               ecab_utils.major_attr)
     n_boxes   = context.countContainedBoxes()
     
     row = [userName, fullname, email, studentid, major, n_boxes]
@@ -72,7 +77,10 @@ for row in table:
 filename = '%s_%s.%s' % (ecab_utils.pathQuote(context.getId()),
                          'statistics', format)
 
-# RESPONSE.setHeader('Content-Disposition', 'inline') # Useful for debugging
+if not isReviewer:
+    filename = str(REQUEST.AUTHENTICATED_USER) + '_' + filename
+
+#RESPONSE.setHeader('Content-Disposition', 'inline') # Useful for debugging
 RESPONSE.setHeader('Content-Disposition', 'attachment; filename=' + filename)
 RESPONSE.setHeader('Content-Type', 'text/plain')
 

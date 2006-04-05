@@ -228,7 +228,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             prefLang = portal_language
         
         default_subject = '[${id}] Submission to "${box_title}" by ${student}'
-        subject = self.translate(domain='eduComponents',
+        subject = self.translate(domain=I18N_DOMAIN,
                                  msgid='email_new_submission_subject',
                                  target_language=prefLang,
                                  mapping={'id': PROJECTNAME,
@@ -241,7 +241,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                            '<${url}>\n\n' \
                            '-- \n' \
                            '${product} ${version}'
-        mailText = self.translate(domain='eduComponents',
+        mailText = self.translate(domain=I18N_DOMAIN,
                                   msgid='email_new_submission_content',
                                   target_language=prefLang,
                                   mapping={'box_title': box.Title(),

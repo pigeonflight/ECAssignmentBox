@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-# TODO: move to a separate file
 
 from Products.Archetypes.atapi import *
 from AccessControl import ClassSecurityInfo
@@ -35,7 +34,7 @@ from types import FileType
 from Products.CMFCore.utils import getToolByName
 
 class PlainTextField(TextField):
-    """Specialized class for plain text fields"""
+    """A specialized field for plain text only"""
 
     _properties = TextField._properties.copy()
     _properties.update({
@@ -46,6 +45,8 @@ class PlainTextField(TextField):
 
     def _process_input(self, value, file=None, default=None,
                        mimetype=None, instance=None, **kwargs):
+        """
+        """
         if file is None:
             file = self._make_file(self.getName(), title='',
                                    file='', instance=instance)
@@ -133,4 +134,4 @@ class PlainTextField(TextField):
 
 registerField(PlainTextField,
               title='PlainTextField',
-              description='Used for storing plain text only')
+              description='A specialized field for plain text only')

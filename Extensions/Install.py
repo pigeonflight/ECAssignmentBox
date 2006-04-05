@@ -82,6 +82,14 @@ def install(self):
     # register tool to preferences panel
     addPrefsPanel(self, out)
 
+    # enable portal_factory for given types
+    factory_tool = getToolByName(self, 'portal_factory')
+    factory_types=[
+        ECAB_META,
+        ECA_META,
+        ] + factory_tool.getFactoryTypes().keys()
+    factory_tool.manage_setPortalFactoryTypes(listOfTypeIds=factory_types)
+
     return out.getvalue()
 
 def install_workflow(self, out):

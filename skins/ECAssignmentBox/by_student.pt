@@ -106,9 +106,11 @@
 		  <a tal:content="python: student[1]"
 		    tal:attributes="href python: 'all_assignments?userName=%s' % student[0]"></a>
 		</td>
-		<td tal:condition="grades"
+		<td tal:condition="python: grades.get(student[0], [])"
 		  tal:content="python: ecab_utils.localizeNumber('%.2f',
 		  ecab_utils.calculateMean(grades.get(student[0], [])))"/>
+		<td tal:condition="python: not grades.get(student[0], [])"
+		  >&mdash;</td>
 	      <tal:block tal:condition="here/completedStates">
 		<tal:block tal:define="c python: completed[student[0]]">
 		  <td tal:content="c"/>

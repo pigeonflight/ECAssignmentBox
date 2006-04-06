@@ -127,9 +127,10 @@
             </tal:block>
           </dl>
 
-          <div metal:use-macro="here/document_byline/macros/byline"/>
-    
         </div>
+
+        <div metal:use-macro="here/document_byline/macros/byline"/>
+
       </tal:main-macro>
     </metal:main>
 

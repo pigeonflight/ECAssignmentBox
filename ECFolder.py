@@ -115,6 +115,8 @@ class ECFolder(ATFolder):
     __implements__ = (ATFolder.__implements__,)
     security = ClassSecurityInfo()
 
+    _at_rename_after_creation = True
+
     # -- actions ---------------------------------------------------------------
     actions = updateActions(ATFolder, (
         {

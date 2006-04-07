@@ -148,6 +148,8 @@ class ECAssignmentBox(ATFolder):
     typeDescription = "Allows the creation, submission and grading of online assignments."
     typeDescMsgId = 'description_edit_ecab'
 
+    _at_rename_after_creation = True
+
     # -- actions --------------------------------------------------------------
     actions = updateActions(ATFolder, (
         {

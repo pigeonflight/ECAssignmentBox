@@ -363,7 +363,7 @@ msgstr ""
 #. <b i18n:translate="label_email">
 #.  E-Mail:
 #. </b>
-# Original: "E-Mail:"
+# Original: "E-Mail"
 msgid "label_email"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 #. <b i18n:translate="label_major">
 #.  Major:
 #. </b>
-# Original: "Major:"
+# Original: "Major"
 msgid "label_major"
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr ""
 #. <b i18n:translate="label_name">
 #.  Name:
 #. </b>
-# Original: "Name:"
+# Original: "Name"
 msgid "label_name"
 msgstr ""
 
@@ -502,7 +502,7 @@ msgstr ""
 #. <b i18n:translate="label_student_id">
 #.  Student ID:
 #. </b>
-# Original: "Student ID:"
+# Original: "Student ID"
 msgid "label_student_id"
 msgstr ""
 

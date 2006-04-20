@@ -174,11 +174,11 @@ class ECAssignmentBox(ATFolder):
         # Add local role 'Reviewer' for the creator so that the
         # creator can change the workflow status of submissions
         # without having to be Manager
-        creator = self.Creator()
-        roles = list(self.get_local_roles_for_userid(creator))
-        if 'Reviewer' not in roles:
-            roles.append('Reviewer')
-            self.manage_setLocalRoles(creator, roles)
+#         creator = self.Creator()
+#         roles = list(self.get_local_roles_for_userid(creator))
+#         if 'Reviewer' not in roles:
+#             roles.append('Reviewer')
+#             self.manage_setLocalRoles(creator, roles)
 
         # Create a user-defined role "ECAssignment Viewer".  This role
         # has the View permission in certain states (defined in
@@ -190,6 +190,17 @@ class ECAssignmentBox(ATFolder):
         if 'ECAssignment Viewer' not in self.valid_roles():
             self.manage_defined_roles('Add Role',
                                       {'role': 'ECAssignment Viewer'})
+
+        if 'ECAssignment Grader' not in self.valid_roles():
+            self.manage_defined_roles('Add Role',
+                                      {'role': 'ECAssignment Grader'})
+        creator = self.Creator()
+        roles = list(self.get_local_roles_for_userid(creator))
+        if 'ECAssignment Grader' not in roles:
+            roles.append('ECAssignment Grader')
+            self.manage_setLocalRoles(creator, roles)
+        self.manage_permission('eduComponents: Grade Assignments', roles=['ECAssignment Grader',], acquire=True)
+
 
     security.declarePublic('hasExpired')
     def hasExpired(self):

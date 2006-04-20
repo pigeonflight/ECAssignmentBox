@@ -74,28 +74,31 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('Modify portal content',
                        0,
                        [#'Owner',
                         'Reviewer',
-                        'Manager'
-                        ])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission(ManageProperties,
                        0,
                        [#'Owner',
                         'Reviewer',
-                        'Manager'
-                        ])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('View',
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
 
     sdef = wf.states['pending']
     sdef.setProperties(title="""Pending""",
@@ -104,26 +107,30 @@ def setupAssignment_workflow(wf):
                        0,
                        ['Owner',
                         'Reviewer'
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('Modify portal content',
                        0,
                        ['Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission(ManageProperties,
                        0,
                        [#'Owner',
                         'Reviewer',
-                        'Manager'
-                        ])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('View',
                        0,
                        ['Owner',
                         'Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
     sdef.setPermission('List folder contents',
                        0,
                        ['Reviewer',
-                        'Manager'])
+                        'Manager',
+                        'ECAssignment Grader'])
 
     sdef = wf.states['graded']
     sdef.setProperties(title="""Graded""",

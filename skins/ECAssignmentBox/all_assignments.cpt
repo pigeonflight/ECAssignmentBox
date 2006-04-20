@@ -18,22 +18,13 @@
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
           define="userName request/userName | nothing;
-              permission python: modules['AccessControl'].getSecurityManager().checkPermission;
-              isReviewer python: bool(permission('Review portal content', here));">
+                  permission python: modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);">
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
-        <div tal:define="global ecab_utils nocall:portal/ecab_utils;">
-
-<!--
-                auth_filter nocall: modules/ZTUtils/LazyFilter;
-                searchMembers nocall: mtool/searchMembers;
-                default_types python: here.allowed_content_types;
-                types types | here/show_content_types | default_types;
-                raw_items python: here.contentValues(filter={'portal_type': types});
-                items python: auth_filter(raw_items, skip='View');"
-            tal:condition="items">
--->
+        <div tal:define="global ecab_utils nocall:portal/ecab_utils;
+	                 global has_items python: 0;">
 
 	<metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
           
@@ -88,7 +79,7 @@
                 <tal:block define="
 		    item_type           elt/portal_type;
                     item_url            elt/getURL|elt/absolute_url;
-                    item_wf_state elt/review_state | python: wtool.getInfoFor(elt, 'review_state', '');
+                    item_wf_state       elt/review_state | python: wtool.getInfoFor(elt, 'review_state', '');
                     item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
                     item_title_or_id    elt/pretty_title_or_id;
                     use_view_action     site_properties/typesUseViewActionInListings;
@@ -123,20 +114,23 @@
                     </div>
                   </metal:recurse>
 
-                  <table class="listing"
-		    tal:condition="python: ecab_utils.isAssignmentBoxType(elt)">
+		  <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
+		    <tal:define define="items python: elt.getAssignmentsSummary(id=userName);">
+		      <p tal:condition="not: items"
+			 class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
+		         i18n:translate="no_submissions">There are no submissions in this assignment box.</p>
 
-		    <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
-                    <metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
+		      <table class="listing" tal:condition="items">
+			<metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+			<metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
 
-                    <tal:block define="
-                        items python: elt.getAssignmentsSummary(id=userName);
-                        wtool here/portal_workflow;">
-
-                      <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
-                    </tal:block>
-
-                  </table>
+			<tal:block define="wtool here/portal_workflow;
+			                   global has_items python: 1;">
+			  <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
+			</tal:block>
+		      </table>
+		    </tal:define>
+		  </tal:if>
                 </tal:block>
               </div>
 
@@ -144,8 +138,8 @@
           </tal:hidemacro>
           <!-- end list items -->
 
-          <div class="formControls" tal:condition="python: isReviewer">
-
+          <div class="formControls" tal:condition="python: isOwner and has_items">
+	    <hr/>
             <select name="workflow_action" size="1"
                  tal:attributes="tabindex tabindex/next;"
                  tal:define="transitions here/ecab_utils/getWfTransitionsDisplayList">

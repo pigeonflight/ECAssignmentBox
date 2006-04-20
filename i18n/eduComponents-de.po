@@ -416,6 +416,12 @@ msgid "label_n_boxes"
 msgstr "Veröffentlichte Aufgaben in diesem Ordner:"
 
 
+#: ./skins/ECAssignmentBox/all_assignments.pt
+# Original: "There are no submissions in this assignment box."
+msgid "no_submissions"
+msgstr "Keine Einreichungen zu dieser Aufgabe"
+
+
 #: ./skins/ECAssignmentBox/base_macros.pt
 #. <b i18n:translate="label_name">
 #.  Name:
@@ -588,12 +594,18 @@ msgstr "Student"
 
 
 #: ./skins/ECAssignmentBox/ecfolder_view.pt
-#. <a href="/assignments" i18n:translate="label_view_assignments" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))">
-#.                           View submitted assignments
+#. <a href="/assignments" i18n:translate="label_view_submissions" tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))">
+#.                           View submissions
 #. </a>
-# Original: "View submitted assignments"
-msgid "label_view_assignments"
+# Original: "View submissions"
+msgid "label_view_submissions"
 msgstr "Einreichungen anzeigen"
+
+
+#: ./skins/ECAssignmentBox/ecfolder_view.pt
+# Original: "View assignment"
+msgid "label_view_assignment"
+msgstr "Aufgabe anzeigen"
 
 
 #: ./skins/ECAssignmentBox/ecfolder_view.pt

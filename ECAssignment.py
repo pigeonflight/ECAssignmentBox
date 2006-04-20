@@ -360,7 +360,10 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         state = wtool.getInfoFor(self, 'review_state', '')
         
         currentUser = self.portal_membership.getAuthenticatedMember()
-        isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
+        #isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
+        #isOwner = currentUser.has_role(['Owner', 'Reviewer', 'Manager'], self)
+        #isGrader = currentUser.has_role(['ECAssignment Grader', 'Manager'], self)
+        isGrader = currentUser.checkPermission('eduComponents: Grade Assignments', self)
 
         if self.mark:
             try:
@@ -373,7 +376,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
             if state == 'graded':
                 return result
-            elif isReviewer:
+            elif isGrader:
                 return '(' + result + ')'
 
 

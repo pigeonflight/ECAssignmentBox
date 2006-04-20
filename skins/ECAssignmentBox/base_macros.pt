@@ -221,13 +221,13 @@
 	    <td>
 	      <tal:block define="viewers python: item.getViewerNames()">
 		<tal:if condition="viewers">
-		  <tal:if condition="python: isReviewer">
+		  <tal:if condition="python: isOwner">
 		    <img tal:attributes="src   string: star.png;
                                          title python: ';; '.join(viewers)"
 		         alt="Released"
 	                 i18n:attributes="alt label_released;"/>
 		  </tal:if>
-		  <tal:elif condition="python: not isReviewer
+		  <tal:elif condition="python: not isOwner
                                                and user.has_role('ECAssignment Viewer', object=item)">
 		    <img tal:attributes="src string: star.png"
 		         alt="Released"
@@ -273,12 +273,10 @@
                   tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('view'))"
                   i18n:translate="label_action_view">[View]</a>
 
-              <tal:block condition="isReviewer">
+              <tal:block condition="isOwner">
                 <a href="item_url"
                     tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('grade'))"
-                    i18n:translate="label_action_grade">
-                  [Grade]
-                </a>
+                    i18n:translate="label_action_grade">[Grade]</a>
               </tal:block>
 
             	<a href="item_url"

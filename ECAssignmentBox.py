@@ -23,7 +23,6 @@ from DateTime import DateTime
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
-from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
@@ -34,6 +33,7 @@ from Products.ATContentTypes.content.folder import ATFolder
 
 # local imports
 from Products.ECAssignmentBox.config import *
+from Products.ECAssignmentBox import permissions
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 from Statistics import Statistics
 
@@ -145,8 +145,9 @@ class ECAssignmentBox(ATFolder):
     default_view = 'ecab_view'
     immediate_view = 'ecab_view'
 
-    typeDescription = "Allows the creation, submission and grading of online assignments."
-    typeDescMsgId = 'description_edit_ecab'
+    typeDescription = 'Allows the creation, submission and grading ' \
+                      'of online assignments.'
+    typeDescMsgId   = 'description_edit_ecab'
 
     _at_rename_after_creation = True
 
@@ -158,7 +159,8 @@ class ECAssignmentBox(ATFolder):
         'id':          'all_assignments',
         'name':        'Assignments',
         'permissions': (permissions.View,),
-        'condition'  : 'python:1'
+        # Only display the assignments tab if there actually are assignments
+        'condition':   'python: len(here.contentValues()) > 0'
         },
     ))
     
@@ -171,14 +173,6 @@ class ECAssignmentBox(ATFolder):
     def manage_afterAdd(self, item, container):
         BaseFolder.manage_afterAdd(self, item, container)
         OrderedBaseFolder.manage_afterAdd(self, item, container)
-        # Add local role 'Reviewer' for the creator so that the
-        # creator can change the workflow status of submissions
-        # without having to be Manager
-#         creator = self.Creator()
-#         roles = list(self.get_local_roles_for_userid(creator))
-#         if 'Reviewer' not in roles:
-#             roles.append('Reviewer')
-#             self.manage_setLocalRoles(creator, roles)
 
         # Create a user-defined role "ECAssignment Viewer".  This role
         # has the View permission in certain states (defined in
@@ -191,15 +185,27 @@ class ECAssignmentBox(ATFolder):
             self.manage_defined_roles('Add Role',
                                       {'role': 'ECAssignment Viewer'})
 
+        # Create a user-defined role "ECAssignment Grader".  The owner
+        # of an assignment box can use this role to delegate grading
+        # to other users.
         if 'ECAssignment Grader' not in self.valid_roles():
             self.manage_defined_roles('Add Role',
                                       {'role': 'ECAssignment Grader'})
+
+        # Grant the GradeAssignments permission to the "ECAssignment
+        # Grader" role.
+        self.manage_permission(permissions.GradeAssignments,
+                               roles=['ECAssignment Grader',], acquire=True)
+        
+        # Assign the local roles to the creator
         creator = self.Creator()
         roles = list(self.get_local_roles_for_userid(creator))
-        if 'ECAssignment Grader' not in roles:
-            roles.append('ECAssignment Grader')
-            self.manage_setLocalRoles(creator, roles)
-        self.manage_permission('eduComponents: Grade Assignments', roles=['ECAssignment Grader',], acquire=True)
+        
+        for role in ('ECAssignment Viewer', 'ECAssignment Grader'):
+            if role not in roles:
+                roles.append(role)
+        
+        self.manage_setLocalRoles(creator, roles)
 
 
     security.declarePublic('hasExpired')

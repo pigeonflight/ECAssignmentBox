@@ -59,7 +59,6 @@ ADD_CONTENT_PERMISSIONS = {
 
 setDefaultRoles('eduComponents: Add ECFolder',       ('Manager', 'Owner',))
 setDefaultRoles('eduComponents: Add Assignment Box', ('Manager', 'Owner',))
-setDefaultRoles('eduComponents: Grade Assignments',  ('Manager',))
 
 # Supported formats in text areas
 TEXT_TYPES = (

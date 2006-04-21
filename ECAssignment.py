@@ -26,7 +26,6 @@ import re
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
-from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
@@ -44,7 +43,7 @@ from Products.PortalTransforms.utils import TransformException
 
 # local imports
 from Products.ECAssignmentBox.config import *
-
+from Products.ECAssignmentBox import permissions
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
@@ -152,7 +151,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     typeDescription = "A submission to an assignment box."
     typeDescMsgId = 'description_edit_eca'
 
-    # -- actions ---------------------------------------------------------------
+    # -- actions --------------------------------------------------------------
     actions = updateActions(ATCTContent, (
         {
         'action':      "string:$object_url/eca_grade",
@@ -363,7 +362,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         #isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
         #isOwner = currentUser.has_role(['Owner', 'Reviewer', 'Manager'], self)
         #isGrader = currentUser.has_role(['ECAssignment Grader', 'Manager'], self)
-        isGrader = currentUser.checkPermission('eduComponents: Grade Assignments', self)
+        isGrader = currentUser.checkPermission(permissions.GradeAssignments,
+                                               self)
 
         if self.mark:
             try:
@@ -438,7 +438,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     def getViewModeReadFieldNames(self):
         """
         Returns the names of the fields which are shown in view mode.
-        This method should be overridden in subclasses which need more fields.        
+        This method should be overridden in subclasses which need more fields.
 
         @return list of field names
         """
@@ -449,7 +449,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     def getGradeModeReadFieldNames(self):
         """
         Returns the names of the fields which are read only in grade mode.
-        This method should be overridden in subclasses which need more fields.        
+        This method should be overridden in subclasses which need more fields.
 
         @return list of field names
         """

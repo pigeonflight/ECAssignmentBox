@@ -245,6 +245,15 @@
 	          i18n:attributes="alt   label_feedback;
 	                           title tooltip_feedback_icon"/>
 	      </tal:if>
+
+	      <tal:if condition="python: isGrader and item.remarks">
+	        <img tal:attributes="src   string: ecab_remarks.png;
+	                             title python: str(item.remarks)[0:20] +
+	                             ['...', ''][len(item.remarks) <= 20];"
+	          alt="Remarks"
+	          title="Remarks"
+	          i18n:attributes="alt label_remarks"/>
+	      </tal:if>
 	    </td>
 
             <td tal:content="python: here.toLocalizedTime(item.CreationDate(), True)"/>
@@ -273,7 +282,7 @@
                   tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('view'))"
                   i18n:translate="label_action_view">[View]</a>
 
-              <tal:block condition="isOwner">
+              <tal:block condition="isGrader">
                 <a href="item_url"
                     tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('grade'))"
                     i18n:translate="label_action_grade">[Grade]</a>

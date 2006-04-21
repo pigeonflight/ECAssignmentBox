@@ -34,9 +34,13 @@ from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, TRIGGER_USER_ACTI
 from Products.CMFCore.permissions import ManageProperties
 
 from Products.ECAssignmentBox.config import *
+from Products.ECAssignmentBox import permissions
 
 def setupAssignment_workflow(wf):
     """Assignment Workflow definition"""
+
+    isBoxOwner = 'python: user.has_permission("Review portal content", here)' \
+                 ' or user.has_role("Owner", here.aq_parent)'
 
     wf.setProperties(title='Assignment workflow [EC]')
     for s in ['graded',
@@ -238,7 +242,7 @@ def setupAssignment_workflow(wf):
                        actbox_name="""Review""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_permissions': permissions.GradeAssignments},
                        )
 
     tdef = wf.transitions['accept']
@@ -250,7 +254,7 @@ def setupAssignment_workflow(wf):
                        actbox_name="""Accept""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_expr': isBoxOwner},
                        )
 
     tdef = wf.transitions['reject']
@@ -262,7 +266,7 @@ def setupAssignment_workflow(wf):
                        actbox_name="""Reject""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_expr': isBoxOwner},
                        )
 
     tdef = wf.transitions['supersede']
@@ -271,7 +275,7 @@ def setupAssignment_workflow(wf):
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
-                       actbox_name="""Supersede""",
+                       # actbox_name="""Supersede""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
                        props={'guard_roles': 'Owner'},
@@ -286,7 +290,7 @@ def setupAssignment_workflow(wf):
                        actbox_name="""Grade""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_expr': isBoxOwner},
                        )
 
     tdef = wf.transitions['retract']
@@ -298,7 +302,7 @@ def setupAssignment_workflow(wf):
                        actbox_name="""Retract""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_permissions': permissions.GradeAssignments},
                        )
 
     wf.variables.setStateVar('review_state')

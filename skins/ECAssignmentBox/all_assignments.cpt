@@ -19,7 +19,8 @@
       <tal:main-macro metal:define-macro="main"
           define="userName request/userName | nothing;
                   permission python: modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);">
+                  isOwner  python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+	          isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context)">
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     

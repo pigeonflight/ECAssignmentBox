@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# $Id$
+# $Id: ECAssignmentWorkflow.py,v 1.11 2006/04/20 16:06:07 mxp Exp $
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universit√§t Magdeburg
+# Copyright (c) 2006 Otto-von-Guericke-Universit‰t Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -19,8 +19,13 @@
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# View an Assignment
-VIEW_ASSIGNMENT_PERMISSION = "ECAssignmentBox: View Assignments"
+# Permissions used by ECAssignmentBox
 
-# Edit an Assignment
-EDIT_ASSIGNMENT_PERMISSION = "ECAssignmentBox: Edit Assignments"
+from Products.CMFCore import permissions
+
+View                = permissions.View
+ModifyPortalContent = permissions.ModifyPortalContent
+
+GradeAssignments    = 'eduComponents: Grade Assignments'
+
+permissions.setDefaultRoles(GradeAssignments,  ('Manager',))

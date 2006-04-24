@@ -238,18 +238,21 @@
 		</tal:if>
 	      </tal:block>
 
-	      <tal:if condition="item/feedback">
-	        <img tal:attributes="src string: comment.png"
+	      <tal:if condition="item/feedback"
+                      define="feedback python: str(item.feedback);
+                              title    python: feedback.replace('\r\n', ' ')[0:76]">
+	        <img tal:attributes="src   string: comment.png;
+                                     title python: title + ['', ' …'][len(feedback) > len(title)];"
 	          alt="Feedback"
 	          title="Feedback available"
-	          i18n:attributes="alt   label_feedback;
-	                           title tooltip_feedback_icon"/>
+	          i18n:attributes="alt label_feedback;"/>
 	      </tal:if>
 
-	      <tal:if condition="python: isGrader and item.remarks">
+              <tal:if condition="python: isGrader and item.remarks"
+                      define="remarks python: str(item.remarks);
+                              title   python: remarks.replace('\r\n', ' ')[0:76]">
 	        <img tal:attributes="src   string: ecab_remarks.png;
-	                             title python: str(item.remarks)[0:20] +
-	                             ['...', ''][len(item.remarks) <= 20];"
+	                             title python: title + ['', ' …'][len(remarks) > len(title)];"
 	          alt="Remarks"
 	          title="Remarks"
 	          i18n:attributes="alt label_remarks"/>

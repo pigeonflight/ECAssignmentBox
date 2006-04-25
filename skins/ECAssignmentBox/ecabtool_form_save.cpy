@@ -15,7 +15,9 @@ I18N_DOMAIN = 'eduComponents'
 student_id_attr = REQUEST.get('student_id_attr', None)
 major_attr = REQUEST.get('major_attr', None)
 
-context.ecab_utils.manage_changeProperties(REQUEST)
+#context.ecab_utils.manage_changeProperties(REQUEST)
+props = context.portal_properties.ecab_properties
+props.manage_changeProperties(REQUEST)
 
 # set portal message
 msg = context.translate(

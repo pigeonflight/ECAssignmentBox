@@ -21,7 +21,6 @@
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-#from OFS.SimpleItem import SimpleItem
 from OFS.Folder import Folder
 from Products.CMFCore.utils import UniqueObject, getToolByName
 
@@ -48,26 +47,11 @@ class ECABTool(UniqueObject, Folder):
     
     security = ClassSecurityInfo()
 
-    student_id_attr = ''
-    major_attr = ''
-
     # manage options
     manage_options = (
         (Folder.manage_options[0],)
         + Folder.manage_options[2:]
         )
-
-    # set properties
-    _properties = Folder._properties + (
-        {'id':'student_id_attr',
-         'type':'ustring',
-         'mode':'w',
-        },
-        {'id':'major_attr',
-         'type':'ustring',
-         'mode':'w',
-        },
-    )
 
     # -- constructor ----------------------------------------------------------
     def __init__(self):

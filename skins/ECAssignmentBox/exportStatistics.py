@@ -45,9 +45,9 @@ for userName in data.keys():
     fullname  = ecab_utils.getFullNameById(userName)
     email     = ecab_utils.getUserPropertyById(userName, 'email')
     studentid = ecab_utils.getUserPropertyById(userName,
-                                               ecab_utils.student_id_attr)
+                                               context.portal_properties.ecab_properties.student_id_attr)
     major     = ecab_utils.getUserPropertyById(userName,
-                                               ecab_utils.major_attr)
+                                               context.portal_properties.ecab_properties.major_attr)
     n_boxes   = context.countContainedBoxes()
     
     row = [userName, fullname, email, studentid, major, n_boxes]

@@ -51,7 +51,8 @@
 	  </p>
 
           <div class="field"
-	    tal:define="student_id_attr  request/student_id_attr | ecab_utils/student_id_attr;
+	    tal:define="student_id_attr request/student_id_attr
+	                | portal_properties/ecab_properties/student_id_attr;
 	    error errors/student_id_attr | nothing;"
 	    tal:attributes="class python:test(error, 'field error', 'field');">
 
@@ -73,7 +74,8 @@
           </div>
   
           <div class="field"
-              tal:define="major_attr  request/major_attr | ecab_utils/major_attr;
+              tal:define="major_attr  request/major_attr
+	                  | portal_properties/ecab_properties/major_attr;
                           error errors/major_attr | nothing;"
               tal:attributes="class  python:test(error, 'field error', 'field');">
         

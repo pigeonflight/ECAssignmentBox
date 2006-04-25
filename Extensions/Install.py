@@ -68,6 +68,9 @@ def install(self):
     
     print >> out, "Successfully installed %s." % PROJECTNAME
 
+    # install site-wide properties to portal_properties
+    install_properties(self, out)
+
     # continue with my custom tool
     if hasattr(self, 'ecab_utils'):
         self.manage_delObjects(['ecab_utils'])
@@ -110,7 +113,26 @@ def install_workflow(self, out):
     print >> out, "Successfully installed ECAssignment workflow."
 
 
-def uninstall(self):
+def install_properties(self, out):
+    """
+    Install properties for ECAssignmentBox
+    """
+    if not hasattr(self.portal_properties, 'ecab_properties'):
+        self.portal_properties.addPropertySheet('ecab_properties',
+                                                'ECAssignmentBox properties')
+    
+    props = self.portal_properties.ecab_properties
+
+    if not hasattr(props, 'student_id_attr'):
+        props._setProperty('student_id_attr', "", 'string')
+        
+    if not hasattr(props, 'major_attr'):
+        props._setProperty('major_attr', "", 'string')
+
+    out.write("Installed site-wide ECAssignmentBox properties.\n")
+
+
+def uninstall(self, reinstall):
     """ 
     Uninstalls the product.
     """
@@ -122,6 +144,11 @@ def uninstall(self):
     if hasattr(self, TOOL_NAME):
         self.manage_delObjects([TOOL_NAME])
         out.write('Removed %s.\n' % TOOL_NAME)
+
+    # Remove property sheet
+    if not reinstall:
+        if hasattr(self.portal_properties, 'ecab_properties'):
+            self.portal_properties.manage_delObjects('ecab_properties')
 
     print >> out, "Successfully uninstalled %s." % PROJECTNAME
     return out.getvalue()

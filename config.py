@@ -44,8 +44,7 @@ SKINS_DIR = 'skins'
 DEPENDENCIES = ['Archetypes',]
 
 TOOL_NAME  = "ecab_utils"
-TOOL_TITLE = "Assignment Box Settings"
-TOOL_META  = "ECAssignmentBox Utility Tool"
+TOOL_TITLE = TOOL_META = "ECAssignmentBox Utility Tool"
 TOOL_ICON  = "tool.png"
 
 # Permissions

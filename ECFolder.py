@@ -132,6 +132,14 @@ class ECFolder(ATFolder):
         'name':        'Statistics',
         'permissions': (permissions.View,),
         },
+        
+        {
+        'action':      'string:ecf_modify_boxes:method',
+        'id':          'ecf_modify_boxes',
+        'name':        'Set Assignment Box Options',
+        'permissions': (permissions.ManageProperties,),
+        'category':    'folder_buttons',
+        },
    ))
     
     aliases = updateAliases(ATFolder, {

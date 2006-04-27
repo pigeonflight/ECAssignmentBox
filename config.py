@@ -30,7 +30,7 @@ I18N_DOMAIN = 'eduComponents'
 PROJECTNAME = "ECAssignmentBox"
 
 ECAB_META = "ECAssignmentBox"
-ECAB_NAME = "AssignmentBox"
+ECAB_NAME = "Assignment Box"
 
 ECA_META = "ECAssignment"
 ECA_NAME = "Assignment"

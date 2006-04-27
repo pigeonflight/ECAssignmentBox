@@ -128,7 +128,7 @@ finalizeATCTSchema(ECAssignmentSchema)
 
 
 class ECAssignment(ATCTContent, HistoryAwareMixin):
-    """A simple assignment"""
+    """A submission to an assignment box"""
 
     __implements__ = (ATCTContent.__implements__,
                       IATDocument,

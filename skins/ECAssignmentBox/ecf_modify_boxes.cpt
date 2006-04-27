@@ -46,9 +46,10 @@
                    tal:replace="python:here.redirectToReferrer('The item(s) you selected are no longer available.')"/>
 
       <metal:block tal:condition="python: len(paths) == 0"
-	           i18n:translate="err_select_box"
-                   tal:content="python:here.redirectToReferrer('You need to
-	                        select at least one assignment box for this action.')"/>
+	tal:content="python:here.redirectToReferrer(here.translate(domain='eduComponents',
+	msgid='err_select_box', default='You need to select at least one assignment box for this action.'))"/>
+
+      <h1 i18n:domain="plone" i18n:translate="">Set Assignment Box Options</h1>
 
       <form id="edit_form"
             name="edit_form"
@@ -67,72 +68,113 @@
 	  </div>
 	</div>
 
-	<div class="field"
-	     tal:define="error errors/submission_period_start | nothing;">
-	  <label i18n:translate="label_submission_period_start">Start of Submission Period</label>
-	  <div class="formHelp"
-	       i18n:translate="help_submission_period_start">
-	    Date after which students are allowed to submit their assignments</div>
+	<p i18n:translate="description_selective_application">
+	  The settings below are applied if the box next to the title is
+	  checked.
+	</p>
 
-	  <div tal:content="error">Validation error output</div>
+	<fieldset>
+	  <legend>
+	    <input type="checkbox"
+	      class="noborder"
+	      id="use_submission_period_start"
+	      name="use_submission_period_start"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;"/>
+	    <label for="use_submission_period_start"
+	      i18n:translate="label_submission_period_start">Start of Submission Period</label>
+	  </legend>
 
-	  <div class="field">
-	    <div tal:define="inputname  string:submission_period_start;
-			     formname   string:edit_form;
-			     inputvalue python:request.get('submission_period_start', '');
-			     tabindex tabindex/next;"
-		 tal:attributes="class python:test(error, 'field error', 'field')">
+	  <div class="field"
+	    tal:define="error errors/submission_period_start | nothing;">
 
-	      <div metal:use-macro="here/calendar_macros/macros/calendarDatePickerBox">
-		calendar pop-up
+	    <div class="formHelp" i18n:translate="help_submission_period_start">
+	      Date after which students are allowed to submit their assignments</div>
+
+	    <div tal:content="error">Validation error output</div>
+
+	    <div class="field">
+	      <div tal:define="inputname  string:submission_period_start;
+		formname   string:edit_form;
+		inputvalue python:request.get('submission_period_start', '');
+		tabindex tabindex/next;"
+		tal:attributes="class python:test(error, 'field error', 'field');
+		onchange string:window.document.edit_form.use_submission_period_start.checked=true;">
+
+		<div metal:use-macro="here/calendar_macros/macros/calendarDatePickerBox">
+		  calendar pop-up
+		</div>
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</fieldset>
 
-	<div class="field"
-	     tal:define="error errors/submission_period_end | nothing;">
-	  <label i18n:translate="label_submission_period_end">End of Submission Period</label>
-	  <div class="formHelp"
-	       i18n:translate="help_submission_period_end">
-	    Date after which assignments can no longer be submitted
-	  </div>
 
-	  <div tal:content="error">Validation error output</div>
+	<fieldset>
+	  <legend>
+	    <input type="checkbox"
+	      class="noborder"
+	      id="use_submission_period_end"
+	      name="use_submission_period_end"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;"/>
+	    <label for="use_submission_period_end"
+	      i18n:translate="label_submission_period_end">End of Submission Period</label>
+	  </legend>
 
-	  <div class="field">
-	    <div tal:define="inputname  string:submission_period_end;
-			     formname   string:edit_form;
-			     inputvalue python:request.get('submission_period_end', '');
-			     tabindex tabindex/next;"
-		 tal:attributes="class python:test(error, 'field error', 'field')">
+	  <div class="field"
+	    tal:define="error errors/submission_period_end | nothing;">
 
-	      <div metal:use-macro="here/calendar_macros/macros/calendarDatePickerBox">
-		calendar pop-up
+	    <div class="formHelp" i18n:translate="help_submission_period_end">
+	      Date after which assignments can no longer be submitted</div>
+
+	    <div tal:content="error">Validation error output</div>
+
+	    <div class="field">
+	      <div tal:define="inputname  string:submission_period_end;
+		formname   string:edit_form;
+		inputvalue python:request.get('submission_period_end', '');
+		tabindex tabindex/next;"
+		tal:attributes="class python:test(error, 'field error', 'field');
+		onchange string:window.document.edit_form.use_submission_period_end.checked=true;">
+
+		<div metal:use-macro="here/calendar_macros/macros/calendarDatePickerBox">
+		  calendar pop-up
+		</div>
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</fieldset>
 
-	<div class="field formSingleCheckbox">
 
-	  <label for="sendNotificationEmail" i18n:translate="label_sendNotificationEmail">
-	    Send notification e-mail messages
-	  </label>
+	<fieldset>
+	  <legend>
+	    <input type="checkbox"
+	      class="noborder"
+	      id="use_sendNotificationEmail"
+	      name="use_sendNotificationEmail"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;"/>
+	    <label for="use_sendNotificationEmail"
+	      i18n:translate="label_sendNotificationEmail">Send notification e-mail messages</label>
+	  </legend>
 
-	  <div class="formHelp"
-	       i18n:translate="help_sendNotificationEmail">
-	    If selected, the owner of this assignment box will receive an
-	    e-mail message each time an assignment is submitted.
+	  <div class="field formSingleCheckbox">
+	    <div class="formHelp" i18n:translate="help_sendNotificationEmail">
+	      If selected, the owner of this assignment box will receive an
+	      e-mail message each time an assignment is submitted.
+	    </div>
+
+	    <input type="checkbox"
+	      class="formElement"
+	      id="sendNotificationEmail"
+	      name="sendNotificationEmail"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;
+	      onchange string:window.document.edit_form.use_sendNotificationEmail.checked=true;"/>
 	  </div>
+	</fieldset>
 
-	  <input type="checkbox"
-		 class="formElement"
-		 id="sendNotificationEmail"
-		 name="sendNotificationEmail"
-		 tabindex=""
-		 tal:attributes="tabindex tabindex/next;"/>
-	</div>
 
 	<div class="formControls" i18n:domain="plone">
 	  <input class="context"

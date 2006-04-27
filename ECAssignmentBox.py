@@ -126,7 +126,7 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
 finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
 
 class ECAssignmentBox(ATFolder):
-    """Allows the creation, submission and grading of online assignments."""
+    """Allows the creation, submission and grading of online assignments"""
 
     __implements__ = (ATFolder.__implements__)
 

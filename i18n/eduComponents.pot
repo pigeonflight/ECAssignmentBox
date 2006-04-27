@@ -703,6 +703,26 @@ msgstr ""
 msgid "label_download_answer_template"
 msgstr ""
 
+#: ./skins/ECAssignmentBox/ecf_modify_boxes.cpt
+# Original: You need to select at least one assignment box for this action.
+msgid "err_select_box"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecf_modify_boxes.cpt
+# Original: The settings below are applied if the box next to the title is checked.
+msgid "description_selective_application"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/modify_boxes.cpy
+# Original: The options for the following assignment boxes were changed: "${titles}".
+msgid "modify_boxes_success"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/modify_boxes.cpy
+# Original: The settings of the following assignment boxes could not be changed: "${titles}".
+msgid "modify_boxes_failure"
+msgstr ""
+
 #: ./ECAssignmentBox.py
 # Original: "Enable word wrap in the Answer text area"
 msgid "label_wrapAnswer"

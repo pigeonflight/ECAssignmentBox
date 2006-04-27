@@ -5,7 +5,7 @@
 ##bind script=script
 ##bind state=state
 ##bind subpath=traverse_subpath
-##parameters=submission_period_start=None, submission_period_end=None, sendNotificationEmail=None, *args
+##parameters=submission_period_start=None, use_submission_period_start=False, submission_period_end=None, use_submission_period_end=False, sendNotificationEmail=None, use_sendNotificationEmail=False, *args
 ##title=Set the submission period
 ##
 
@@ -30,9 +30,13 @@ if REQUEST.has_key('paths'):
             obj = portal.restrictedTraverse(path)
 
             if context.ecab_utils.isAssignmentBoxType(obj):
-                obj.setSubmission_period_start(submission_period_start)
-                obj.setSubmission_period_end(submission_period_end)
-                obj.setSendNotificationEmail(sendNotificationEmail)
+                if use_submission_period_start:
+                    obj.setSubmission_period_start(submission_period_start)
+                if use_submission_period_end:
+                    obj.setSubmission_period_end(submission_period_end)
+                if use_sendNotificationEmail:
+                    obj.setSendNotificationEmail(sendNotificationEmail)
+                
                 succeeded.append(obj.title_or_id())
                 titles_and_paths.append('%s (%s)' % (obj.title_or_id(), path))
         except ConflictError:
@@ -42,9 +46,9 @@ if REQUEST.has_key('paths'):
 
 if succeeded:
     status = 'success'
-    message = context.translate(msgid = 'set_period_success',
+    message = context.translate(msgid = 'modify_boxes_success',
                                 domain = I18N_DOMAIN,
-                                default = 'Set submission period from ${start} until ${end} for: "${titles}"',
+                                default = 'The options for the following assignment boxes were changed: "${titles}".',
                                 mapping = {'itemCount': str(len(succeeded)),
                                            'titles': '", "'.join(succeeded),
                                            'start': submission_period_start or '----',
@@ -55,9 +59,9 @@ if succeeded:
 
 if failed:
     if message: message = message + '  '
-    message = message + context.translate(msgid = 'set_period_failure',
+    message = message + context.translate(msgid = 'modify_boxes_failure',
                                           domain = I18N_DOMAIN,
-                                          default = 'Submission periods of "${titles}" could not be changed.',
+                                          default = 'The settings of the following assignment boxes could not be changed: "${titles}".',
                                           mapping = {'titles': '", "'.join(failed)})
 
 return state.set(status=status, portal_status_message=message)

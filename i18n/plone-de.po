@@ -21,17 +21,47 @@ msgstr ""
 msgid "description_edit_eca"
 msgstr "Eine Einreichung zu einer Aufgabe."
 
+#: ECAssignment.py
+# Original: "A submission to an assignment box"
+msgid "A submission to an assignment box"
+msgstr "Eine Einreichung zu einer Aufgabe"
+
+#: ECAssignment.py
+# Original: "Assignment"
+msgid "Assignment"
+msgstr "Einreichung"
+
 
 #: ECAssignmentBox.py
 # Original: "Allows the creation, submission and grading of online assignments."
 msgid "description_edit_ecab"
 msgstr "Ermöglicht die Erstellung, Einreichung und Benotung von Aufgaben."
 
+#: ECAssignmentBox.py
+# Original: "Allows the creation, submission and grading of online assignments"
+msgid "Allows the creation, submission and grading of online assignments"
+msgstr "Ermöglicht die Erstellung, Einreichung und Benotung von Aufgaben"
+
+#: ECAssignmentBox.py
+# Original: "Assignment Box"
+msgid "Assignment Box"
+msgstr "Aufgabe"
+
 
 #: ECFolder.py
 # Original: "A container for assignment boxes."
 msgid "description_edit_ecf"
 msgstr "Bietet die Möglichkeit, Aufgaben zu gruppieren."
+
+#: ECFolder.py
+# Original: "A container for assignment boxes"
+msgid "A container for assignment boxes"
+msgstr "Bietet die Möglichkeit, Aufgaben zu gruppieren"
+
+#: ECFolder.py
+# Original: "ECFolder"
+msgid "ECFolder"
+msgstr "EC-Ordner"
 
 
 #: ECFolder.py
@@ -46,6 +76,12 @@ msgstr "Einreichungen"
 # Original: "Statistics"
 msgid "Statistics"
 msgstr "Statistiken"
+
+
+#: ECFolder.py
+# Original: Set Assignment Box Options
+msgid "Set Assignment Box Options"
+msgstr "Einstellungen von Aufgaben ändern"
 
 
 #: ECAssignmentWorkflow.py
@@ -138,3 +174,4 @@ msgstr "Speichern"
 #: widget description of TextAreaWidget for label Description
 msgid "help_description"
 msgstr "Eine kurze Beschreibung des Inhalts"
+

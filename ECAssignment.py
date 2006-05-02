@@ -468,4 +468,57 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         return ['remarks', 'feedback', 'mark']
 
 
+    security.declarePublic('getFooIndicators')
+    def getIndicators(self):
+        """
+        Returns a list of dictionaries which contain information necessary
+        to display the indicator icons.
+        """
+        result = []
+
+        user = self.portal_membership.getAuthenticatedMember()
+        isOwner = user.has_role(['Owner', 'Reviewer', 'Manager'], self);
+        isGrader = self.portal_membership.checkPermission(
+                                          permissions.GradeAssignments, self)        
+
+        viewers = self.getViewerNames()
+        
+        if viewers:
+            if isOwner:
+                result.append({'icon':'star.png', 
+                               'alt':'Released',
+                               'alt_msgid':'label_released',
+                               'title':'; '.join(viewers),
+                               })
+            elif user.has_role('ECAssignment Viewer', object=self):
+                result.append({'icon':'star.png', 
+                               'alt':'Released',
+                               'alt_msgid':'label_released',
+                               'title':'This assignment has been released for viewing',
+                               'title_msgid':'tooltip_released_icon',
+                               })
+        
+        if self.feedback:
+            feedback = str(self.feedback)
+            title = re.sub('[\r\n]+', ' ', feedback)[0:76]
+
+            result.append({'icon':'comment.png', 
+                           'alt':'Feedback',
+                           'alt_msgid':'label_feedback',
+                           'title':title,
+                           })
+
+        if isGrader and self.remarks:
+            remarks = str(self.remarks)
+            title = re.sub('[\r\n]+', ' ', remarks)[0:76]
+
+            result.append({'icon':'ecab_remarks.png', 
+                           'alt':'Remarks',
+                           'alt_msgid':'label_remarks',
+                           'title':title,
+                           })
+
+        return result
+        
+
 registerATCT(ECAssignment, PROJECTNAME)

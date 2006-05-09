@@ -148,7 +148,7 @@
           <th i18n:translate="label_user">User</th>
           <th i18n:translate="label_state">State</th>
           <th i18n:translate="label_mark">Grade</th>
-          <th i18n:translate="label_actions">Actions</th>
+          <th class="nosort" i18n:translate="label_actions">Actions</th>
         </tr>
       </thead>
     </metal:define>

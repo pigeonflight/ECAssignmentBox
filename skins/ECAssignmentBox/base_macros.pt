@@ -143,7 +143,7 @@
                 i18n:attributes="title label_select_all_items; alt label_select_all_items;"
             />
           </th>
-	  <th class="nosort"></th>
+	  <th class="nosort">&nbsp;</th>
           <th i18n:translate="label_date">Date</th>
           <th i18n:translate="label_user">User</th>
           <th i18n:translate="label_state">State</th>

@@ -508,7 +508,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                            'title':title,
                            })
 
-        if isGrader and self.remarks:
+        if isGrader and hasattr(self, 'remarks') and self.remarks:
             remarks = str(self.remarks)
             title = re.sub('[\r\n]+', ' ', remarks)[0:76]
 

@@ -39,7 +39,7 @@
           <span tal:content="python: here.toLocalizedTime(here.getSubmission_period_end(), True)"/>
         </div>
   
-        <a class="link-parent"
+        <a class="link-parent visualNoPrint"
            href=""
            tal:define="parent_url python:here.navigationParent(here, template_id)"
            tal:condition="parent_url"

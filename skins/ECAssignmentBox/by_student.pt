@@ -30,7 +30,7 @@
 	  Students
 	</h1>
 
-  <a class="link-parent"
+  <a class="link-parent visualNoPrint"
       tal:define="
           parent     python: here.aq_parent;
           template   python: parent.getTypeInfo().getActionById(template_id, '');

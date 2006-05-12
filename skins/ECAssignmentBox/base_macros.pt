@@ -48,7 +48,7 @@
            tal:content="here/aq_parent/title_or_id"/>
       </h1>
 
-      <a class="link-parent"
+      <a class="link-parent visualNoPrint"
          href=""
          tal:define="parent_url python:here.navigationParent(here, template_id)"
          tal:condition="parent_url"
@@ -107,7 +107,7 @@
         <span tal:condition="not: item_state_title">&nbsp;</span>
       </div>
 
-      <a class="link-parent"
+      <a class="link-parent visualNoPrint"
          tal:attributes="href string: #${here/aq_parent/id}"
          i18n:translate="back_to_overview">
         Back to the assignment text

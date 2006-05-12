@@ -29,7 +29,7 @@
 
 	<metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
           
-	<a class="link-parent"
+	<a class="link-parent visualNoPrint"
 	  tal:define="parent     python: here.aq_parent;
 	              template   python: parent.getTypeInfo().getActionById(template_id, '');
 	              parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
@@ -90,7 +90,7 @@
 		               and item_wf_state == 'published')
 		               or (not elt.isPrincipiaFolderish))">
 
-                  <span tal:attributes="class item_type_class"
+                  <h4 tal:attributes="class item_type_class"
                       tal:condition="python:item_type != 'Link'">
                     <a href="#" 
                        tal:attributes="
@@ -98,7 +98,7 @@
                            class string:$item_wf_state_class visualIconPadding;
                            title elt/description|nothing"
                        tal:content="item_title_or_id"/>
-                  </span>
+                  </h4>
 
                   <metal:recurse 
                       tal:condition="python: elt.isPrincipiaFolderish and not ecab_utils.isAssignmentBoxType(elt)"

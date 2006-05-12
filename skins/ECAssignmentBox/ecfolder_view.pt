@@ -105,7 +105,7 @@
                     <div class="field" tal:content="structure item/getAssignment_text"/>
 
                     <tal:block tal:condition="python: is_published and not item.hasExpired()">
-                      <p>&#x25B6;
+                      <p class="visualNoPrint">&#x25B6;
                         <a href="/view" tal:attributes="href item/absolute_url" i18n:translate="label_work_on">
                           Work on this assignment
                         </a>
@@ -113,7 +113,7 @@
                     </tal:block>
 
                     <tal:block tal:condition="python: is_published and item.hasExpired()">
-                      <p>&#x25B6;
+                      <p class="visualNoPrint">&#x25B6;
                         <a href="/assignments"
                             tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))"
                            i18n:translate="label_view_submissions">
@@ -123,7 +123,7 @@
                     </tal:block>
 
                     <tal:block tal:condition="not: is_published">
-                      <p>&#x25B6;
+                      <p class="visualNoPrint">&#x25B6;
                         <a href="/assignments"
                             tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
                            i18n:translate="label_view_assignment">

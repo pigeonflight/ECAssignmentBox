@@ -143,12 +143,12 @@
                 i18n:attributes="title label_select_all_items; alt label_select_all_items;"
             />
           </th>
-	  <th class="nosort">&nbsp;</th>
+	        <th class="nosort">&nbsp;</th>
           <th i18n:translate="label_date">Date</th>
           <th i18n:translate="label_user">User</th>
           <th i18n:translate="label_state">State</th>
           <th i18n:translate="label_mark">Grade</th>
-          <th class="nosort" i18n:translate="label_actions">Actions</th>
+          <th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
         </tr>
       </thead>
     </metal:define>
@@ -156,31 +156,31 @@
     <!-- -->
     <metal:define define-macro="all_assignments_tfoot">
       <tfoot tal:condition="grades">
-	<tr>
-	  <td colspan="5"
-	    i18n:translate="label_average_grade">Average Grade</td>
-	  <td
-	    style="text-align: right"
-	    tal:content="python: ecab_utils.localizeNumber('%.2f',
-	                         ecab_utils.calculateMean(grades))"/>
-	  <td/>
-	</tr>
-	<tr>
-	  <td colspan="5"
-	    i18n:translate="label_median_grade">Median Grade</td>
-	  <td
-	    style="text-align: right"
-	    tal:content="python: ecab_utils.localizeNumber('%.2f',
-	                         ecab_utils.calculateMedian(grades))"/>
-	  <td/>
-	</tr>
-	<tr>
-	  <td colspan="7" i18n:translate="grade_statistics_help"
-	    class="discreet">
-	    Average and median grades are calculated from all assignments
-	    in this assignment box which are in the state <em>graded</em> and
-	    which have a grade assigned.</td>
-	</tr>
+      	<tr>
+      	  <td colspan="5"
+      	    i18n:translate="label_average_grade">Average Grade</td>
+      	  <td
+      	    style="text-align: right"
+      	    tal:content="python: ecab_utils.localizeNumber('%.2f',
+      	                         ecab_utils.calculateMean(grades))"/>
+      	  <td/>
+      	</tr>
+      	<tr>
+      	  <td colspan="5"
+      	    i18n:translate="label_median_grade">Median Grade</td>
+      	  <td
+      	    style="text-align: right"
+      	    tal:content="python: ecab_utils.localizeNumber('%.2f',
+      	                         ecab_utils.calculateMedian(grades))"/>
+      	  <td/>
+      	</tr>
+      	<tr>
+      	  <td colspan="7" i18n:translate="grade_statistics_help"
+      	    class="discreet">
+      	    Average and median grades are calculated from all assignments
+      	    in this assignment box which are in the state <em>graded</em> and
+      	    which have a grade assigned.</td>
+      	</tr>
       </tfoot>
     </metal:define>
 
@@ -204,15 +204,15 @@
 
             <td>
               <input type="checkbox"
-		class="noborder"
-		name="paths:list" 
-		id="#"
-		value=""
-		tal:attributes="value   item_path;
-		                id      string:cb_$item_id;
-		                checked python:test(request.get('ids_checked', False), 'checked', None);
-		                alt     string:Select $item_title_or_id;
-		                title   string:Select $item_title_or_id" />
+              		class="noborder"
+              		name="paths:list" 
+              		id="#"
+              		value=""
+              		tal:attributes="value   item_path;
+  		                id      string:cb_$item_id;
+  		                checked python:test(request.get('ids_checked', False), 'checked', None);
+  		                alt     string:Select $item_title_or_id;
+  		                title   string:Select $item_title_or_id" />
               
               <input type="hidden" name="obj_paths:list" value=""
 		tal:attributes="value item_rel_url" />
@@ -247,7 +247,7 @@
      			          tal:content="python: field.getAccessor(item)()"/>
             </td>
 
-            <td style="text-align: center">
+            <td class="visualNoPrint" style="text-align: center">
               <a href="item_url"
                   tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('view'))"
                   i18n:translate="label_action_view">[View]</a>

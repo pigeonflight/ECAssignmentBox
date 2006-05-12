@@ -139,11 +139,14 @@
           </tal:hidemacro>
           <!-- end list items -->
 
-          <div class="formControls" tal:condition="python: isOwner and has_items">
-	    <hr/>
-            <select name="workflow_action" size="1"
-                 tal:attributes="tabindex tabindex/next;"
-                 tal:define="transitions here/ecab_utils/getWfTransitionsDisplayList">
+          <div class="formControls visualNoPrint" tal:condition="python: isOwner and has_items">
+	          <hr/>
+            <select
+                name="workflow_action" 
+                size="1"
+                tal:attributes="tabindex tabindex/next;"
+                tal:define="transitions here/ecab_utils/getWfTransitionsDisplayList"
+            >
               <option tal:repeat="key python:transitions.keys()"
   	              tal:content="python: transitions.getValue(key)"
       	          tal:attributes="value key"

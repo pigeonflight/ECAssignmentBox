@@ -117,7 +117,7 @@ class ECFolder(ATFolder):
 
     _at_rename_after_creation = True
 
-    # -- actions ---------------------------------------------------------------
+    # -- actions --------------------------------------------------------------
     actions = updateActions(ATFolder, (
         {
         'action':      "string:$object_url/all_assignments",
@@ -146,7 +146,7 @@ class ECFolder(ATFolder):
         'view': 'ecfolder_view',
         })
 
-    # -- methods ---------------------------------------------------------------
+    # -- methods --------------------------------------------------------------
 #    security.declarePrivate('manage_afterAdd')
 #    def manage_afterAdd(self, item, container):
 #        ATFolder.manage_afterAdd(self, item, container)
@@ -164,8 +164,8 @@ class ECFolder(ATFolder):
         published=False to count all boxes.
 
         @param published only published boxes and folders are considered
-        @return a dictionary containing user-id as key and summarized states as 
-                value
+        @return a dictionary containing user-id as key and summarized states
+                as value
         """
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type': 
@@ -202,7 +202,8 @@ class ECFolder(ATFolder):
                         wtool.getInfoFor(assignment, 'review_state', ''))] += 1
 
         return students
-    
+
+    #security.declarePrivate('summarizeGrades')
     def summarizeGrades(self, published=True):
         """
         Create a dictionary listing all grades for the contained
@@ -261,7 +262,8 @@ class ECFolder(ATFolder):
         mtool = self.portal_membership
 
         for key in dict:
-            array.append((key, self.ecab_utils.getFullNameById(key), dict[key]))
+            array.append((key, self.ecab_utils.getFullNameById(key),
+                          dict[key]))
             array.sort(lambda a, b: cmp(a[1], b[1]))
 
         return array

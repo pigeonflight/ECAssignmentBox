@@ -468,7 +468,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         return ['remarks', 'feedback', 'mark']
 
 
-    security.declarePublic('getFooIndicators')
+    security.declarePublic('getIndicators')
     def getIndicators(self):
         """
         Returns a list of dictionaries which contain information necessary
@@ -520,5 +520,22 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         return result
         
+
+    security.declarePublic('diff')
+    def diff(self, other):
+        """
+        Compare this assignment to another one.
+        """
+        import difflib
+
+        result = difflib.context_diff(
+            unicode((str(self.getFile()) +
+                     '\n').decode('utf8')).splitlines(True),
+            unicode((str(other.getFile()) +
+                     '\n').decode('utf8')).splitlines(True),
+            self.pretty_title_or_id(),
+            other.pretty_title_or_id())
+
+        return "".join(result)
 
 registerATCT(ECAssignment, PROJECTNAME)

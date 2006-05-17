@@ -23,6 +23,7 @@ from DateTime import DateTime
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
+from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
@@ -161,6 +162,14 @@ class ECAssignmentBox(ATFolder):
         'permissions': (permissions.View,),
         # Only display the assignments tab if there actually are assignments
         'condition':   'python: len(here.contentValues()) > 0'
+        },
+
+        {
+        'action':      'string:ecab_compare_assignments:method',
+        'id':          'ecab_compare_assignments',
+        'name':        'Compare Two Assignments',
+        'permissions': (permissions.View,),
+        'category':    'folder_buttons',
         },
     ))
     

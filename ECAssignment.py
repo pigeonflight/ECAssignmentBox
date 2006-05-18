@@ -533,8 +533,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                      '\n').decode('utf8')).splitlines(True),
             unicode((str(other.getFile()) +
                      '\n').decode('utf8')).splitlines(True),
-            self.pretty_title_or_id(),
-            other.pretty_title_or_id())
+            self.pretty_title_or_id().decode('utf8'),
+            other.pretty_title_or_id().decode('utf8'))
 
         return "".join(result)
 

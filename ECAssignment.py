@@ -160,7 +160,6 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         'name':        'Grade',
         'permissions': (permissions.ModifyPortalContent,),
         'condition':   'python:1'
-        #'condition':   "python: portal.portal_workflow.getInfoFor(here, 'review_state', '') == 'graded'"
         },
 
         {
@@ -211,9 +210,11 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         portal_url = getToolByName(self, 'portal_url')
         portal = portal_url.getPortalObject()
-        portal_language = portal.getProperty('default_language', None)
+        site_properties = self.portal_properties.site_properties
+        # 'en' is used as fallback language if default_language is not
+        # set; this shouldn't normally happen
+        portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
-
         productVersion = portal_qi.getProductVersion(PROJECTNAME)
         
         submitterId   = self.Creator()

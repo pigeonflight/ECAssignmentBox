@@ -99,7 +99,7 @@
               Enter your answer for this assignment
             </div>
             <textarea cols="30"
-              rows="12"
+              rows="15"
               wrap="off"
               name="answer"
               tabindex=""

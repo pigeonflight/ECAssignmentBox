@@ -186,7 +186,7 @@ class ECFolder(ATFolder):
                 for student in sum.keys():
                     if student in students:
                         i = 0
-                        for i in range(len(sum[student]) - 1):
+                        for i in range(len(sum[student])):
                             students[student][i] += sum[student][i]
                     else:
                         students[student] = sum[student]

@@ -46,7 +46,7 @@ DEPENDENCIES = ['Archetypes',]
 TOOL_NAME  = "ecab_utils"
 TOOL_META  = "ECAssignmentBox Utility Tool"
 TOOL_TITLE = "Assignment Box Settings"
-TOOL_ICON  = "tool.png"
+TOOL_ICON  = "ec_tool.png"
 
 # Permissions
 DEFAULT_ADD_CONTENT_PERMISSION = AddPortalContent

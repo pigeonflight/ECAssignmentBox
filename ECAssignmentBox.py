@@ -135,7 +135,7 @@ class ECAssignmentBox(ATFolder):
 
     schema = ECAssignmentBoxSchema
 
-    content_icon = "box-16.png"
+    content_icon = "ecab.png"
     portal_type = meta_type = ECAB_META
     archetype_name = ECAB_NAME
 

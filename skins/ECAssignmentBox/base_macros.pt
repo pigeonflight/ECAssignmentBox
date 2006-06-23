@@ -270,7 +270,7 @@
     <!-- shows user details -->
     <metal:define define-macro="user_details">
       <div tal:condition="userName">
-	<img src="vcard.png"/>
+	<img src="ec_userinfo.png"/>
 	<dl class="collapsible inline collapsedInlineCollapsible">
 	  <dt class="collapsibleHeader"
 	    i18n:translate="label_student_details">Student details</dt>

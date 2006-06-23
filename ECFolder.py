@@ -101,7 +101,7 @@ class ECFolder(ATFolder):
 
     schema         = ECFolderSchema
     
-    content_icon   = "folder-box-16.png"
+    content_icon   = "ecfolder.png"
     portal_type    = meta_type = "ECFolder"
     archetype_name = "ECFolder"
     immediate_view = 'ecfolder_view'

@@ -511,7 +511,7 @@ msgstr "Matrikel-Nr."
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt
-#. <img tal:attributes="src string: star.png"
+#. <img tal:attributes="src string: ec_shared.png"
 #.      alt="Released"
 #.      title="This assignment has been released for viewing"
 #.      i18n:attributes="alt   label_released;
@@ -522,7 +522,7 @@ msgstr "Freigegeben"
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt
-#. <img tal:attributes="src string: star.png"
+#. <img tal:attributes="src string: ec_shared.png"
 #.      alt="Released"
 #.      title="This assignment has been released for viewing"
 #.      i18n:attributes="alt   label_released;
@@ -533,7 +533,7 @@ msgstr "Diese Einreichung ist zur Ansicht freigegeben"
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt
-#. <img tal:attributes="src string: comment.png"
+#. <img tal:attributes="src string: ec_comment.png"
 #.   alt="Feedback"
 #.   title="Feedback available"
 #.   i18n:attributes="alt   label_feedback;

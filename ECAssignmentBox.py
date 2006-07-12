@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+from hotshot import log
 
 from DateTime import DateTime
 
@@ -331,20 +332,24 @@ class ECAssignmentBox(ATFolder):
 
         return grades
 
+
     security.declarePrivate('getNotificationEmailAddresses')
     def getNotificationEmailAddresses(self):
         """
         Get the e-mail addresses to which notification messages should
         be sent.  May return an empty list if notification is turned
-        off.  Currently returns only the address of the Creator of the
+        off.  Currently returns only the address of the owner of the
         assignment box.
         """
         if not self.getSendNotificationEmail():
             return []
         
+        putils = getToolByName(self, 'plone_utils')
+        
         addresses = []
-        addresses.append(self.ecab_utils.getUserPropertyById(self.Creator(),
-                                                             'email'))
+        addresses.append(self.ecab_utils.getUserPropertyById(
+                                         putils.getOwnerName(self), 'email'))
+       
         return addresses
 
 

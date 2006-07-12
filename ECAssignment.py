@@ -282,19 +282,25 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         @return file content
         """
-        box = self.aq_parent
+        mt = self.getContentType('file')
         
-        if box.getWrapAnswer() and self.getContentType('file') == 'text/plain':
-            file = StringIO(self.getField('file').get(self))
-            wrap = TextWrapper()
-            result = ''
-
-            for line in file:
-                result += wrap.fill(line) + '\n'
-
-            return result
+        if re.match("(text/.+)|(application/(.+\+)?xml)", mt):
+        
+            box = self.aq_parent
+            
+            if (mt == 'text/plain') and box.getWrapAnswer():
+                file = StringIO(self.getField('file').get(self))
+                wrap = TextWrapper()
+                result = ''
+    
+                for line in file:
+                    result += wrap.fill(line) + '\n'
+    
+                return result
+            else:
+                return self.getField('file').get(self)
         else:
-            return self.getField('file').get(self)
+            return None
         
     
     # FIXME: deprecated, use get_data or data in page templates
@@ -314,7 +320,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         mt = self.getContentType('file')
         
-        if re.match("text/|application/(.+\+)?xml", mt):
+        if re.match("(text|application)/(.+\+)?xml", mt):
             return str(f.get(self))
         else:
             return None

@@ -23,9 +23,10 @@
 
     <metal:define define-macro="content">
       <pre tal:define="file accessor;
-                       mime_type file/get_content_type | file/Format;"
-           tal:condition="python:test(mime_type.find('text') > -1, 1,0)"
-           tal:content="file/get_data | file/data | nothing">
+                       mime_type file/get_content_type | file/Format;
+                       cnt file/get_data;"
+           tal:condition="cnt"
+           tal:content="cnt">
       </pre>
     </metal:define>
 

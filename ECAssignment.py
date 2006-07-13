@@ -19,7 +19,7 @@
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from urllib import quote
+#from urllib import quote
 from StringIO import StringIO
 from textwrap import TextWrapper
 import re
@@ -31,14 +31,13 @@ from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions, updateAliases
-from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 
 # The following two imports are for getAsPlainText()
-from Products.CMFCore.utils import getToolByName
+#from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.PortalTransforms.utils import TransformException
 
 # local imports
@@ -208,11 +207,13 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         if not box.getSendNotificationEmail():
             return
 
-        portal_url = getToolByName(self, 'portal_url')
-        portal = portal_url.getPortalObject()
+        #portal_url = getToolByName(self, 'portal_url')
+        #portal = portal_url.getPortalObject()
+
         site_properties = self.portal_properties.site_properties
         # 'en' is used as fallback language if default_language is not
         # set; this shouldn't normally happen
+
         portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
         productVersion = portal_qi.getProductVersion(PROJECTNAME)

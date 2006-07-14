@@ -31,7 +31,7 @@ from urlparse import urlsplit, urlunsplit
 from socket import gethostname, getfqdn
 from string import split, join
 
-from ZODB.POSException import ConflictError
+#from ZODB.POSException import ConflictError
 from email.MIMEText import MIMEText
 from email.Header import Header
 
@@ -78,7 +78,7 @@ class ECABTool(UniqueObject, Folder):
         elif len(fields) == 1:
             result = fields[0]
         else:
-            raise Error, "Too many decimal points in result string"
+            raise ValueError, "Too many decimal points in result string"
 
         return result
 
@@ -86,9 +86,11 @@ class ECABTool(UniqueObject, Folder):
     security.declarePublic('getFullNameById')
     def getFullNameById(self, id):
         """
+        Returns the full name of a user by the given ID. 
         """
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
+        error = False
         
         if not member:
             return id
@@ -97,6 +99,9 @@ class ECABTool(UniqueObject, Folder):
             sn        = member.getProperty('sn')
             givenName = member.getProperty('givenName')
         except:
+            error = True
+    
+        if error or (not sn) or (not givenName):
             fullname = member.getProperty('fullname', '')
             
             if fullname == '':
@@ -108,6 +113,9 @@ class ECABTool(UniqueObject, Folder):
             sn = fullname[fullname.rfind(' ') + 1:]
             givenName = fullname[0:fullname.find(' ')]
             
+        #log('xxx_sn: %s' % str(sn))
+        #log('xxx_gn: %s' % str(givenName))
+
         return sn + ', ' + givenName
 
 

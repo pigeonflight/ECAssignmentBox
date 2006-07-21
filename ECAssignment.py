@@ -321,7 +321,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         mt = self.getContentType('file')
         
-        if re.match('text/|application/(.+\+)?xml", mt):
+        if re.match('text/|application/(.+\+)?xml', mt):
             return str(f.get(self))
         else:
             return None

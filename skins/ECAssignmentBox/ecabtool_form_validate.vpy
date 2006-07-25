@@ -11,25 +11,20 @@ REQUEST = context.REQUEST
 # resourcestrings
 I18N_DOMAIN = 'eduComponents'
 
-errors = {}
+for item_name in ('student_id_attr', 'major_attr', 'personal_title_attr'):
+    item = REQUEST.get(item_name, None)
 
-student_id_attr = REQUEST.get('student_id_attr', None)
-major_attr = REQUEST.get('major_attr', None)
+    if item is not None:
+        item = item.strip()
+        REQUEST.set(item_name, item)
 
-if student_id_attr is not None:
-    # strips the id, so make sure we test the stripped version
-    student_id_attr = student_id_attr.strip() 
-    REQUEST.set('student_id_attr', student_id_attr)
+    error = context.check_id(item, 0, None)
 
-student_id_attr_error = context.check_id(student_id_attr, 0, None)
-
-if student_id_attr_error:
-    state.setError('error_student_id_attr', student_id_attr_error, new_status='failure')
-
-
-# FIXME: add validation for major_attr
+    if error:
+        state.setError(item_name, error, new_status='failure')
 
 if state.getErrors():
-    return state.set(status='failure', portal_status_message='Please correct the indicated errors.')
+    return state.set(status='failure',
+                     portal_status_message='Please correct the indicated errors.')
 else:
     return state

@@ -42,10 +42,11 @@
 	    <code>portal_memberdata</code> in the Zope Management Interface.
 	    On your site, some of them are:
 
-	    <span i18n:name="properties"
-	      tal:replace="python: ', '.join(filter(lambda p: here.portal_memberdata.getPropertyType(p) in ('string', 'int'),
-	                                            here.portal_memberdata.propertyIds()))"/>.
-
+	    <span i18n:name="properties" style="font-style: italic;"
+	      tal:content="python: ', '.join(filter(lambda p:
+	      here.portal_memberdata.getPropertyType(p) in ('string', 'int'),
+	      here.portal_memberdata.propertyIds()))"/>.
+	    
 	    Additional user attributes may be available, e.g., if the user data
 	    for your site is stored in an LDAP directory.
 	  </p>
@@ -93,6 +94,30 @@
             <input name="major_attr" 
                 type="text" 
                 tal:attributes="value    major_attr;
+                                tabindex tabindex/next;"/>
+          </div>
+
+          <div class="field"
+	    tal:define="personal_title_attr  request/personal_title_attr
+	               | portal_properties/ecab_properties/personal_title_attr;
+	    error errors/personal_title_attr | nothing;"
+	    tal:attributes="class python:test(error, 'field error', 'field');">
+        
+            <label i18n:translate="label_personal_title">Title</label>
+
+            <div class="formHelp" i18n:translate="help_personal_title_attr">
+              The user attribute which stores a student's personal title (such
+              as &ldquo;Mr.&rdquo; or &ldquo;Ms.&rdquo;).
+            </div>
+
+            <div tal:condition="error" 
+                tal:content="error" 
+                i18n:translate="error_personal_title_attr">Error message
+            </div>
+    
+            <input name="personal_title_attr" 
+                type="text" 
+                tal:attributes="value    personal_title_attr;
                                 tabindex tabindex/next;"/>
           </div>
 

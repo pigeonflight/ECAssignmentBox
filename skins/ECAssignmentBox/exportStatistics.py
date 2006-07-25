@@ -36,8 +36,8 @@ table  = []
 output = ''
 
 # Table heading
-output += '%s\t' % '\t'.join(('"user name"', '"full name"', '"e-mail"',
-                              '"ID"', '"major"', '"assignments"'))
+output += '%s\t' % '\t'.join(('"user name"', '"full name"', '"title"',
+                              '"e-mail"', '"ID"', '"major"', '"assignments"'))
 output += '%s\n' % '\t'.join(ecab_utils.getWfStates())
 
 # Create a table containing all required data
@@ -45,12 +45,14 @@ for userName in data.keys():
     fullname  = ecab_utils.getFullNameById(userName)
     email     = ecab_utils.getUserPropertyById(userName, 'email')
     studentid = ecab_utils.getUserPropertyById(userName,
-                                               context.portal_properties.ecab_properties.student_id_attr)
+                                               context.portal_properties.ecab_properties.student_id_attr) or ""
     major     = ecab_utils.getUserPropertyById(userName,
-                                               context.portal_properties.ecab_properties.major_attr)
+                                               context.portal_properties.ecab_properties.major_attr) or ""
+    perstitle = ecab_utils.getUserPropertyById(userName,
+                                               context.portal_properties.ecab_properties.personal_title_attr) or ""
     n_boxes   = context.countContainedBoxes()
     
-    row = [userName, fullname, email, studentid, major, n_boxes]
+    row = [userName, fullname, perstitle, email, studentid, major, n_boxes]
     row.extend(data[userName])
 
     table.append(row)

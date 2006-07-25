@@ -60,10 +60,14 @@ msgstr ""
 msgid "help_major_attr"
 msgstr ""
 
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores a student's personal title (such as &ldquo;Mr.&rdquo; or &ldquo;Ms.&rdquo;)."
+msgid "help_personal_title_attr"
+msgstr ""
+
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "Changing state for "${titles}" caused an exception."
 msgstr ""
-
 
 #: ./skins/ECAssignmentBox/eca_add.cpy
 msgid "Neither answer nor uploaded file found."
@@ -510,6 +514,12 @@ msgstr ""
 #. </b>
 # Original: "Student ID"
 msgid "label_student_id"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+# Original: "Title"
+msgid "label_personal_title"
 msgstr ""
 
 

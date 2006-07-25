@@ -1,10 +1,10 @@
-# Mario Amelung <amelung@iws.cs.uni-magdeburg.de>, 2006.
+# -*- coding: utf-8 -*-
 msgid ""
 msgstr ""
 "Project-Id-Version: ECAssignmentBox\n"
 "POT-Creation-Date: 2005-11-03 15:35+0100\n"
 "PO-Revision-Date: 2006-03-09 15:45+0100\n"
-"Last-Translator: Mario Amelung <amelung@iws.cs.uni-magdeburg.de>\n"
+"Last-Translator: Michael Piotrowski <mxp@iws.cs.uni-magdeburg.de>\n"
 "Language-Team: eduComponents <educomponents@uni-magdeburg.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -123,15 +123,23 @@ msgstr "Abbildung von zusätzlichen Attributen für Studenten"
 msgid "help_ecab_attr_mapping"
 msgstr "Hier können Benutzerattribute angegeben werden, die benutzt werden sollen, um zusätzliche Informationen zu Studenten zu finden. Die verfügbaren Attribute sind in <code>portal_memberdata</code> im Zope Management Interface aufgeführt. Hier eine Auswahl: ${properties}. Weitere Attribute sind möglicherweise verfügbar, z. B. wenn die Benutzerdaten in einem LDAP-Verzeichnis gespeichert sind."
 
+
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
 # Original: "The user attribute which stores the student ID."
 msgid "help_student_id_attr"
-msgstr "Das Attribut, das die Matrikelnummer enthält."
+msgstr "Der Name des Attributs, das die Matrikelnummer enthält."
+
 
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
 # Original: "The user attribute which stores a student's major."
 msgid "help_major_attr"
-msgstr "Das Attribut, das den Studiengang enthält."
+msgstr "Der Name des Attributs, das den Studiengang enthält."
+
+
+#: ./skins/ECAssignmentBox/ecabtool_form.cpt
+# Original: "The user attribute which stores a student's personal title (such as &ldquo;Mr.&rdquo; or &ldquo;Ms.&rdquo;)."
+msgid "help_personal_title_attr"
+msgstr "Der Name des Attributs, das die Anrede enthält."
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt
@@ -508,6 +516,12 @@ msgstr "Details zum Studenten"
 # Original: "Student ID"
 msgid "label_student_id"
 msgstr "Matrikel-Nr."
+
+
+#: ./skins/ECAssignmentBox/base_macros.pt
+# Original: "Title"
+msgid "label_personal_title"
+msgstr "Anrede"
 
 
 #: ./skins/ECAssignmentBox/base_macros.pt

@@ -129,6 +129,9 @@ def install_properties(self, out):
     if not hasattr(props, 'major_attr'):
         props._setProperty('major_attr', "", 'string')
 
+    if not hasattr(props, 'personal_title_attr'):
+        props._setProperty('personal_title_attr', "", 'string')
+
     out.write("Installed site-wide ECAssignmentBox properties.\n")
 
 

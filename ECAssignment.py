@@ -255,6 +255,64 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         self.ecab_utils.sendEmail(addresses, subject, mailText)
 
 
+    def sendGradingNotificationEmail(self):
+        """
+        When this assignment is graded, send a notification email to
+        the submitter of the assignment, unless grading notification
+        is turned off in the assignment box.
+        """
+        box = self.aq_parent
+        if not box.getSendGradingNotificationEmail():
+            return
+
+        site_properties = self.portal_properties.site_properties
+        # 'en' is used as fallback language if default_language is not
+        # set; this shouldn't normally happen
+        portal_language = getattr(site_properties, 'default_language', 'en')
+        portal_qi = getToolByName(self, 'portal_quickinstaller')
+        productVersion = portal_qi.getProductVersion(PROJECTNAME)
+        
+        submitterId   = self.Creator()
+        submitterName = self.ecab_utils.getFullNameById(submitterId)
+        submissionURL = self.ecab_utils.normalizeURL(self.absolute_url())
+
+        addresses = []
+        addresses.append(self.ecab_utils.getUserPropertyById(submitterId,
+                                                             'email'))
+        
+        prefLang = self.ecab_utils.getUserPropertyById(submitterId,
+                                                       'language')
+        if not prefLang:
+            prefLang = portal_language
+
+        default_subject = 'Your submission to "${box_title}" has been graded'
+        subject = self.translate(domain=I18N_DOMAIN,
+                                 msgid='email_submission_graded_subject',
+                                 target_language=prefLang,
+                                 mapping={'box_title': box.Title(),},
+                                 default=default_subject)
+
+        default_mailText = 'Your submission to the assignment box ' \
+                           '"${box_title}" has been graded.\n\n' \
+                           'Visit the following URL to view your ' \
+                           'submission:\n\n' \
+                           '<${url}>\n\n' \
+                           '-- \n' \
+                           '${product} ${version}'
+        mailText = self.translate(domain=I18N_DOMAIN,
+                                  msgid='email_submission_graded_content',
+                                  target_language=prefLang,
+                                  mapping={'box_title': box.Title(),
+                                           'grade': self.mark,
+                                           'feedback': self.feedback,
+                                           'url': submissionURL,
+                                           'product': PROJECTNAME,
+                                           'version': productVersion},
+                                  default=default_mailText)
+
+        self.ecab_utils.sendEmail(addresses, subject, mailText)
+
+
     # FIXME: deprecated, set security
     def setField(self, name, value, **kw):
         """Sets value of a field"""

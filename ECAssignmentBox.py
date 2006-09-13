@@ -121,6 +121,17 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
             i18n_domain=I18N_DOMAIN,
         ),
     ),
+    
+    BooleanField('sendGradingNotificationEmail',
+        default=False,
+        widget=BooleanWidget(
+            label="Send grading notification e-mail messages",
+            description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
+            label_msgid='label_sendGradingNotificationEmail',
+            description_msgid='help_sendGradingNotificationEmail',
+            i18n_domain=I18N_DOMAIN,
+        ),
+    ),
                                                         
 ) # , marshall = PrimaryFieldMarshaller()
 )

@@ -31,7 +31,7 @@ from urlparse import urlsplit, urlunsplit
 from socket import gethostname, getfqdn
 from string import split, join
 
-#from ZODB.POSException import ConflictError
+from ZODB.POSException import ConflictError
 from email.MIMEText import MIMEText
 from email.Header import Header
 

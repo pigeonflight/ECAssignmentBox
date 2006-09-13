@@ -36,8 +36,8 @@ ECA_META = "ECAssignment"
 ECA_NAME = "Assignment"
 
 ECA_WORKFLOW_ID = 'ec_assignment_workflow'
-ECA_WORKFLOW_TITLE= 'Assignment workflow [EC]'
-
+ECA_WORKFLOW_TITLE = 'Assignment workflow [EC]'
+WORKFLOW_SCRIPTS = ['notify_students',]
 
 SKINS_DIR = 'skins'
 

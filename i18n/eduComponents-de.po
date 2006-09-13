@@ -579,6 +579,18 @@ msgid "help_sendNotificationEmail"
 msgstr "Wenn dieses Feld ausgewählt ist, wird der Eigentümer dieser Aufgabe über Einreichungen per E-Mail benachrichtigt."
 
 
+#: ./ECAssignmentBox.py
+# Original: "Send grading notification e-mail messages"
+msgid "label_sendGradingNotificationEmail"
+msgstr "Benachrichtigung bei Benotung"
+
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, students will receive an e-mail message when their submissions to this assignment box are graded."
+msgid "help_sendGradingNotificationEmail"
+msgstr "Wenn dieses Feld ausgewählt ist, werden Studenten per E-Mail benachrichtigt, wenn ihre Einreichungen benotet wurden."
+
+
 #: ./skins/ECAssignmentBox/by_student.pt
 #. <h1 class="documentFirstHeading" i18n:translate="label_submissions">
 #. 	  Students
@@ -702,6 +714,18 @@ msgstr "[${id}] Einreichung zu \"${box_title}\" von ${student}"
 # Original: "${student} has made a submission to the assignment "${box_title}".\n\n<${url}>\n\n-- \n${product} ${version}"
 msgid "email_new_submission_content"
 msgstr "${student} hat eine Lösung zur Aufgabe \"${box_title}\" eingereicht.\n\n<${url}>\n\n-- \n${product} ${version}"
+
+
+#: ./ECAssignment.py
+# Original: "Your submission to "${box_title}" has been graded"
+msgid "email_submission_graded_subject"
+msgstr "Ihre Einreichung zu \"${box_title}\" wurde benotet"
+
+
+#: ./ECAssignment.py
+# Original: "Your submission to the assignment box "${box_title}" has been graded.\n\nVisit the following URL to view your submission:\n\n<${url}>\n\n -- \n ${product} ${version}"
+msgid "email_submission_graded_content"
+msgstr "Ihre Einreichung zur Aufgabe \"${box_title}\" wurde benotet.\n\nUnter der folgenden Adresse können Sie Ihre Einreichung einsehen: \n\n<${url}>\n\n -- \n ${product} ${version}"
 
 
 #: ./skins/ECAssignmentBox/ecab_view.py

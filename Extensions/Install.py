@@ -21,6 +21,7 @@
 
 from StringIO import StringIO
 
+from Products.PythonScripts.PythonScript import manage_addPythonScript
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.Archetypes.public import listTypes
 from Products.CMFCore.utils import getToolByName
@@ -102,7 +103,14 @@ def install_workflow(self, out):
         wf_tool._delObject(ECA_WORKFLOW_ID)
     
     wf_tool.manage_addWorkflow(id = ECA_WORKFLOW_ID,
-                               workflow_type = '%s (%s)' % (ECA_WORKFLOW_ID, ECA_WORKFLOW_TITLE))
+                               workflow_type = '%s (%s)' % (ECA_WORKFLOW_ID,
+                                                            ECA_WORKFLOW_TITLE))
+
+
+
+
+    #addWorkflowScripts(wf_tool[ECA_WORKFLOW_ID])
+
 
     wf_tool.setChainForPortalTypes((ECA_META,), ECA_WORKFLOW_ID)
     #wf_tool.setChainForPortalTypes(('ECAssignmentQC',), ECA_WORKFLOW_ID)
@@ -112,6 +120,15 @@ def install_workflow(self, out):
     
     print >> out, "Successfully installed ECAssignment workflow."
 
+def addWorkflowScripts(wf):
+    """
+    Adds workflow scripts to workflow.
+    """
+    wf_scripts = WORKFLOW_SCRIPTS
+    for key in wf_scripts.keys():
+        if not key in wf.scripts.objectIds():
+            wf.scripts.manage_addProduct['ExternalMethod'].\
+                manage_addExternalMethod(key, key, wf_scripts[key], key)
 
 def install_properties(self, out):
     """

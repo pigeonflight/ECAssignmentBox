@@ -578,6 +578,18 @@ msgid "help_sendNotificationEmail"
 msgstr ""
 
 
+#: ./ECAssignmentBox.py
+# Original: "Send grading notification e-mail messages"
+msgid "label_sendGradingNotificationEmail"
+msgstr ""
+
+
+#: ./ECAssignmentBox.py
+# Original: "If selected, students will receive an e-mail message when their submissions to this assignment box are graded."
+msgid "help_sendGradingNotificationEmail"
+msgstr ""
+
+
 #: ./skins/ECAssignmentBox/by_student.pt
 #. <h1 class="documentFirstHeading" i18n:translate="label_submissions">
 #. 	  Students
@@ -699,6 +711,18 @@ msgstr ""
 #: ./skins/ECAssignmentBox/ECAssignment.py
 # Original: "${student} has made a submission to the assignment "${box_title}".\n\n<${url}>\n\n-- \n${product} ${version}"
 msgid "email_new_submission_content"
+msgstr ""
+
+
+#: ./ECAssignment.py
+# Original: "Your submission to "${box_title}" has been graded"
+msgid "email_submission_graded_subject"
+msgstr ""
+
+
+#: ./ECAssignment.py
+# Original: "Your submission to the assignment box "${box_title}" has been graded.\n\nVisit the following URL to view your submission:\n\n<${url}>\n\n -- \n ${product} ${version}"
+msgid "email_submission_graded_content"
 msgstr ""
 
 

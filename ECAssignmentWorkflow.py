@@ -28,10 +28,11 @@ __docformat__ = 'plaintext'
 __version__   = '$Revision$'
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
-from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
-from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, TRIGGER_USER_ACTION, TRIGGER_WORKFLOW_METHOD
-
 from Products.CMFCore.permissions import ManageProperties
+from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+from Products.DCWorkflow.Transitions import TRIGGER_AUTOMATIC, \
+     TRIGGER_USER_ACTION, TRIGGER_WORKFLOW_METHOD
+from Products.ExternalMethod.ExternalMethod import ExternalMethod
 
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox import permissions
@@ -281,12 +282,20 @@ def setupAssignment_workflow(wf):
                        props={'guard_roles': 'Owner'},
                        )
 
+    ## Creation of workflow scripts
+    for wf_scriptname in ['sendGradedEmail']:
+        if not wf_scriptname in wf.scripts.objectIds():
+            wf.scripts._setObject(wf_scriptname,
+                ExternalMethod(wf_scriptname, wf_scriptname,
+                PROJECTNAME + '.eca_workflow_scripts',
+                wf_scriptname))
+
     tdef = wf.transitions['grade']
     tdef.setProperties(title="""Reviewer grades the assignment""",
                        new_state_id="""graded""",
                        trigger_type=1,
                        script_name="""""",
-                       after_script_name="""""",
+                       after_script_name="""sendGradedEmail""",
                        actbox_name="""Grade""",
                        actbox_url="""""",
                        actbox_category="""workflow""",

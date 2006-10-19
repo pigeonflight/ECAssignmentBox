@@ -25,119 +25,122 @@
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
         <div tal:define="global ecab_utils nocall:portal/ecab_utils;
-	                 global has_items python: 0;">
+                         global has_items python: 0;"
+        >
 
-	<metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
+          <metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
           
-	<a class="link-parent visualNoPrint"
-	  tal:define="parent     python: here.aq_parent;
-	              template   python: parent.getTypeInfo().getActionById(template_id, '');
-	              parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
-	  tal:condition="parent_url"
-	  tal:attributes="href python: '%s/%s' % (parent_url, template)"
-	  i18n:domain="plone"
-	  i18n:translate="go_to_parent_url">
-	  Up one level
-	</a>
+          <a class="link-parent visualNoPrint"
+              tal:define="parent     python: here.aq_parent;
+                          template   python: parent.getTypeInfo().getActionById(template_id, '');
+                          parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
+              tal:condition="parent_url"
+              tal:attributes="href python: '%s/%s' % (parent_url, template)"
+              i18n:domain="plone"
+              i18n:translate="go_to_parent_url">
+            Up one level
+          </a>
 
-	<p tal:condition="python: not ecab_utils.isAssignmentBoxType(here)">
-	  <b i18n:translate="label_n_boxes">
-	    Published assignment boxes inside this folder:
-	  </b>
-	  <span tal:omit-tag="" tal:content="here/countContainedBoxes"/>
-	</p>
+          <p tal:condition="python: not ecab_utils.isAssignmentBoxType(here)">
+            <b i18n:translate="label_n_boxes">
+              Published assignment boxes inside this folder:
+            </b>
+            <span tal:omit-tag="" tal:content="here/countContainedBoxes"/>
+          </p>
 
-	<metal:use use-macro="here/base_macros/macros/user_details" />
+          <metal:use use-macro="here/base_macros/macros/user_details" />
 
-	<form action=""
-	  method="post"
-	  name="allAssignmentsEditForm"
-	  tal:attributes="action string:${here/absolute_url}/${template/getId}">
+          <form action=""
+              method="post"
+              name="allAssignmentsEditForm"
+              tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
-          <!-- start showing folder title and items -->
-          <tal:contain define="location nocall:here; level python:1;">
-          
-            <div tal:attributes="class item_type_class"
-                 tal:define="
-                   item_type here/portal_type;
-                   item_type_class python: 'contenttype-' + normalizeString(item_type);">
-              
-              <!--
-              <h4 class="visualIconPadding" tal:content="here/pretty_title_or_id"/>
-              -->
-            </div>
-
-            <div metal:use-macro="template/macros/list" /> 
-
-          </tal:contain> 
-
-          <tal:hidemacro replace="nothing">
-            <metal:recurse define-macro="list">
-
-              <div tal:define="objects python: [location.objectValues(), [location]][ecab_utils.isAssignmentBoxType(location)]" 
-                  tal:repeat="elt objects">
-              
-                <tal:block define="
-		    item_type           elt/portal_type;
-                    item_url            elt/getURL|elt/absolute_url;
-                    item_wf_state       elt/review_state | python: wtool.getInfoFor(elt, 'review_state', '');
-                    item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
-                    item_title_or_id    elt/pretty_title_or_id;
-                    use_view_action     site_properties/typesUseViewActionInListings;
-                    item_type_class     python: 'contenttype-' + normalizeString(item_type);
-                    grades              elt/getNumericGrades | nothing;"
-                    condition="python: ((elt.isPrincipiaFolderish
-		               and item_wf_state == 'published')
-		               or (not elt.isPrincipiaFolderish))">
-
-                  <h4 tal:attributes="class item_type_class"
-                      tal:condition="python:item_type != 'Link'">
-                    <a href="#" 
-                       tal:attributes="
-                           href python:test(item_type in use_view_action, item_url+'/view', item_url+'/');
-                           class string:$item_wf_state_class visualIconPadding;
-                           title elt/description|nothing"
-                       tal:content="item_title_or_id"/>
-                  </h4>
-
-                  <metal:recurse 
-                      tal:condition="python: elt.isPrincipiaFolderish and not ecab_utils.isAssignmentBoxType(elt)"
-                      tal:define="
-                        location            nocall: elt;
-                        level               python: level + 1;"
-                  >
-
-                    <div class="visualIconPadding">
-
-                      <div metal:use-macro="template/macros/list"/>
-
-                      <hr tal:condition="python: elt.portal_type == 'ECFolder'" />
-                    </div>
-                  </metal:recurse>
-
-		  <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
-		    <tal:define define="items python: elt.getAssignmentsSummary(id=userName);">
-		      <p tal:condition="not: items"
-			 class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
-		         i18n:translate="no_submissions">There are no submissions in this assignment box.</p>
-
-		      <table class="listing" tal:condition="items">
-			<metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
-			<metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
-
-			<tal:block define="wtool here/portal_workflow;
-			                   global has_items python: 1;">
-			  <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
-			</tal:block>
-		      </table>
-		    </tal:define>
-		  </tal:if>
-                </tal:block>
+            <!-- start showing folder title and items -->
+            <tal:contain define="location nocall:here; level python:1;">
+            
+              <div tal:attributes="class item_type_class"
+                   tal:define="
+                     item_type here/portal_type;
+                     item_type_class python: 'contenttype-' + normalizeString(item_type);">
+                
+                <!--
+                <h4 class="visualIconPadding" tal:content="here/pretty_title_or_id"/>
+                -->
               </div>
+  
+              <div metal:use-macro="template/macros/list" /> 
+  
+            </tal:contain> 
 
-            </metal:recurse>
-          </tal:hidemacro>
-          <!-- end list items -->
+            <tal:hidemacro replace="nothing">
+              <metal:recurse define-macro="list">
+
+                <div tal:define="objects python: [location.objectValues(), [location]][ecab_utils.isAssignmentBoxType(location)]" 
+                    tal:repeat="elt objects">
+                
+                  <tal:block define="
+                      item_type           elt/portal_type;
+                      item_url            elt/getURL|elt/absolute_url;
+                      item_wf_state       elt/review_state | python: wtool.getInfoFor(elt, 'review_state', '');
+                      item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
+                      item_title_or_id    elt/pretty_title_or_id;
+                      use_view_action     site_properties/typesUseViewActionInListings;
+                      item_type_class     python: 'contenttype-' + normalizeString(item_type);
+                      grades              elt/getNumericGrades | nothing;"
+                      condition="python: ((elt.isPrincipiaFolderish and item_wf_state == 'published') or (not elt.isPrincipiaFolderish))"
+                  >
+  
+                    <h4 tal:attributes="class item_type_class"
+                        tal:condition="python:item_type != 'Link'">
+                      <a href="#" 
+                         tal:attributes="
+                             href python:test(item_type in use_view_action, item_url+'/view', item_url+'/');
+                             class string:$item_wf_state_class visualIconPadding;
+                             title elt/description|nothing"
+                         tal:content="item_title_or_id"/>
+                    </h4>
+  
+                    <metal:recurse 
+                        tal:condition="python: elt.isPrincipiaFolderish and not ecab_utils.isAssignmentBoxType(elt)"
+                        tal:define="
+                          location            nocall: elt;
+                          level               python: level + 1;"
+                    >
+
+                      <div class="visualIconPadding">
+  
+                        <div metal:use-macro="template/macros/list"/>
+  
+                        <hr tal:condition="python: elt.portal_type == 'ECFolder'" />
+                      </div>
+                    </metal:recurse>
+
+	                <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
+                      <tal:define define="items python: elt.getAssignmentsSummary(id=userName);">
+                        <p tal:condition="not: items"
+                            class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
+                            i18n:translate="no_submissions">There are no submissions in this assignment box.
+                        </p>
+  
+                        <table class="listing" tal:condition="items">
+                          <!-- write table header -->
+                          <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+                          <!-- write table footer -->
+  	                    <metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
+                          <!--  add table contents -->
+                          <tal:block define="wtool here/portal_workflow;
+  			                               global has_items python: 1;">
+                            <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
+                          </tal:block>
+                        </table>
+                      </tal:define>
+                    </tal:if>
+                  </tal:block>
+                </div>
+
+              </metal:recurse>
+            </tal:hidemacro>
+            <!-- end list items -->
 
           <div class="formControls visualNoPrint" tal:condition="python: isOwner and has_items">
 	          <hr/>

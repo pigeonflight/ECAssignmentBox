@@ -400,7 +400,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     
     
     security.declarePublic('evaluate')
-    def evaluate(self, parent):
+    def evaluate(self, parent, recheck=False):
         """
         Will be called if a new assignment is added to this assignment box to
         evaluate it. Please do not confuse this with the validation of the
@@ -408,9 +408,9 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         For ECAssignment this mehtod returns nothing but it can be 
         overwritten in subclasses, e.g. ECAutoAssignmentBox.
         
-        @return None
+        @return (True, '')
         """
-        return None
+        return (True, '')
 
     
     #security.declarePublic('getGradeIfAllowed')

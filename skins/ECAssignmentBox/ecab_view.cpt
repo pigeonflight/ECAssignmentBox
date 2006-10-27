@@ -18,13 +18,14 @@
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
           tal:define="Iterator      python: modules['Products.Archetypes'].IndexIterator;
-		      tabindex      python: Iterator();
-	              user_id       python: member.getId();
-	              item_wf_state here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
+                      tabindex      python: Iterator();
+                      user_id       python: member.getId();
+                      item_wf_state here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
                       hasExpired    here/hasExpired;
                       isEffective   here/isEffective;
                       is_published  python: item_wf_state == 'published';
-                      canResubmit   here/canResubmit">
+                      is_owner      python: user.has_role(['Owner', 'Reviewer', 'Manager'], context.aq_parent);
+                      canResubmit   python: here.canResubmit() and (is_published or is_owner);">
 
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
       
@@ -49,7 +50,7 @@
           Up one level
         </a>
         
-        <!-- TODO: add collapsible box with directions text from ecfolder -->
+        <!-- TODO: add a collapsible box with the directions text from ecfolder -->
         <!--
         <dl class="collapsible collapsedBlockCollapsible">
           <dt class="collapsibleHeader"
@@ -90,7 +91,7 @@
             enctype="multipart/form-data"
             tal:attributes="action string:${here/absolute_url}/${template/getId}"
             tal:condition="python: not hasExpired and isEffective and
-	                   canResubmit and is_published">
+                           canResubmit">
   
           <!-- text field -->
           <div class="field">
@@ -153,12 +154,12 @@
       
           <i tal:condition="python: not is_published or not isEffective"
              i18n:translate="submission_period_not_effective">
-	    Submissions are not yet allowed.</i>
+            Submissions are not yet allowed.</i>
   
           <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired)"
              i18n:translate="submission_cannot_resubmit">
             Submission not permitted: An earlier submission is under review
-	    or has already been accepted.</i>
+            or has already been accepted.</i>
         </div>
   
         <div metal:use-macro="here/document_byline/macros/byline" />

@@ -60,18 +60,19 @@ qca.setFilename(filename, key='file')
 # evaluate this submission
 result = qca.evaluate(context)
             
-if result[0]:
-    # The submission was evaluated.
-    msg = context.translate(
-        msgid   = 'submission_saved',
-        domain  = I18N_DOMAIN,
-        default = 'Your submission has been saved.')
-
-    # add possible message from evaluate
-    msg += ' ' + result[1]
-
-else:
-    msg = result
+if result:
+    if result[0]:
+        # The submission was evaluated.
+        msg = context.translate(
+            msgid   = 'submission_saved',
+            domain  = I18N_DOMAIN,
+            default = 'Your submission has been saved.')
+    
+        # add possible message from evaluate
+        msg += ' ' + result[1]
+    
+    else:
+        msg = result
     
 target_action = '%s/%s' % (qca.getId(), qca.getTypeInfo().getActionById('view'))
 

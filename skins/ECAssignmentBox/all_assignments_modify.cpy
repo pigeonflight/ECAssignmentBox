@@ -26,8 +26,15 @@ if not workflow_action:
                                 domain = I18N_DOMAIN)
     return state.set(status=status, portal_status_message = message)
 
-# get selected items
-paths = REQUEST.get('paths', [])
+# paths
+paths = []
+
+# get all boxes
+boxes = REQUEST.get('ecabox', [])
+
+for box in boxes:
+    # get selected items
+    paths.extend(REQUEST.get(box, []))
 
 succeeded = []
 succeeded_and_paths = []

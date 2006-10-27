@@ -20,7 +20,7 @@
           define="userName request/userName | nothing;
                   permission python: modules['AccessControl'].getSecurityManager().checkPermission;
                   isOwner  python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-	          isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context)">
+                  isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context)">
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
@@ -115,7 +115,7 @@
                       </div>
                     </metal:recurse>
 
-	                <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
+                    <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
                       <tal:define define="items python: elt.getAssignmentsSummary(id=userName);">
                         <p tal:condition="not: items"
                             class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
@@ -125,16 +125,20 @@
                         <table class="listing" tal:condition="items">
                           <!-- write table header -->
                           <metal:use use-macro="here/base_macros/macros/all_assignments_thead" />
+
                           <!-- write table footer -->
-  	                    <metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
+                          <metal:use use-macro="here/base_macros/macros/all_assignments_tfoot" />
+
                           <!--  add table contents -->
                           <tal:block define="wtool here/portal_workflow;
-  			                               global has_items python: 1;">
+                                             global has_items python: 1;"
+                          >
                             <metal:use use-macro="here/base_macros/macros/all_assignments_tbody" />
                           </tal:block>
                         </table>
                       </tal:define>
                     </tal:if>
+
                   </tal:block>
                 </div>
 
@@ -143,7 +147,7 @@
             <!-- end list items -->
 
           <div class="formControls visualNoPrint" tal:condition="python: isOwner and has_items">
-	          <hr/>
+                  <hr/>
             <select
                 name="workflow_action" 
                 size="1"
@@ -151,11 +155,11 @@
                 tal:define="transitions here/ecab_utils/getWfTransitionsDisplayList"
             >
               <option tal:repeat="key python:transitions.keys()"
-  	              tal:content="python: transitions.getValue(key)"
-      	          tal:attributes="value key"
-              	  i18n:domain="plone"
-                	i18n:translate="">
-            	  Transition Name
+                        tal:content="python: transitions.getValue(key)"
+                        tal:attributes="value key"
+                        i18n:domain="plone"
+                        i18n:translate="">
+                      Transition Name
               </option>
             </select>
 

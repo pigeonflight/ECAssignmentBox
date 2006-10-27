@@ -264,30 +264,67 @@ class ECAssignmentBox(ATFolder):
         
         return True
 
-    def getAssignmentsSummary(self, id=None):
-        items = self.contentValues(filter={'portal_type':
-                                           self.allowed_content_types})
-        items.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
-        wtool = self.portal_workflow
-        current_user = self.portal_membership.getAuthenticatedMember()
-        summary = []
+
+    #security.declarePublic('getAssignmentsSummary')
+    def getAssignmentsSummary(self, id=None, hideSuperseeded=True):
+        """
+        Returns a list of all assginments inside this box. The assignments
+        must be accessible by the current user.
+
+        TODO: use portal_catalog
+        """
+#        items = self.contentValues(filter={'portal_type':
+#                                           self.allowed_content_types})
+#        items.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
+#        wtool = self.portal_workflow
+#        current_user = self.portal_membership.getAuthenticatedMember()
+#        summary = []
+#        
+#        for item in items:
+#            if (current_user.checkPermission(permissions.View, item)):
+#                if id and item.Creator() != id:
+#                    continue
+#                summary.append(item)
+#        return summary
+
+        catalog = getToolByName(self, 'portal_catalog')
+
+        brains = catalog.searchResults(
+                    path = {'query':'/'.join(self.getPhysicalPath()), 'depth':1, },
+                    #sort_on = 'CreationDate', 
+                    review_state = ('submitted', 'accepted', 'rejected', 'graded'),
+                    contentFilter = {'portal_type':(ECA_META, 'ECAutoAssignment')},
+                    #meta_type = (ECA_META, 'ECAutoAssignment', ),
+                )
         
-        for item in items:
-            if (current_user.checkPermission(permissions.View, item)):
+        result = []
+        currentUser = self.portal_membership.getAuthenticatedMember()
+        
+        for brain in brains:
+            item = brain.getObject()
+
+            if (currentUser.checkPermission(permissions.View, item)):
                 if id and item.Creator() != id:
                     continue
-                summary.append(item)
-        return summary
+
+                result.append(item)
+
+        # sort itemds
+        result.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
+
+        return result
 
     def getGradeForStudent(self, student):
         """
-        Your documentation here
+        FIXME: currently unused!
+        TODO: use portal_catalog
         """
         submissions = self.contentValues(filter={'Creator': student})
         if submissions:
             submission = submissions[0]
             field = submission.getField('mark')
             return field.getAccessor(submission)()
+
 
     def getGradesByStudent(self):
         """

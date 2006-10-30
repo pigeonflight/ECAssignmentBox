@@ -50,23 +50,19 @@
           Up one level
         </a>
         
-        <!-- TODO: add a collapsible box with the directions text from ecfolder -->
-        <!--
-        <dl class="collapsible collapsedBlockCollapsible">
+        <!-- show a collapsible box with the directions text from ecfolder -->
+        <dl class="collapsible collapsedBlockCollapsible"
+            tal:define="parent nocall:here/aq_parent;"
+            tal:condition="python: hasattr(parent, 'directions') and parent.directions"
+        >
           <dt class="collapsibleHeader"
-              i18n:translate="ecfolder_directions">
+              i18n:translate="label_directions">
             Directions
           </dt>
           <dd class="collapsibleContent">
-            <div class="documentDescription"
-                 tal:content="structure here/aq_parent/Description"
-                 tal:condition="here/aq_parent/Description"/>
-  
-            <div tal:condition="python: hasattr(here.aq_parent, 'directions')"
-                 tal:replace="structure here/aq_parent/getDirections"/>
+            <div tal:replace="structure parent/getDirections" />
           </dd>
         </dl>
-        -->
   
         <p/>
     

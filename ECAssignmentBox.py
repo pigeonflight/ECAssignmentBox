@@ -266,7 +266,7 @@ class ECAssignmentBox(ATFolder):
 
 
     #security.declarePublic('getAssignmentsSummary')
-    def getAssignmentsSummary(self, id=None, hideSuperseeded=True):
+    def getAssignmentsSummary(self, id=None, showSuperseded=False):
         """
         Returns a list of all assginments inside this box. The assignments
         must be accessible by the current user.
@@ -287,12 +287,17 @@ class ECAssignmentBox(ATFolder):
 #                summary.append(item)
 #        return summary
 
+        review_states = ('submitted', 'pending', 'accepted', 'rejected', 'graded',)
+        
+        if showSuperseded:
+            review_states += ('superseded',)
+
         catalog = getToolByName(self, 'portal_catalog')
 
         brains = catalog.searchResults(
                     path = {'query':'/'.join(self.getPhysicalPath()), 'depth':1, },
                     #sort_on = 'CreationDate', 
-                    review_state = ('submitted', 'accepted', 'rejected', 'graded'),
+                    review_state = review_states,
                     contentFilter = {'portal_type':(ECA_META, 'ECAutoAssignment')},
                     #meta_type = (ECA_META, 'ECAutoAssignment', ),
                 )

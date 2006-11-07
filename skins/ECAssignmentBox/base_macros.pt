@@ -146,7 +146,7 @@
                                 onclick  string:javascript:toggleSelect(this, '${elt/id}:list');"
             />
             <input type="hidden" name="" value="" 
-              tal:attributes="name  string:ecabox;
+              tal:attributes="name  string:ecabox:list;
                               value string:${elt/id};"
             />
           </th>

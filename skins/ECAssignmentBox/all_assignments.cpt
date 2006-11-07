@@ -11,16 +11,17 @@
 
   <body>
     <metal:block fill-slot="css_slot">
-      <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);">
-      </style>
+      <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);" />
     </metal:block>
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
           define="userName request/userName | nothing;
                   permission python: modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner  python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-                  isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context)">
+                  isOwner python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  showSuperseded request/show_superseded | nothing"
+      >
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
@@ -33,7 +34,7 @@
           <a class="link-parent visualNoPrint"
               tal:define="parent     python: here.aq_parent;
                           template   python: parent.getTypeInfo().getActionById(template_id, '');
-                          parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
+                          parent_url python: here.navigationParent(here, fallThroughDefaultPage=False)"
               tal:condition="parent_url"
               tal:attributes="href python: '%s/%s' % (parent_url, template)"
               i18n:domain="plone"
@@ -55,6 +56,20 @@
               name="allAssignmentsEditForm"
               tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
+            <div class="formControls visualNoPrint">
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleSuperseded"
+                     value="Show or hide superseded"
+                     tabindex=""
+                     tal:attributes="tabindex tabindex/next;
+                                     value python: test(showSuperseded, 'Hide', 'Show') + ' superseded';"
+              />
+
+              <input type="hidden" name="show_superseded" value="1" 
+                  tal:condition="not:showSuperseded"/>
+            </div>
+  
             <!-- start showing folder title and items -->
             <tal:contain define="location nocall:here; level python:1;">
             
@@ -119,7 +134,7 @@
                     </metal:recurse>
 
                     <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
-                      <tal:define define="items python: elt.getAssignmentsSummary(id=userName);">
+                      <tal:define define="items python: elt.getAssignmentsSummary(userName, showSuperseded);">
                         <p tal:condition="not: items"
                             class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
                             i18n:translate="no_submissions">There are no submissions in this assignment box.
@@ -150,7 +165,9 @@
             <!-- end list items -->
 
           <div class="formControls visualNoPrint" tal:condition="python: isOwner and has_items">
-                  <hr/>
+
+            <hr/>
+
             <select
                 name="workflow_action" 
                 size="1"

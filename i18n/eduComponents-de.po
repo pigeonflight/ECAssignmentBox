@@ -769,9 +769,9 @@ msgstr "Hier können Sie eine Vorlage für Antworten vorgeben"
 #: ./skins/ECAssignmentBox/all_assignments.cpy
 # Original: "Show superseded"
 msgid "Show superseded"
-msgstr "Ersetz anzeigen"
+msgstr "Ersetzte Einreichungen anzeigen"
 
 #: ./skins/ECAssignmentBox/all_assignments.cpy
 # Original: "Hide superseded"
 msgid "Hide superseded"
-msgstr "Ersetzt ausblenden"
+msgstr "Ersetzte Einreichungen ausblenden"

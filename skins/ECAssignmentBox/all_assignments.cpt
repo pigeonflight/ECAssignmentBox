@@ -22,6 +22,10 @@
                   isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
                   showSuperseded request/show_superseded | nothing"
       >
+      
+        <!-- 
+        <div tal:content="string:showSuperseded:$showSuperseded" />
+        -->
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
@@ -60,14 +64,24 @@
               <input class="standalone"
                      type="submit"
                      name="form.button.ToggleSuperseded"
-                     value="Show or hide superseded"
+                     value="Show superseded"
                      tabindex=""
-                     tal:attributes="tabindex tabindex/next;
-                                     value python: test(showSuperseded, 'Hide', 'Show') + ' superseded';"
+                     i18n:attributes="value"
+                     tal:attributes="tabindex tabindex/next;"
+                     tal:condition="not:showSuperseded"
               />
 
-              <input type="hidden" name="show_superseded" value="1" 
-                  tal:condition="not:showSuperseded"/>
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleSuperseded"
+                     value="Hide superseded"
+                     tabindex=""
+                     i18n:attributes="value"
+                     tal:attributes="tabindex tabindex/next;"
+                     tal:condition="showSuperseded"
+              />
+
+              <input type="hidden" name="show_superseded" tal:attributes="value showSuperseded"/>
             </div>
   
             <!-- start showing folder title and items -->

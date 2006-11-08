@@ -776,3 +776,13 @@ msgstr ""
 # Original: "You can provide a template for the students\' answers"
 msgid "help_answer_template"
 msgstr ""
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Show superseded"
+msgid "Show superseded"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Hide superseded"
+msgid "Hide superseded"
+msgstr ""

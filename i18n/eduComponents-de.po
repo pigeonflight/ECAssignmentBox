@@ -16,55 +16,46 @@ msgstr ""
 "Domain: eduComponents\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "Changing state for \"${titles}\" caused an exception."
 msgstr "Die Statusänderung für \"${titles}\" verursachte einen Fehler."
-
 
 #: ./skins/ECAssignmentBox/eca_add.cpy
 msgid "Neither answer nor uploaded file found."
 msgstr "Leerer Antworttext. Bitte machen Sie eine Eingabe."
 
-
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "Please select one or more items."
 msgstr "Bitte wählen Sie einen oder mehrere Einträge."
-
 
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "State for ${itemCount} items has been changed."
 msgstr "Der Status von ${itemCount} Einträgen wurde geändert."
 
-
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "State for \"${titles}\" could not be changed."
 msgstr "Der Status von \"${titles}\" konnte nicht geändert werden."
 
-
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "State for \"${titles}\" has been changed."
 msgstr "Der Status von \"${titles}\" wurde geändert."
 
-
 #: ./skins/ECAssignmentBox/ecab_assignments_status.cpy
 msgid "State for \"${titles}\" has been changed."
 msgstr "Der Status von \"${titles}\" wurde geändert."
-
 
 #: ./skins/ECAssignmentBox/eca_add_validate.vpy
 msgid "The submission period has expired. Your submission was rejected."
 msgstr "Einreichungsfrist abgelaufen. Ihre Einreichung wurde abgelehnt."
 
-
 #: ./skins/ECAssignmentBox/eca_add_validate.vpy
 msgid "You need to be logged in with your username and password."
 msgstr "Sie müssen angemeldet sein."
 
-
 #: ./skins/ECAssignmentBox/eca_add.cpy
 msgid "Your submission has been saved."
 msgstr "Ihre Einreichung wurde gespeichert."
-
 
 #: ./skins/ECAssignmentBox/base_macros.pt
 #. <a i18n:translate="assignment_of" tal:attributes="name here/getId">
@@ -74,7 +65,6 @@ msgstr "Ihre Einreichung wurde gespeichert."
 msgid "assignment_of"
 msgstr "Einreichung von"
 
-
 #: ./skins/ECAssignmentBox/base_macros.pt
 #. <dt class="collapsibleHeader" i18n:translate="assignment_text">
 #.           Assignment text
@@ -82,7 +72,6 @@ msgstr "Einreichung von"
 # Original: "Assignment text"
 msgid "assignment_text"
 msgstr "Aufgabenstellung"
-
 
 #: ./skins/ECAssignmentBox/base_macros.pt
 #. <a class="link-parent" i18n:translate="back_to_overview" tal:attributes="href string: #${here/aq_parent/id}">
@@ -92,11 +81,9 @@ msgstr "Aufgabenstellung"
 msgid "back_to_overview"
 msgstr "Zurück zur Aufgabenstellung"
 
-
 #: ./ECABTool.py
 msgid "decimal_separator"
 msgstr ","
-
 
 #: ./skins/ECAssignmentBox/ecabtool_form.cpt
 # Original: "Assignment Box Settings"
@@ -778,3 +765,13 @@ msgstr "Antwortvorlage"
 # Original: "You can provide a template for the students\' answers"
 msgid "help_answer_template"
 msgstr "Hier können Sie eine Vorlage für Antworten vorgeben"
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Show superseded"
+msgid "Show superseded"
+msgstr "Ersetz anzeigen"
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Hide superseded"
+msgid "Hide superseded"
+msgstr "Ersetzt ausblenden"

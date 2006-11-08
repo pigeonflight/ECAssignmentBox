@@ -8,7 +8,7 @@ View = 0:Authenticated
 validators=
 
 [actions]
-action.success..ToggleSuperseded=traverse_to:string:all_assignments
+action.success..ToggleSuperseded=traverse_to:string:toggle_superseded
 action.success..Change=traverse_to:string:all_assignments_modify
 action.success=traverse_to:string:all_assignments_modify
 action.failure=traverse_to:string:all_assignments

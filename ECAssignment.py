@@ -408,9 +408,9 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         For ECAssignment this mehtod returns nothing but it can be 
         overwritten in subclasses, e.g. ECAutoAssignmentBox.
         
-        @return (True, '')
+        @return (1, '')
         """
-        return (True, '')
+        return (1, '')
 
     
     #security.declarePublic('getGradeIfAllowed')

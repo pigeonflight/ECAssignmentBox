@@ -25,7 +25,7 @@
                       isEffective   here/isEffective;
                       is_published  python: item_wf_state == 'published';
                       is_owner      python: user.has_role(['Owner', 'Reviewer', 'Manager'], context.aq_parent);
-                      canResubmit   python: here.canResubmit() and (is_published or is_owner);">
+                      canResubmit   python: here.canResubmit() and is_published;">
 
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
       
@@ -81,13 +81,14 @@
       
         <hr/>
   
+        <!-- input field and upload field -->
         <form action=""
             name="eca_add"
             method="post"
             enctype="multipart/form-data"
             tal:attributes="action string:${here/absolute_url}/${template/getId}"
-            tal:condition="python: not hasExpired and isEffective and
-                           canResubmit">
+            tal:condition="python: (not hasExpired and isEffective and
+                           canResubmit) or is_owner">
   
           <!-- text field -->
           <div class="field">

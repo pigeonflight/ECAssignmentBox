@@ -16,22 +16,23 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          define="userName request/userName | nothing;
-                  permission python: modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-                  isGrader python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
-                  showSuperseded request/show_superseded | nothing"
-      >
+          define="global ecab_utils	nocall: portal/ecab_utils;
+                  permission		python: modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner		python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader		python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  resFlt		python: {'user_id'		: request.get('user_id', None),
+	                                         'state'		: request.get('state', None), };
+                  resFlt2		python: dict([(k,v) for k,v in resFlt.items() if v is not None]);
+                  mkUrl			python: lambda d : here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));
+	          userName		python: resFlt['user_id'];
+                  showSuperseded	python: request.get('show_superseded', None);
+	">
       
-        <!-- 
-        <div tal:content="string:showSuperseded:$showSuperseded" />
-        -->
+        <!--div tal:content="string:showSuperseded:$showSuperseded" /-->
 
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
-        <div tal:define="global ecab_utils nocall:portal/ecab_utils;
-                         global has_items python: 0;"
-        >
+        <div tal:define="global has_items python: 0;">
 
           <metal:use use-macro="here/base_macros/macros/all_assignments_heading" />
           
@@ -58,7 +59,7 @@
           <form action=""
               method="post"
               name="allAssignmentsEditForm"
-              tal:attributes="action string:${here/absolute_url}/${template/getId}">
+	      tal:attributes="action string:${here/absolute_url}/${template/getId}">
 
             <div class="formControls visualNoPrint">
               <input class="standalone"
@@ -116,7 +117,6 @@
                       use_view_action     site_properties/typesUseViewActionInListings;
                       item_type_class     python: 'contenttype-' + normalizeString(item_type);
                       grades              elt/getNumericGrades | nothing;"
-                      condition="python: ((elt.isPrincipiaFolderish) or (not elt.isPrincipiaFolderish))"
                   >
 <!-- 
                       condition="python: ((elt.isPrincipiaFolderish and item_wf_state == 'published') or (not elt.isPrincipiaFolderish))"
@@ -148,7 +148,7 @@
                     </metal:recurse>
 
                     <tal:if condition="python: ecab_utils.isAssignmentBoxType(elt)">
-                      <tal:define define="items python: elt.getAssignmentsSummary(userName, showSuperseded);">
+                      <tal:define define="items python: elt.getAssignmentsSummary(id=resFlt['user_id'], showSuperseded=showSuperseded, state=resFlt['state']);">
                         <p tal:condition="not: items"
                             class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
                             i18n:translate="no_submissions">There are no submissions in this assignment box.

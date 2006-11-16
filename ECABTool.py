@@ -28,6 +28,7 @@ from Products.Archetypes.atapi import *
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
 from urlparse import urlsplit, urlunsplit
+import urllib
 from socket import gethostname, getfqdn
 from string import split, join
 
@@ -265,6 +266,11 @@ class ECABTool(UniqueObject, Folder):
         url = urlunsplit((url_parts[0], hostpart, \
                           url_parts[2], url_parts[3], url_parts[4]))
         return url
+
+    
+    security.declarePublic('urlencode')
+    def urlencode(self, *args, **kwargs):
+        return urllib.urlencode(*args, **kwargs)
 
 
     security.declarePrivate('sendEmail')

@@ -119,10 +119,9 @@
       <h1 class="documentFirstHeading">
         <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
 
-        <span tal:define="userName request/userName | nothing;"
-            tal:condition="userName" 
-            tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
-            tal:omit-tag="" />
+        <span tal:condition="userName" 
+	      tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
+              tal:omit-tag="" />
       </h1>
     </metal:define>
 
@@ -195,7 +194,7 @@
     <metal:define define-macro="all_assignments_tbody">
       <tbody>
         <tal:block tal:repeat="item items">
-            <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
+	  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
               tal:define="oddrow      repeat/item/odd;
                           item_type           item/portal_type;
                           item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
@@ -233,17 +232,19 @@
             <td tal:content="python: here.toLocalizedTime(item.CreationDate(), True)"/>
 
             <td>
-              <a tal:attributes="href python: '%s?userName=%s' % (template.id, item.Creator())"
+              <a tal:attributes="href python: mkUrl({'user_id' : item.Creator()});"
                  tal:content="python: ecab_utils.getFullNameById(item.Creator())"/>
             </td>
 
             <td>
-              <span i18n:domain="plone"
-                  i18n:translate=""
-                  tal:condition="item_state_title"
-                  tal:content="item_state_title"
-                  tal:attributes="class item_wf_state_class" />
-              <span tal:condition="not: item_state_title">&nbsp;</span>
+	      <a i18n:domain="plone"
+		i18n:translate=""
+		tal:condition="item_state_title"
+		tal:content="item_state_title"
+		tal:attributes="class	item_wf_state_class;
+		                href	python: mkUrl({'state' : item_wf_state});
+		"/>
+	      <span tal:condition="not: item_state_title">&nbsp;</span>
             </td>
 
             <td style="text-align: right">

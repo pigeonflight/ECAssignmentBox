@@ -266,7 +266,7 @@ class ECAssignmentBox(ATFolder):
 
 
     #security.declarePublic('getAssignmentsSummary')
-    def getAssignmentsSummary(self, id=None, showSuperseded=False):
+    def getAssignmentsSummary(self, id=None, showSuperseded=False, state=None):
         """
         Returns a list of all assginments inside this box. The assignments
         must be accessible by the current user.
@@ -288,6 +288,11 @@ class ECAssignmentBox(ATFolder):
 #        return summary
 
         review_states = ('submitted', 'pending', 'accepted', 'rejected', 'graded',)
+        
+        if state is not None:
+            if type(state) not in [tuple, list]:
+                state = (state,)
+            review_states = [s for s in state if s in review_states]
         
         if showSuperseded:
             review_states += ('superseded',)

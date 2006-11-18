@@ -29,6 +29,7 @@ from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
 from urlparse import urlsplit, urlunsplit
 import urllib
+import cgi
 from socket import gethostname, getfqdn
 from string import split, join
 
@@ -271,6 +272,10 @@ class ECABTool(UniqueObject, Folder):
     security.declarePublic('urlencode')
     def urlencode(self, *args, **kwargs):
         return urllib.urlencode(*args, **kwargs)
+
+    security.declarePublic('parseQueryString')
+    def parseQueryString(self, *args, **kwargs):
+        return cgi.parse_qs(*args, **kwargs)
 
 
     security.declarePrivate('sendEmail')

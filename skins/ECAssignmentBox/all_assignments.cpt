@@ -21,11 +21,13 @@
                   isOwner		python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
                   isGrader		python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
                   resFlt		python: {'user_id'		: request.get('user_id', None),
-	                                         'state'		: request.get('state', None), };
+	                                         'state'		: request.get('state', None),
+					         'show_superseded'	: request.get('show_superseded', None),
+					        };
                   resFlt2		python: dict([(k,v) for k,v in resFlt.items() if v is not None]);
                   mkUrl			python: lambda d : here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));
 	          userName		python: resFlt['user_id'];
-                  showSuperseded	python: request.get('show_superseded', None);
+                  showSuperseded	python: resFlt['show_superseded'];
 	">
       
         <!--div tal:content="string:showSuperseded:$showSuperseded" /-->
@@ -56,10 +58,10 @@
 
           <metal:use use-macro="here/base_macros/macros/user_details" />
 
-          <form action=""
+	  <form action=""
               method="post"
               name="allAssignmentsEditForm"
-	      tal:attributes="action string:${here/absolute_url}/${template/getId}">
+	      tal:attributes="action python: mkUrl({});">
 
             <div class="formControls visualNoPrint">
               <input class="standalone"
@@ -81,8 +83,6 @@
                      tal:attributes="tabindex tabindex/next;"
                      tal:condition="showSuperseded"
               />
-
-              <input type="hidden" name="show_superseded" tal:attributes="value showSuperseded"/>
             </div>
   
             <!-- start showing folder title and items -->

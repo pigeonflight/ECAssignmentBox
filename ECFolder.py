@@ -128,6 +128,13 @@ class ECFolder(ATFolder):
         },
 
         {
+        'action':      "string:$object_url/all_assignments_full",
+        'id':          'all_assignments_full',
+        'name':        'Assignments (full)',
+        'permissions': (permissions.ManageProperties,),
+        },
+
+        {
         'action':      "string:$object_url/by_student",
         'id':          'by_student',
         'name':        'Statistics',
@@ -389,13 +396,13 @@ class ECFolder(ATFolder):
         if published:
             #, 'depth':100
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, }, 
-                                           sort_on = 'getObjPositionInParent', 
+                                           #sort_on = 'getObjPositionInParent', 
                                            review_state = 'published',
                                            meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
                                            )
         else:
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), },
-                                           sort_on = 'getObjPositionInParent', 
+                                           #sort_on = 'getObjPositionInParent', 
                                            meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
                                            )
         return len(brains)

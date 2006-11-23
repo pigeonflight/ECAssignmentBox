@@ -306,7 +306,7 @@
                       <img tal:condition="assignment_icon" src=""
                            tal:attributes="src string:${assignment_icon}"/>
                       <tal:filename tal:replace="filename | fieldName"/>
-                      (<span tal:content="python:item.lookupMime(field.getContentType(item))">ContentType</span>
+                      (<span tal:content="python:assignment.lookupMime(field.getContentType(assignment))">ContentType</span>
                       <tal:size content="python:'%sKb' % (size / 1024)">0Kb</tal:size>)
                     </a>
 

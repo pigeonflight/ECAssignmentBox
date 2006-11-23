@@ -26,7 +26,7 @@
                   resFlt2           python: dict([(k,v) for k,v in resFlt.items() if v is not None]);
                   userName          python: resFlt['user_id'];
                   statesToShow      python: ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
-                  mkUrl             python: lambda d : here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));"
+                  mkUrl             python: lambda d : here.getActionInfo('object/%s' % template_id)['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));"
       >
       
         <!--  debug -->

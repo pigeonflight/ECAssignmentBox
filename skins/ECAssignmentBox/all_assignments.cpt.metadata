@@ -1,5 +1,5 @@
 [default]
-title = View all ECAssignments
+title = View all assignments in a table on one page
 
 [security]
 View = 0:Authenticated
@@ -9,6 +9,8 @@ validators=
 
 [actions]
 action.success..ToggleSuperseded=traverse_to:string:toggle_superseded
-action.success..Change=traverse_to:string:all_assignments_modify
-action.success=traverse_to:string:all_assignments_modify
+action.success..Change=traverse_to:string:assignments_change_state
+action.success..Cut=traverse_to:string:assignments_cut
+action.success..Delete=traverse_to:string:assignments_delete
+action.success=traverse_to:string:all_assignments
 action.failure=traverse_to:string:all_assignments

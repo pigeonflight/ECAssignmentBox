@@ -9,7 +9,6 @@
       i18n:domain="eduComponents">
 
   <body>
-    <!-- macros used in this project -->
 
     <!-- base view macro -->
     <metal:define define-macro="base_view">
@@ -36,8 +35,8 @@
     </metal:define>
 
     <!-- 
-      shows assignmentbox's text in a collapsible box and further information 
-      about student's submission.
+      shows text of an assignment box in a collapsible box and further  
+      information about the student's submission
     -->
     <metal:define define-macro="eca_view_head">
       <div metal:use-macro="here/document_actions/macros/document_actions"/>
@@ -93,8 +92,8 @@
       <div class="documentByLine"
         tal:define="item_type           here/portal_type;
                     item_wf_state       here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
-                      item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
-                      item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);"
+                    item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
+                    item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);"
       >
         <span i18n:translate="label_datetime">submitted at</span>
         <span tal:content="python: here.toLocalizedTime(here.CreationDate(), 1)"/>,
@@ -114,163 +113,6 @@
       </a>
     </metal:define>
 
-    <!-- headline in all assignments templates -->
-    <metal:define define-macro="all_assignments_heading">
-      <h1 class="documentFirstHeading">
-        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
-
-        <span tal:condition="userName" 
-	      tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
-              tal:omit-tag="" />
-      </h1>
-    </metal:define>
-
-
-    <!-- header of table in all assignments templates -->
-    <metal:define define-macro="all_assignments_thead">
-      <thead>
-        <tr>
-          <th class="nosort visualNoPrint">
-            <input 
-                type="checkbox"
-                onclick="toggleSelect"
-                name="xxx_toggle"
-                value="#"
-                id="xxx_toggle"
-                class="noborder"
-                tabindex=""
-                tal:attributes="tabindex tabindex/next;
-                                name     string:${elt/id}_toggle;
-                                id       string:${elt/id}_toggle;
-                                onclick  string:javascript:toggleSelect(this, '${elt/id}:list');"
-            />
-            <input type="hidden" name="" value="" 
-              tal:attributes="name  string:ecabox:list;
-                              value string:${elt/id};"
-            />
-          </th>
-          <th class="nosort">&nbsp;</th>
-          <th i18n:translate="label_date">Date</th>
-          <th i18n:translate="label_user">User</th>
-          <th i18n:translate="label_state">State</th>
-          <th i18n:translate="label_mark">Grade</th>
-          <th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
-        </tr>
-      </thead>
-    </metal:define>
-
-    <!-- -->
-    <metal:define define-macro="all_assignments_tfoot">
-      <tfoot tal:condition="grades">
-          <tr>
-            <td colspan="5"
-              i18n:translate="label_average_grade">Average Grade</td>
-            <td
-              style="text-align: right"
-              tal:content="python: ecab_utils.localizeNumber('%.2f',
-                                   ecab_utils.calculateMean(grades))"/>
-            <td/>
-          </tr>
-          <tr>
-            <td colspan="5"
-              i18n:translate="label_median_grade">Median Grade</td>
-            <td
-              style="text-align: right"
-              tal:content="python: ecab_utils.localizeNumber('%.2f',
-                                   ecab_utils.calculateMedian(grades))"/>
-            <td/>
-          </tr>
-          <tr>
-            <td colspan="7" i18n:translate="grade_statistics_help"
-              class="discreet">
-              Average and median grades are calculated from all assignments
-              in this assignment box which are in the state <em>graded</em> and
-              which have a grade assigned.</td>
-          </tr>
-      </tfoot>
-    </metal:define>
-
-    <!-- body of table in all assignments templates -->
-    <metal:define define-macro="all_assignments_tbody">
-      <tbody>
-        <tal:block tal:repeat="item items">
-	  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
-              tal:define="oddrow      repeat/item/odd;
-                          item_type           item/portal_type;
-                          item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
-                          item_state_title    python: wtool.getTitleForStateOnType(item_wf_state, item_type);
-                          item_wf_state_class python: 'state-' + putils.normalizeString(item_wf_state);
-                          item_id             item/getId;
-                          item_title_or_id    item/pretty_title_or_id;
-                          item_url            item/getURL|item/absolute_url;
-                          item_path           item/getPath | python:'/'.join(item.getPhysicalPath());
-                          hasGetUrl           python:hasattr(item.aq_explicit, 'getURL');
-                          item_rel_url        python: hasGetUrl and item.getURL(relative=1);"
-              tal:attributes="class python: test(oddrow, 'odd', 'even')">
-
-            <td class="visualNoPrint">
-              <input type="checkbox"
-                  class="noborder"
-                  tal:attributes="
-                      value   item_path;
-                      name    string:${elt/id}:list;
-                      id      string:${elt/id}_$item_id;
-                      checked python:test(request.get('ids_checked', False), 'checked', None);
-                      alt     string:Select $item_title_or_id;
-                      title   string:Select $item_title_or_id" 
-              />
-            </td>
-
-              <td>
-                <tal:repeat repeat="indicator item/getIndicators">
-                    <img tal:attributes="src   indicator/icon|nothing;
-                                     title indicator/title|nothing;
-                                         alt   indicator/alt|nothing;"/>
-                </tal:repeat>
-              </td>
-
-            <td tal:content="python: here.toLocalizedTime(item.CreationDate(), True)"/>
-
-            <td>
-              <a tal:attributes="href python: mkUrl({'user_id' : item.Creator()});"
-                 tal:content="python: ecab_utils.getFullNameById(item.Creator())"/>
-            </td>
-
-            <td>
-	      <a i18n:domain="plone"
-		i18n:translate=""
-		tal:condition="item_state_title"
-		tal:content="item_state_title"
-		tal:attributes="class	item_wf_state_class;
-		                href	python: mkUrl({'state' : item_wf_state});
-		"/>
-	      <span tal:condition="not: item_state_title">&nbsp;</span>
-            </td>
-
-            <td style="text-align: right">
-                    <span tal:define="field python: item.getField('mark')"
-                           tal:content="python: field.getAccessor(item)()"/>
-            </td>
-
-            <td class="visualNoPrint" style="text-align: center">
-              <a href="item_url"
-                  tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('view'))"
-                  i18n:translate="label_action_view">[View]</a>
-
-              <tal:block condition="isGrader">
-                <a href="item_url"
-                    tal:attributes="href python: '%s/%s' % (item_url, item.getTypeInfo().getActionById('grade'))"
-                    i18n:translate="label_action_grade">[Grade]</a>
-              </tal:block>
-
-                <a href="item_url"
-                    tal:attributes="href python: '%s/at_download/file' % (item_url,)"
-                    i18n:translate="label_action_download">[Download]</a>
-            </td>
-          </tr>
-        </tal:block>
-      </tbody>
-    </metal:define>
 
     <!-- shows user details -->
     <metal:define define-macro="user_details">

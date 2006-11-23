@@ -45,6 +45,7 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
     TextField(
         'assignment_text',
         required=True,
+        searchable = True,
         default_output_type = 'text/html',
         default_content_type = 'text/structured',
         allowable_content_types = TEXT_TYPES,
@@ -270,8 +271,6 @@ class ECAssignmentBox(ATFolder):
         """
         Returns a list of all assginments inside this box. The assignments
         must be accessible by the current user.
-
-        TODO: use portal_catalog
         """
 #        items = self.contentValues(filter={'portal_type':
 #                                           self.allowed_content_types})
@@ -311,13 +310,17 @@ class ECAssignmentBox(ATFolder):
         currentUser = self.portal_membership.getAuthenticatedMember()
         
         for brain in brains:
-            item = brain.getObject()
-
-            if (currentUser.checkPermission(permissions.View, item)):
-                if id and item.Creator() != id:
-                    continue
-
-                result.append(item)
+#            item = brain.getObject()
+#
+#            if (currentUser.checkPermission(permissions.View, item)):
+#                if id and item.Creator() != id:
+#                    continue
+#
+#                result.append(item)
+            if id and brain.Creator() != id:
+                continue
+                
+                result.append(brain)
 
         # sort itemds
         result.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
@@ -362,8 +365,6 @@ class ECAssignmentBox(ATFolder):
 
     def getNumericGrades(self):
         """
-        Add documentation here
-
         @return a list containing all grades assigned to graded
         submissions in this box
         """

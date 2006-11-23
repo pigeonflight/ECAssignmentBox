@@ -108,7 +108,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 
     StringField(
         'mark',
-        searchable = True,
+        #searchable = True,
         accessor = 'getGradeIfAllowed',
         edit_accessor = 'getGradeForEdit',
         mutator = 'setGrade',

@@ -39,7 +39,9 @@ from email.Header import Header
 
 # local imports
 from Products.ECAssignmentBox.Statistics import Statistics
-from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
+from Products.ECAssignmentBox.config import I18N_DOMAIN
+from Products.ECAssignmentBox.config import ECA_WORKFLOW_ID
+from Products.ECAssignmentBox.config import ECAB_META
 
 class ECABTool(UniqueObject, Folder):
     """Various utility methods."""
@@ -143,6 +145,36 @@ class ECABTool(UniqueObject, Folder):
         return hasattr(obj, 'getAssignmentsSummary')
 
 
+    security.declarePublic('isBoxType')
+    def isBoxType(self, item):
+        """
+        FIXME: We use static names which is not the best solution
+        """
+        return item.portal_type in (ECAB_META, 'ECAutoAssignmentBox', )
+
+    security.declarePublic('getStatesToShow')
+    def getStatesToShow(self, showSuperseded=False, state=None):
+        """
+        Returns a list of state names which will be used as a filter
+        for showing assignments.
+        """
+        
+        # FIXME: states are static names but they shoul better be taken from
+        #        workflow_tool for the given object
+        result = ('submitted', 'pending', 'accepted', 'rejected', 'graded',)
+        
+        if state is not None:
+            if type(state) not in [tuple, list]:
+                state = (state,)
+            result = [s for s in state if s in result]
+        
+        if showSuperseded:
+            result += ('superseded',)
+            
+        return result
+
+
+    
     #security.declarePublic('findAssignments')
     def findAssignments(self, context, id):
         """
@@ -219,6 +251,33 @@ class ECABTool(UniqueObject, Folder):
         return dl
 
 
+    #security.declarePrivate('getWfTransitions')
+    def getWfTransitions(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return all transitions for the given workflow
+        """
+        
+        result = {}
+        
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+
+        for tid in wf.transitions.keys():
+            tdef = wf.transitions.get(tid, None)
+            if tdef is not None and \
+               tdef.trigger_type == TRIGGER_USER_ACTION and \
+               tdef.actbox_name and \
+               not result.has_key(tdef.id):
+                result[tdef.id] = {
+                        'id': tdef.id,
+                        'title': tdef.title,
+                        'title_or_id': tdef.title_or_id(),
+                        'description': tdef.description,
+                        'name': tdef.actbox_name}
+        
+        return tuple(result.values())
+
+
     #security.declarePrivate('getWfTransitionsDisplayList')
     def getWfTransitionsDisplayList(self, wfName=ECA_WORKFLOW_ID):
         """
@@ -229,16 +288,12 @@ class ECABTool(UniqueObject, Folder):
 
         wtool = self.portal_workflow
         wf = wtool.getWorkflowById(wfName)
-        transKeys = wf.transitions.keys()
-        
-        for key in transKeys:
-            # trigger type must be TRIGGER_USER_ACTION, 
-            # i.e., transition can be initiated by a user
-            if wf.transitions[key].trigger_type == TRIGGER_USER_ACTION:
-                dl.add(key, wf.transitions[key].actbox_name)
+
+        for transition in self.getWfTransitions():
+            # FIXME: not sure if this works with the result from getWfTransitions
+            dl.add(transition.id, transition.actbox_name)
 
         return dl.sortedByValue()
-        #return dl
 
 
     def normalizeURL(self, url):

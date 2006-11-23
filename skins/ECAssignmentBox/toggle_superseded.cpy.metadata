@@ -5,5 +5,5 @@ title = Toggle show superseded assignments
 validators=
 
 [actions]
-action.success=traverse_to:string:all_assignments
-action.failure=traverse_to:string:all_assignments
+action.success=redirect_to:request/orig_template|string:all_assignments
+action.failure=redirect_to:request/orig_template|string:all_assignments

@@ -25,7 +25,8 @@
                       isEffective   here/isEffective;
                       is_published  python: item_wf_state == 'published';
                       is_owner      python: user.has_role(['Owner', 'Reviewer', 'Manager'], context.aq_parent);
-                      canResubmit   python: here.canResubmit() and is_published;">
+                      canResubmit   python: here.canResubmit() and is_published;
+	              tries_left    python: here.getMaxTries() - here.getTries();">
 
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
       
@@ -39,6 +40,13 @@
           </span>
           <span tal:content="python: here.toLocalizedTime(here.getSubmission_period_end(), True)"/>
         </div>
+
+	<div class="documentByLine"
+	  tal:condition="python: here.submission_period_end and isEffective and not hasExpired and here.getMaxTries()">
+	  <span i18n:translate="tries_info">
+	    You have <b i18n:name="count" tal:content="tries_left"/> attempts left.
+	  </span>
+	</div>
   
         <a class="link-parent visualNoPrint"
            href=""
@@ -147,16 +155,19 @@
         <div class="field">
           <i tal:condition="python: is_published and hasExpired"
              i18n:translate="submission_period_expired">
-            The submission period has expired.</i>
+	    The submission period has expired.</i>
       
           <i tal:condition="python: not is_published or not isEffective"
              i18n:translate="submission_period_not_effective">
-            Submissions are not yet allowed.</i>
+	    Submissions are not yet allowed.</i>
   
-          <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired)"
+          <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired) and (tries_left > 0)"
              i18n:translate="submission_cannot_resubmit">
-            Submission not permitted: An earlier submission is under review
-            or has already been accepted.</i>
+            Submission not permitted: An earlier submission is under review or has already been accepted.</i>
+
+          <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired) and (tries_left == 0)"
+             i18n:translate="submission_max_tries_reached">
+            Submission not permitted: You have reached the maximum number of attempts.</i>
         </div>
   
         <div metal:use-macro="here/document_byline/macros/byline" />

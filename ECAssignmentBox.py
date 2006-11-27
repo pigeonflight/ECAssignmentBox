@@ -101,6 +101,20 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
+    IntegerField('maxTries',
+        searchable = False,
+        required = True,
+        default = 3,
+        validators = ('isInt', 'isPositive'),
+        widget = IntegerWidget(
+            label = "Maximum number of tries",
+            label_msgid = "label_max_tries",
+            description = "Maximum number of tries, 0 means unlimited",
+            description_msgid = "help_max_tries",
+            i18n_domain = I18N_DOMAIN,
+        ),
+    ),
+
     BooleanField('wrapAnswer',
         default=True,
         widget=BooleanWidget(
@@ -250,18 +264,55 @@ class ECAssignmentBox(ATFolder):
         else:
             return True
 
+
+    security.declarePublic('getTries')
+    def getTries(self):
+        """
+        EXPERIMENTAL.  Return the number of submissions of the current
+        user.
+        """
+        
+        user_id = self.portal_membership.getAuthenticatedMember().getId()
+        catalog = getToolByName(self, 'portal_catalog')
+
+        brains = catalog.searchResults(
+            path          = {'query': '/'.join(self.getPhysicalPath()),
+                             'depth': 1,},
+            Creator       = user_id,
+            contentFilter = {'portal_type': (ECA_META, 'ECAutoAssignment')},
+        )
+
+        return len(brains)
+
+
     security.declarePublic('canResubmit')
     def canResubmit(self):
+        """
+        Return whether submissions are possible.  Submissions are not
+        possible if there is an assignment which cannot be superseded,
+        or if the maximum number of tries has been reached.
+        """
+        
         user_id = self.portal_membership.getAuthenticatedMember().getId()
         wtool = self.portal_workflow
-        
-        assignments = self.contentValues(filter = {'Creator': user_id})
-        
-        for a in assignments:
-            wf = wtool.getWorkflowsFor(a)[0]
-            if wf.getInfoFor(a, 'review_state', '') != 'superseded' \
-                   and not wf.isActionSupported(a, 'supersede'):
-                return False
+        catalog = getToolByName(self, 'portal_catalog')
+
+        brains = catalog.searchResults(
+            path          = {'query': '/'.join(self.getPhysicalPath()),
+                             'depth': 1,},
+            Creator       = user_id,
+            contentFilter = {'portal_type': (ECA_META, 'ECAutoAssignment')},
+        )
+
+        if self.getMaxTries() and len(brains) >= self.getMaxTries():
+            return False
+
+        for brain in brains:
+            if brain.review_state != 'superseded':
+                a = brain.getObject()
+                wf = wtool.getWorkflowsFor(a)[0]
+                if not wf.isActionSupported(a, 'supersede'):
+                    return False
         
         return True
 

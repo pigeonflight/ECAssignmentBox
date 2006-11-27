@@ -651,6 +651,12 @@ msgid "submission_cannot_resubmit"
 msgstr ""
 
 
+#: ./skins/ECAssignmentBox/ecab_view.cpt
+# Original: "Submission not permitted: You have reached the maximum number of attempts."
+msgid "submission_max_tries_reached"
+msgstr ""
+
+
 #: ./skins/ECAssignmentBox/ecfolder_view.pt
 #. <span i18n:translate="submission_period_ended">
 #.                         Submission period ended:
@@ -684,6 +690,12 @@ msgstr ""
 #. </i>
 # Original: "The submission period is not effective."
 msgid "submission_period_not_effective"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_view.cpt
+# Original: "You have ${count} attempts left."
+msgid "tries_info"
 msgstr ""
 
 

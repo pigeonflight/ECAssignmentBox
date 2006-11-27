@@ -640,6 +640,12 @@ msgid "submission_cannot_resubmit"
 msgstr "Einreichung nicht möglich: Eine frühere Einreichung wird gerade geprüft oder ist bereits akzeptiert worden."
 
 
+#: ./skins/ECAssignmentBox/ecab_view.cpt
+# Original: "Submission not permitted: You have reached the maximum number of attempts."
+msgid "submission_max_tries_reached"
+msgstr "Einreichung nicht möglich: Maximale Anzahl an Versuchen erreicht."
+
+
 #: ./skins/ECAssignmentBox/ecfolder_view.pt
 #. <span i18n:translate="submission_period_ended">
 #.                         Submission period ended:
@@ -674,6 +680,12 @@ msgstr "Der Zeitraum für Einreichungen ist abgelaufen."
 # Original: "The submission period is not effective."
 msgid "submission_period_not_effective"
 msgstr "Einreichungen sind noch nicht möglich."
+
+
+#: ./skins/ECAssignmentBox/ecab_view.cpt
+# Original: "You have ${count} attempts left."
+msgid "tries_info"
+msgstr "Sie haben noch ${count} Versuche."
 
 
 #: ./skins/ECAssignmentBox/eca_add.cpy

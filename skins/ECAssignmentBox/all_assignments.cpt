@@ -120,7 +120,7 @@
                 <tal:if condition="python: ecab_utils.isBoxType(item)">
 
                   <tal:define define="
-                          path   python: (hasattr(item, 'getPath') and item.getPath()) or item.absolute_url_path();
+                          path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
                           brains python: (userName and here.portal_catalog(path={'query':path, 'depth':1, }, 
                                                                            sort_on = 'getObjPositionInParent', 
                                                                            review_state=statesToShow, 
@@ -167,7 +167,7 @@
                                            and item.is_folderish">
                 
                   <div tal:define="
-                          path   python: (hasattr(item, 'getPath') and item.getPath()) or item.absolute_url_path();
+                          path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
                           brains python: here.portal_catalog(path={'query':path, 'depth':1, },
                                                              sort_on = 'getObjPositionInParent', 
                                                              review_state=('published', ), );"

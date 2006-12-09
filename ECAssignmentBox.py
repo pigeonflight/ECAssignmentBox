@@ -189,7 +189,7 @@ class ECAssignmentBox(ATFolder):
         'permissions': (permissions.View,),
         # Only display the assignments tab if there actually are assignments
         #'condition':   'python: len(here.contentValues()) > 0',
-        'condition':   'python: len(python:here.portal_catalog(path={"query":"/".join(here.getPhysicalPath()), "depth":1, },)) > 0',
+        'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
         },
 
         {
@@ -198,7 +198,7 @@ class ECAssignmentBox(ATFolder):
         'name':        'Assignments (full)',
         # Only display the assignments_full tab if there actually are assignments
         #'condition':   'python: len(here.portal_catalog(path=here.absolute_url_path())) > 0',
-        'condition':   'python: len(python:here.portal_catalog(path={"query":"/".join(here.getPhysicalPath()), "depth":1, },)) > 0',
+        'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
         'permissions': (permissions.ManageProperties,),
         },
 
@@ -216,6 +216,14 @@ class ECAssignmentBox(ATFolder):
         })
 
     # -- methods --------------------------------------------------------------
+    security.declarePrivate('isAssignmentBoxType')
+    def isAssignmentBoxType(self):
+        """
+        Returns True
+        """
+        return 1
+
+
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
         BaseFolder.manage_afterAdd(self, item, container)
@@ -328,66 +336,68 @@ class ECAssignmentBox(ATFolder):
         return True
 
 
-    #security.declarePublic('getAssignmentsSummary')
-    def getAssignmentsSummary(self, id=None, showSuperseded=False, state=None):
-        """
-        Returns a list of all assginments inside this box. The assignments
-        must be accessible by the current user.
-        """
-#        items = self.contentValues(filter={'portal_type':
-#                                           self.allowed_content_types})
-#        items.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
-#        wtool = self.portal_workflow
-#        current_user = self.portal_membership.getAuthenticatedMember()
-#        summary = []
+# FIXME: delete, because getAssignmentsSummary is unused
+#    #security.declarePublic('getAssignmentsSummary')
+#    def getAssignmentsSummary(self, id=None, showSuperseded=False, state=None):
+#        """
+#        Returns a list of all assginments inside this box. The assignments
+#        must be accessible by the current user.
+#        """
+##        items = self.contentValues(filter={'portal_type':
+##                                           self.allowed_content_types})
+##        items.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
+##        wtool = self.portal_workflow
+##        current_user = self.portal_membership.getAuthenticatedMember()
+##        summary = []
+##        
+##        for item in items:
+##            if (current_user.checkPermission(permissions.View, item)):
+##                if id and item.Creator() != id:
+##                    continue
+##                summary.append(item)
+##        return summary
+#
+#        review_states = ('submitted', 'pending', 'accepted', 'rejected', 'graded',)
 #        
-#        for item in items:
-#            if (current_user.checkPermission(permissions.View, item)):
-#                if id and item.Creator() != id:
-#                    continue
-#                summary.append(item)
-#        return summary
-
-        review_states = ('submitted', 'pending', 'accepted', 'rejected', 'graded',)
-        
-        if state is not None:
-            if type(state) not in [tuple, list]:
-                state = (state,)
-            review_states = [s for s in state if s in review_states]
-        
-        if showSuperseded:
-            review_states += ('superseded',)
-
-        catalog = getToolByName(self, 'portal_catalog')
-
-        brains = catalog.searchResults(
-                    path = {'query':'/'.join(self.getPhysicalPath()), 'depth':1, },
-                    #sort_on = 'CreationDate', 
-                    review_state = review_states,
-                    contentFilter = {'portal_type':(ECA_META, 'ECAutoAssignment')},
-                    #meta_type = (ECA_META, 'ECAutoAssignment', ),
-                )
-        
-        result = []
-        currentUser = self.portal_membership.getAuthenticatedMember()
-        
-        for brain in brains:
-#            item = brain.getObject()
+#        if state is not None:
+#            if type(state) not in [tuple, list]:
+#                state = (state,)
+#            review_states = [s for s in state if s in review_states]
+#        
+#        if showSuperseded:
+#            review_states += ('superseded',)
 #
-#            if (currentUser.checkPermission(permissions.View, item)):
-#                if id and item.Creator() != id:
-#                    continue
+#        catalog = getToolByName(self, 'portal_catalog')
 #
-#                result.append(item)
-            if id and brain.Creator() != id:
-                continue
-                
-                result.append(brain)
+#        brains = catalog.searchResults(
+#                    path = {'query':'/'.join(self.getPhysicalPath()), 'depth':1, },
+#                    #sort_on = 'CreationDate', 
+#                    review_state = review_states,
+#                    contentFilter = {'portal_type':(ECA_META, 'ECAutoAssignment')},
+#                    #meta_type = (ECA_META, 'ECAutoAssignment', ),
+#                )
+#        
+#        result = []
+#        currentUser = self.portal_membership.getAuthenticatedMember()
+#        
+#        for brain in brains:
+##            item = brain.getObject()
+##
+##            if (currentUser.checkPermission(permissions.View, item)):
+##                if id and item.Creator() != id:
+##                    continue
+##
+##                result.append(item)
+#            if id and brain.Creator() != id:
+#                continue
+#                
+#                result.append(brain)
+#
+#        # sort itemds
+#        result.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
+#
+#        return result
 
-        # sort itemds
-        result.sort(lambda a, b: cmp(a.CreationDate(), b.CreationDate()))
-
-        return result
 
     def getGradeForStudent(self, student):
         """
@@ -472,6 +482,5 @@ class ECAssignmentBox(ATFolder):
                                          putils.getOwnerName(self), 'email'))
        
         return addresses
-
 
 registerATCT(ECAssignmentBox, PROJECTNAME)

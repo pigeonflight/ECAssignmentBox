@@ -57,7 +57,61 @@ def removePrefsPanel(self):
         cp.unregisterApplication(PROJECTNAME)
 
 
-def install(self):
+def addCatalogIndex(self, out, catalog, index, type, extra=None):
+    """
+    Add the given index name, of the given type, to the catalog.
+    """
+    if index not in catalog.indexes():
+        catalog.addIndex(index, type, extra)
+        print >> out, "Added index", index, "to catalog"
+    else:
+        print >> out, "Index", index, "already in catalog"
+
+
+def addCatalogMetadata(self, out, catalog, column):
+    """
+    Add the given column to the catalog's metadata schema
+    """
+    if column not in catalog.schema():
+        catalog.addColumn(column)
+        print >> out, "Added", column, "to catalog metadata"
+    else:
+        print >> out, column, "already in catalog metadata"
+
+
+def removeCatalogMetadata(self, out, catalog, column):
+    """
+    Delete the given metadata column
+    """
+    # QueueCatalog work-around
+    if catalog.meta_type == 'ZCatalog Queue':
+         catalog = self.unrestrictedTraverse(catalog._location)
+    if column in catalog.schema():
+        catalog.delColumn(column)
+        print >> out, "Removed column", column
+    else:
+        print >> out, "Column", column, "not in catalog"
+
+
+def setupCatalog(self, out, reinstall):
+    """
+    """
+    catalog = getToolByName(self, 'portal_catalog')
+    addCatalogMetadata(self, out, catalog, 'isAssignmentBoxType')
+    addCatalogIndex(self, out, catalog, 'isAssignmentBoxType', 'FieldIndex')
+
+
+def cleanCatalog(self, out, reinstall):
+    """
+    """
+    catalog = getToolByName(self, 'portal_catalog')
+    if not reinstall:
+        removeCatalogMetadata(self, out, catalog, 'isAssignmentBoxType')
+
+
+def install(self, reinstall=False):
+    """
+    """
     out = StringIO()
 
     installTypes(self, out, listTypes(PROJECTNAME), PROJECTNAME)
@@ -78,10 +132,14 @@ def install(self):
         out.write('Deleting old ecab_utils; make sure you repeat customizations.\n')
     addTool = self.manage_addProduct[PROJECTNAME].manage_addTool
     addTool(TOOL_META)
+
     # set title of tool:
     tool = getToolByName(self, TOOL_NAME)
     tool.title = TOOL_TITLE
     print >> out, "Added ecab_utils to the portal root folder.\n"
+
+    # setup catalog metadata
+    setupCatalog(self, out, reinstall)
 
     # register tool to preferences panel
     addPrefsPanel(self, out)
@@ -158,6 +216,10 @@ def uninstall(self, reinstall):
     """
     out = StringIO()
 
+    # remove metadata from catalog
+    cleanCatalog(self, out, reinstall)
+
+    # remove prefs panel
     removePrefsPanel(self)
 
     # FIXME: use method

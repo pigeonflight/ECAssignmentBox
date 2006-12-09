@@ -28,7 +28,12 @@
                   statesToShow      python: ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
                   mkUrl             python: lambda d : here.getActionInfo('object/%s' % template_id)['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));"
       >
-      
+<!--       
+                  mkUrl             python: lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
+--> 
+
+        <div tal:content="template_id" />
+     
         <!--  debug -->
         <!-- 
         <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
@@ -87,6 +92,8 @@
                      tal:attributes="tabindex tabindex/next;"
                      tal:condition="python: resFlt['show_superseded']"
               />
+               
+              <input type="hidden" name="orig_template" tal:attributes="value template_id"/>
             </div>
   
             <!-- start showing folder title and items -->

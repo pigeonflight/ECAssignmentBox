@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# $Id: ECAssignmentWorkflow.py,v 1.11 2006/04/20 16:06:07 mxp Exp $
+# $Id: permissions.py,v 1.1 2006/04/21 17:53:06 mxp Exp $
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universit‰t Magdeburg
+# Copyright (c) 2006 Otto-von-Guericke-Universit√§t Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -25,6 +25,7 @@ from Products.CMFCore import permissions
 
 View                = permissions.View
 ModifyPortalContent = permissions.ModifyPortalContent
+ManageProperties    = permissions.ManageProperties
 
 GradeAssignments    = 'eduComponents: Grade Assignments'
 

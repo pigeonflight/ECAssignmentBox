@@ -19,29 +19,28 @@
 # along with ECAssignmentBox; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
-from OFS.Folder import Folder
-from Products.CMFCore.utils import UniqueObject, getToolByName
-
-from Products.Archetypes.atapi import *
-from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
-
+import urllib, cgi
 from urlparse import urlsplit, urlunsplit
-import urllib
-import cgi
 from socket import gethostname, getfqdn
 from string import split, join
 
+from AccessControl import ClassSecurityInfo
+from Globals import InitializeClass
+from OFS.Folder import Folder
 from ZODB.POSException import ConflictError
 from email.MIMEText import MIMEText
 from email.Header import Header
+
+from Products.Archetypes.atapi import *
+from Products.CMFCore.utils import UniqueObject, getToolByName
+from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
 # local imports
 from Products.ECAssignmentBox.Statistics import Statistics
 from Products.ECAssignmentBox.config import I18N_DOMAIN
 from Products.ECAssignmentBox.config import ECA_WORKFLOW_ID
 from Products.ECAssignmentBox.config import ECAB_META
+from Products.ECAssignmentBox.permissions import GradeAssignments
 
 class ECABTool(UniqueObject, Folder):
     """Various utility methods."""
@@ -139,18 +138,32 @@ class ECABTool(UniqueObject, Folder):
 
 
     security.declarePublic('isAssignmentBoxType')
-    def isAssignmentBoxType(self, obj):
+    def isAssignmentBoxType(self, item):
         """
+        Returns True if item has a method 'isAssignmentBoxType' or - in case
+        item is a ctalog brain- index 'isAssignmentBoxType' is True
         """
-        return hasattr(obj, 'getAssignmentsSummary')
+        return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
 
+    def isGrader(self, item, id=None):
+        """
+        Returns True if the user given by id has permission to grade the
+        assignment given by item; otherwise False.
+        
+        If id is None, the check will be done for the current user.
+        
+        @param item an assignment
+        @param id a user id
+        """
+        mtool = self.portal_membership
+        
+        if not id:
+            member = mtool.getAuthenticatedMember()
+        else:
+            member = mtool.getMemberById(id)
+            
+        return member.checkPermission(GradeAssignments, item)
 
-    security.declarePublic('isBoxType')
-    def isBoxType(self, item):
-        """
-        FIXME: We use static names which is not the best solution
-        """
-        return item.portal_type in (ECAB_META, 'ECAutoAssignmentBox', )
 
     security.declarePublic('getStatesToShow')
     def getStatesToShow(self, showSuperseded=False, state=None):
@@ -204,7 +217,7 @@ class ECABTool(UniqueObject, Folder):
         """
         """
         try:
-            stats = Statistics(list)
+            stats = Statistics(map((float), list))
         except:
             return None
 
@@ -216,7 +229,7 @@ class ECABTool(UniqueObject, Folder):
         """
         """
         try:
-            stats = Statistics(list)
+            stats = Statistics(map((float), list))
         except:
             return None
 

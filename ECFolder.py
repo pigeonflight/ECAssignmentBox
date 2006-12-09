@@ -127,12 +127,12 @@ class ECFolder(ATFolder):
         'permissions': (permissions.View,),
         },
 
-        {
-        'action':      "string:$object_url/all_assignments_full",
-        'id':          'all_assignments_full',
-        'name':        'Assignments (full)',
-        'permissions': (permissions.ManageProperties,),
-        },
+#        {
+#        'action':      "string:$object_url/all_assignments_full",
+#        'id':          'all_assignments_full',
+#        'name':        'Assignments (full)',
+#        'permissions': (permissions.ManageProperties,),
+#        },
 
         {
         'action':      "string:$object_url/by_student",
@@ -175,6 +175,7 @@ class ECFolder(ATFolder):
         @return a dictionary containing user-id as key and summarized states
                 as value
         """
+#FIXME: del comment liens
 #        wtool = self.portal_workflow
 #        items = self.contentValues(filter={'portal_type': 
 #                                            self.allowed_content_types})

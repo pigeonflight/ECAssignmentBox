@@ -125,9 +125,10 @@
                                                                            sort_on = 'getObjPositionInParent', 
                                                                            review_state=statesToShow, 
                                                                            Creator=userName, ))
-                                          or here.portal_catalog(path={'query':path, 'depth':1, }, 
+                                         or 
+                                         (not userName and here.portal_catalog(path={'query':path, 'depth':1, }, 
                                                                  sort_on = 'getObjPositionInParent', 
-                                                                 review_state=statesToShow, );
+                                                                 review_state=statesToShow, ));
                           grades python: [];"
                   >
 

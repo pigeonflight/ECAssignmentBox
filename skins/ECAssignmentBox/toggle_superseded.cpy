@@ -34,5 +34,15 @@ query['show_superseded'] = showSuperseded
 
 #query['portal_status_message'] = query.items()
 
-target = context.getActionInfo('object/all_assignments')['url']
+# in the following we use redirect to go back to the template
+# this overrides settings in toggle_superseded.cpy.metadata
+
+orig_template = 'all_assignments'
+
+if REQUEST.has_key('orig_template'):
+    orig_template = REQUEST['orig_template']
+
+    
+target = context.getActionInfo('object/%s' % orig_template)['url']
+ 
 return RESPONSE.redirect('%s?%s' % (target, ecab_utils.urlencode(query)))

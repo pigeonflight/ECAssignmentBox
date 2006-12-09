@@ -446,6 +446,31 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                 return '(' + result + ')'
 
 
+    security.declarePublic('getGradeDisplayValue')
+    def getGradeDisplayValue(self):
+        """
+        Formats and returns the grade if given .
+        
+        @return string value of the given grade or nothing
+        """
+        wtool = self.portal_workflow
+        state = wtool.getInfoFor(self, 'review_state', '')
+        
+        if self.mark:
+            try:
+                value = self.mark
+                prec = len(value) - value.find('.') - 1
+                result = self.ecab_utils.localizeNumber("%.*f",
+                                                        (prec, float(value)))
+            except ValueError:
+                result = self.mark
+
+            if state == 'graded':
+                return result
+            else:
+                return '(%s)' % result
+
+
     #security.declarePublic('getGradeForEdit')
     def getGradeForEdit(self):
         """

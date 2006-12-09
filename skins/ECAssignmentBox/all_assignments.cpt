@@ -64,7 +64,7 @@
           
           <form action=""
                 method="post"
-                name="allAssignmentsEditForm"
+                name="all_assignments_form"
                 tal:attributes="action python: mkUrl({});">
     
             <div class="formControls visualNoPrint">
@@ -117,7 +117,7 @@
               <metal:macro define-macro="list">
               
                 <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
-                <tal:if condition="python: ecab_utils.isBoxType(item)">
+                <tal:if condition="python: ecab_utils.isAssignmentBoxType(item)">
 
                   <tal:define define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
@@ -127,7 +127,8 @@
                                                                            Creator=userName, ))
                                           or here.portal_catalog(path={'query':path, 'depth':1, }, 
                                                                  sort_on = 'getObjPositionInParent', 
-                                                                 review_state=statesToShow, );"
+                                                                 review_state=statesToShow, );
+                          grades python: [];"
                   >
 
                     <!--
@@ -144,12 +145,7 @@
                     <table class="listing" tal:condition="brains">
                       <!-- write table header -->
                       <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_thead" />
-                      
-                      <!-- write table footer -->
-                      <!-- FIXME: 
-                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tfoot" />
-                      -->
-                      
+                                            
                       <!--  add table contents -->
                       <tal:block define="wtool here/portal_workflow;
                                          global has_items python: 1;"
@@ -157,21 +153,27 @@
                         <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tbody" />
                       </tal:block>
 
+                      <!-- write table footer -->
+                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tfoot" />
+
                     </table>
 
                   </tal:define>
                 </tal:if>
 
                 <!-- process all other published items inside this item -->
-                <tal:if condition="python: not ecab_utils.isBoxType(item)
+                <tal:if condition="python: not ecab_utils.isAssignmentBoxType(item)
                                            and item.is_folderish">
                 
                   <div tal:define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
                           brains python: here.portal_catalog(path={'query':path, 'depth':1, },
-                                                             sort_on = 'getObjPositionInParent', 
-                                                             review_state=('published', ), );"
+                                                             sort_on = 'getObjPositionInParent', );"
                       tal:repeat="brain brains">
+                      
+<!--  
+                                                             review_state=('published', ),
+-->
 
                     <tal:block define="
                         item_title          brain/Title;

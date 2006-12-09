@@ -107,7 +107,8 @@
                           assignment_url            brain/getURL;
                           assignment_path           brain/getPath;
                           assignment_date           python: here.toLocalizedTime(brain.CreationDate, True);
-                          assignment_creator        brain/Creator;"
+                          assignment_creator        brain/Creator;
+                          assignment_grade          assignment/getGradeDisplayValue;"
               tal:attributes="class python: test(oddrow, 'odd', 'even')">
 
             <td class="visualNoPrint">
@@ -152,9 +153,21 @@
             </td>
 
             <td style="text-align: right">
-              <!-- FIXME: fiel 'mark' is only available by the real object (not by the brain) -->
-              <span tal:define="field python: assignment.getField('mark')"
-                    tal:content="python: field.getAccessor(assignment)()"/>
+              <!-- FIXME: field 'mark' is only available by the real object (not by the brain) -->
+              
+              <tal:if tal:condition="assignment_grade">
+              
+                <tal:if condition="python:assignment_wf_state=='graded'">
+                  <tal:append define="dummy python:grades.append(assignment.mark);" />
+                  <span tal:content="python:assignment_grade" />
+                </tal:if>
+
+                <tal:if condition="python:assignment_wf_state!='graded'">                
+                  <span tal:condition="python:ecab_utils.isGrader(assignment)" 
+                      tal:content="python:assignment_grade" />
+                </tal:if>
+
+              </tal:if>
             </td>
 
             <td class="visualNoPrint" style="text-align: center">
@@ -231,6 +244,7 @@
                           assignment_path           brain/getPath;
                           assignment_date           python: here.toLocalizedTime(brain.CreationDate, True);
                           assignment_creator        brain/Creator;
+                          assignment_grade          assignment/getGradeDisplayValue;
                           assignment_icon           brain/getIcon;"
               tal:attributes="class python: test(oddrow, 'odd', 'even')">
 

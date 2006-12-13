@@ -23,11 +23,22 @@
                       item_wf_state here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
                       hasExpired    here/hasExpired;
                       isEffective   here/isEffective;
-                      is_published  python: item_wf_state == 'published';
-                      is_owner      python: user.has_role(['Owner', 'Reviewer', 'Manager'], context.aq_parent);
-                      canResubmit   python: here.canResubmit() and is_published;
-	              tries_left    python: here.getMaxTries() - here.getTries();">
-
+                      isPublished   python: item_wf_state == 'published';
+                      isOwner       python: user.has_role(['Owner', 'Reviewer', 'Manager'], here);
+                      canSupersed   python: here.canSupersed();
+                      canRetry      python: here.canRetry();
+                      tries_left    python: here.getMaxTries() - here.getTries();">
+                      
+        <!-- debug -->
+        <!--
+        <div tal:content="string:hasExpired:$hasExpired" />
+        <div tal:content="string:isEffective:$isEffective" />
+        <div tal:content="string:isPublished:$isPublished" />
+        <div tal:content="string:isOwner:$isOwner" />
+        <div tal:content="string:canSupersed:$canSupersed" />
+        <div tal:content="string:canRetry:$canRetry" />
+        -->
+ 
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
       
         <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
@@ -41,12 +52,21 @@
           <span tal:content="python: here.toLocalizedTime(here.getSubmission_period_end(), True)"/>
         </div>
 
-	<div class="documentByLine"
-	  tal:condition="python: here.submission_period_end and isEffective and not hasExpired and here.getMaxTries()">
-	  <span i18n:translate="tries_info">
-	    You have <b i18n:name="count" tal:content="tries_left"/> attempts left.
-	  </span>
-	</div>
+        <div class="documentByLine"
+            tal:condition="python: here.submission_period_end and isEffective and hasExpired">
+
+          <span i18n:translate="submission_period_ended">
+            Submission period ended: 
+          </span>
+          <span tal:content="python: here.toLocalizedTime(here.getSubmission_period_end(), True)"/>
+        </div>
+
+        <div class="documentByLine"
+          tal:condition="python: isEffective and not hasExpired and here.getMaxTries()">
+          <span i18n:translate="tries_info">
+            You have <b i18n:name="count" tal:content="tries_left"/> attempts left.
+          </span>
+        </div>
   
         <a class="link-parent visualNoPrint"
            href=""
@@ -95,8 +115,8 @@
             method="post"
             enctype="multipart/form-data"
             tal:attributes="action string:${here/absolute_url}/${template/getId}"
-            tal:condition="python: (not hasExpired and isEffective and
-                           canResubmit) or is_owner">
+            tal:condition="python: isOwner or (not hasExpired and isEffective and
+                           canSupersed and canRetry and isPublished)">
   
           <!-- text field -->
           <div class="field">
@@ -148,24 +168,26 @@
           </div>
   
           <!-- hidden fields -->
+          <!-- 
           <input type="hidden" name="user_id" tal:attributes="value user_id"/>          
+          -->
           <input type="hidden" name="form.submitted" value="1" />
         </form>
       
         <div class="field">
-          <i tal:condition="python: is_published and hasExpired"
-             i18n:translate="submission_period_expired">
-	    The submission period has expired.</i>
-      
-          <i tal:condition="python: not is_published or not isEffective"
+          <i tal:condition="python: not isPublished or not isEffective"
              i18n:translate="submission_period_not_effective">
-	    Submissions are not yet allowed.</i>
-  
-          <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired) and (tries_left > 0)"
+            Submissions are not yet allowed.</i>
+
+          <i tal:condition="python: isPublished and hasExpired"
+             i18n:translate="submission_period_expired">
+            The submission period has expired.</i>
+        
+          <i tal:condition="python: isPublished and (not hasExpired) and (not canSupersed)"
              i18n:translate="submission_cannot_resubmit">
             Submission not permitted: An earlier submission is under review or has already been accepted.</i>
 
-          <i tal:condition="python: is_published and (not canResubmit) and (not hasExpired) and (tries_left == 0)"
+          <i tal:condition="python: isPublished and (not hasExpired) and canSupersed and not canRetry"
              i18n:translate="submission_max_tries_reached">
             Submission not permitted: You have reached the maximum number of attempts.</i>
         </div>

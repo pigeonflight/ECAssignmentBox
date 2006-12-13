@@ -298,40 +298,60 @@ class ECAssignmentBox(ATFolder):
             path          = {'query': '/'.join(self.getPhysicalPath()),
                              'depth': 1,},
             Creator       = user_id,
-            contentFilter = {'portal_type': (ECA_META, 'ECAutoAssignment')},
+            contentFilter = {'portal_type': self.allowed_content_types},
         )
 
         return len(brains)
 
 
-    security.declarePublic('canResubmit')
-    def canResubmit(self):
+    security.declarePublic('canSupersed')
+    def canSupersed(self):
         """
         Return whether submissions are possible.  Submissions are not
-        possible if there is an assignment which cannot be superseded,
-        or if the maximum number of tries has been reached.
+        possible if there is an assignment which cannot be superseded.
         """
         
-        user_id = self.portal_membership.getAuthenticatedMember().getId()
         wtool = self.portal_workflow
         catalog = getToolByName(self, 'portal_catalog')
+        
+        member = self.portal_membership.getAuthenticatedMember()
 
         brains = catalog.searchResults(
-            path          = {'query': '/'.join(self.getPhysicalPath()),
-                             'depth': 1,},
-            Creator       = user_id,
-            contentFilter = {'portal_type': (ECA_META, 'ECAutoAssignment')},
+            path          = {'query': '/'.join(self.getPhysicalPath()), 'depth': 1,},
+            Creator       = member.getId(),
+            contentFilter = {'portal_type': self.allowed_content_types},
         )
-
-        if self.getMaxTries() and len(brains) >= self.getMaxTries():
-            return False
-
+        
         for brain in brains:
             if brain.review_state != 'superseded':
                 a = brain.getObject()
                 wf = wtool.getWorkflowsFor(a)[0]
+
                 if not wf.isActionSupported(a, 'supersede'):
                     return False
+        
+        return True
+
+    
+    security.declarePublic('canRetry')
+    def canRetry(self):
+        """
+        Return whether submissions are possible.  Submissions are not
+        possible if the maximum number of tries has been reached.
+        """
+
+        catalog = getToolByName(self, 'portal_catalog')
+        
+        member = self.portal_membership.getAuthenticatedMember()
+
+        brains = catalog.searchResults(
+            path          = {'query': '/'.join(self.getPhysicalPath()), 'depth': 1,},
+            Creator       = member.getId(),
+            contentFilter = {'portal_type': self.allowed_content_types},
+        )
+        
+        if self.getMaxTries() and len(brains) >= self.getMaxTries():
+            return False
         
         return True
 

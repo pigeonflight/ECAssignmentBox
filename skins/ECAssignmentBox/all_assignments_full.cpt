@@ -224,7 +224,7 @@
             </tal:hidemacro>
             <!-- end list items -->
             
-            <div class="field" tal:condition="python: isOwner and has_items">
+            <div class="field visualNoPrint" tal:condition="python: isOwner and has_items">
               <label i18n:domain="plone" i18n:translate="label_change_status">Change State</label>
               <div class="formHelp"
                    i18n:domain="plone"

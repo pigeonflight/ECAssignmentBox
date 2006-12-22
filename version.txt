@@ -1,1 +1,1 @@
-1.2pre2 (with toggle_superseded)
+1.2pre cvs/devel 2006-12-22

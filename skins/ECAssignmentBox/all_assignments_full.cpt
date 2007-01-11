@@ -31,11 +31,10 @@
 <!--       
                   mkUrl             python: lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
 --> 
-
-        <div tal:content="template_id" />
      
         <!--  debug -->
         <!-- 
+        <div tal:content="template_id" />
         <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
         <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
         <div tal:content="string: resFlt2:$resFlt2" />

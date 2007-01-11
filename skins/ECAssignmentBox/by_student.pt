@@ -133,7 +133,7 @@
 	  </tbody>
 	</table>
 
-	<div class="formControls">
+	<div class="formControls visualNoPrint">
 	  <!-- Export Button -->
 	  <form name="exportStatistics" 
 	    action="#" 

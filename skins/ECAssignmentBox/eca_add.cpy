@@ -4,7 +4,7 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=answer='', file='', user_id='', msg=''
+##parameters=answer='', file='', msg=''
 ##title=Create a file for an assignment submission.
 ##
 from DateTime import DateTime
@@ -37,28 +37,30 @@ if not file:
 
 # get current date and time
 now = DateTime()
+# get current user's id
+user_id = REQUEST.get('AUTHENTICATED_USER', 'unknown')
 # generate unique Id for this submission
 id = str(user_id) + '.' + now.strftime('%Y%m%d') + '.' + now.strftime('%H%M%S')
     
 # create assignment object
 context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
-qca = getattr(context, id)
+assignment = getattr(context, id)
 
 # set file
-qca.setFile(file)
+assignment.setFile(file)
 
 # modify filename
-filename = qca.getFilename(key='file')
+filename = assignment.getFilename(key='file')
 if filename:
     filename = id + '_' + filename
 else:
     # TOOD: get MIME-type and add extension
     filename = id
     
-qca.setFilename(filename, key='file')
+assignment.setId(filename)
     
-# evaluate this submission
-result = qca.evaluate(context)
+# evaluate this submission (actually implemented in ECAAB)
+result = assignment.evaluate(context)
             
 if result:
     if result[0]:
@@ -74,7 +76,7 @@ if result:
     else:
         msg = result
     
-target_action = '%s/%s' % (qca.getId(), qca.getTypeInfo().getActionById('view'))
+target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionById('view'))
 
 #return state.set(portal_status_message = msg)
 RESPONSE.redirect('%s/%s?portal_status_message=%s' % 

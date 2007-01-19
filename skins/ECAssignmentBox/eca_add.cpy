@@ -46,18 +46,19 @@ id = str(user_id) + '.' + now.strftime('%Y%m%d') + '.' + now.strftime('%H%M%S')
 context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
 assignment = getattr(context, id)
 
-# set file
-assignment.setFile(file)
-
-# modify filename
-filename = assignment.getFilename(key='file')
-if filename:
-    filename = id + '_' + filename
+# construct filename
+if hasattr(file, 'filename'):
+    filename = '%s_%s' % (id, file.filename)
 else:
     # TOOD: get MIME-type and add extension
-    filename = id
-    
-assignment.setId(filename)
+    filename = '%s.txt' % (id,)
+
+# set file
+# FIXME: If file is instance of FileUpload, filename will be ignored. 
+#        See Archetypes/Field.py in FileField._process_input.
+assignment.setFile(file, filename=filename)
+
+#assignment.setId(filename)
     
 # evaluate this submission (actually implemented in ECAAB)
 result = assignment.evaluate(context)

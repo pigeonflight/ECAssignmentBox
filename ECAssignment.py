@@ -589,7 +589,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                                'title_msgid':'tooltip_released_icon',
                                })
         
-        if self.feedback:
+        if hasattr(self, 'feedback') and self.feedback:
             feedback = str(self.feedback)
             title = re.sub('[\r\n]+', ' ', feedback)[0:76]
 

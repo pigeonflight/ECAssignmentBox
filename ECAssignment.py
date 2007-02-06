@@ -150,6 +150,10 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     typeDescription = "A submission to an assignment box."
     typeDescMsgId = 'description_edit_eca'
 
+    # work-around for indexing in a corret way
+    isAssignmentBoxType = False
+    isAssignmentType = True
+
     # -- actions --------------------------------------------------------------
     actions = updateActions(ATCTContent, (
         {

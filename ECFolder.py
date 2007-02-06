@@ -163,63 +163,37 @@ class ECFolder(ATFolder):
 #                               acquire=True)
 
     
-    #security.declarePrivate('summarize')
-    def summarize(self, published=True):
+    security.declarePublic('summarize')
+    def summarize(self):
         """
         Returns an dictionary containing summarized states of all assignments 
-        for current user - or all users if manager - in all subfolders.  By 
-        default, only published boxes and folders are considered.  Set 
-        published=False to count all boxes.
-
-        @param published only published boxes and folders are considered
+        for current user - or all users if manager - in all subfolders.
+        
+        Only users with roles owner, reviewer or manager will see 
+        summarized states of all users.
+        
         @return a dictionary containing user-id as key and summarized states
                 as value
         """
-#FIXME: del comment liens
-#        wtool = self.portal_workflow
-#        items = self.contentValues(filter={'portal_type': 
-#                                            self.allowed_content_types})
-#
-#        wf_states = self.getWfStates()
-#        n_states = len(wf_states)
-#        students = {}
-#        
-#        for item in items:
-#            if published:
-#                review_state = wtool.getInfoFor(item, 'review_state')
-#                if review_state not in ('published'):
-#                    continue
-#            if item.portal_type == 'ECFolder':
-#                sum = item.summarize(published)
-#
-#                for student in sum.keys():
-#                    if student in students:
-#                        i = 0
-#                        for i in range(len(sum[student])):
-#                            students[student][i] += sum[student][i]
-#                    else:
-#                        students[student] = sum[student]
-#
-#            elif self.ecab_utils.isAssignmentBoxType(item):
-#                boxsummary = item.getAssignmentsSummary()
-#                
-#                for assignment in boxsummary:
-#                    if assignment.Creator() not in students:
-#                        students[assignment.Creator()] = [0 for i
-#                                                          in range(n_states)]
-#                    students[assignment.Creator()][wf_states.index(
-#                        wtool.getInfoFor(assignment, 'review_state', ''))] += 1
-#
-#        return students
-        wftool = getToolByName(self, 'portal_workflow')
+        
+        # get current uses's id
+        currentUser = self.portal_membership.getAuthenticatedMember()
+        # check if current user is owner of this folder
+        isOwner = currentUser.has_role(['Owner', 'Reviewer', 'Manager'], self)
+        
         catalog = getToolByName(self, 'portal_catalog')
 
-        brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
-                                       sort_on = 'getObjPositionInParent', 
-                                       #review_state = 'submitted',
-                                       #contentFilter = {'portal_type' : (ECA_META,)},
-                                       meta_type = (ECA_META, 'ECAutoAssignment', ),
-                                       )
+        if isOwner:
+            brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
+                                   #meta_type = (ECA_META, 'ECAutoAssignment', ),
+                                   isAssignmentType = True,
+                                   )
+        else:
+            brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
+                                   Creator = currentUser.getId(), 
+                                   #meta_type = (ECA_META, 'ECAutoAssignment', ),
+                                   isAssignmentType = True,
+                                   )
 
         wf_states = self.getWfStates()
         n_states = len(wf_states)
@@ -227,20 +201,17 @@ class ECFolder(ATFolder):
         result = {}
 
         for brain in brains:
-            item = brain.getObject()
-            key = item.Creator()
-            
+            key = brain.Creator
+
             if not result.has_key(key):
                 result[key] = [0 for i in range(n_states)]
-                #result[key] = []
             
-            result[key][wf_states.index(
-                wftool.getInfoFor(item, 'review_state', ''))] += 1
-            #result[key].append(wtool.getInfoFor(item, 'review_state', ''))
+            result[key][wf_states.index(brain.review_state)] += 1
 
         return result
 
-    #security.declarePrivate('summarizeGrades')
+
+    security.declarePublic('summarizeGrades')
     def summarizeGrades(self, published=True):
         """
         Create a dictionary listing all grades for the contained
@@ -250,6 +221,8 @@ class ECFolder(ATFolder):
         {'freddy': [3.0, 3.0], 'dina': [2.0, 2.0, 2.0]}
         
         @return a dictionary
+        """
+
         """
         wtool = self.portal_workflow
         items = self.contentValues(filter={'portal_type': 
@@ -288,11 +261,57 @@ class ECFolder(ATFolder):
                     students[student].append(grades[student])
             
         return students
+        """
+       
+        catalog = getToolByName(self, 'portal_catalog')
+
+        if published:
+            brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
+                                           review_state = 'published',
+                                           isAssignmentBoxType = True,
+                                           )
+        else:
+            brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
+                                           isAssignmentBoxType = True,
+                                          )
+        students = {}
+        
+        for brain in brains:
+            item = brain.getObject()
+            grades = {}
+            
+            grades = item.getGradesByStudent()
+            
+            log('xxx: %s: %s' % (item.title, grades, ))
+
+            # No grades were assigned--no problem.
+            if grades == {}:
+                continue
+            
+            # Non-numeric grades were assigned: Immediately return,
+            # as we can't calculate meaningful statistics in this
+            # case.
+            if grades == None:
+                return {}
+            
+            for student in grades:
+                if student not in students:
+                    students[student] = []
+                if type(grades[student]) is list:
+                    students[student].extend(grades[student])
+                else:
+                    students[student].append(grades[student])
+            
+        return students
+
     
-    #security.declarePrivate('rework')
+    security.declarePublic('rework')
     def rework(self, dict):
         """
-        @param dict summarize assignments only in published assignment boxes
+        Returns an array which consists of a dict with full name and summarized
+        assignment states.
+        
+        @param dict summarized assignments
         @return an array
         """
         array = []
@@ -306,7 +325,7 @@ class ECFolder(ATFolder):
         return array
 
 
-    #security.declarePrivate('FIXME')
+    security.declarePublic('summarizeCompletedAssignments')
     def summarizeCompletedAssignments(self, summary=None):
         """
         Returns a dictionary containing the number of assignments
@@ -362,7 +381,7 @@ class ECFolder(ATFolder):
         return utils.getWfTransitionsDisplayList(ECA_WORKFLOW_ID)
 
 
-    #security.declarePrivate('countContainedBoxes')
+    security.declarePublic('countContainedBoxes')
     def countContainedBoxes(self, published=True):
         """
         Count the assignment boxes contained in this folder and its
@@ -372,22 +391,6 @@ class ECFolder(ATFolder):
         @param published 
         @return an integer
         """
-#        n_boxes = 0
-#        wtool = self.portal_workflow
-#        items = self.contentValues(filter={'portal_type':
-#                                            self.allowed_content_types})
-#
-#        for item in items:
-#            if published:
-#                review_state = wtool.getInfoFor(item, 'review_state')
-#                if review_state not in ('published'):
-#                    continue
-#            if item.portal_type == 'ECFolder':
-#                n_boxes += item.countContainedBoxes(published)
-#            elif self.ecab_utils.isAssignmentBoxType(item):
-#                n_boxes += 1
-#        
-#        return n_boxes
         brains = []
         
         # get the portal's catalog
@@ -399,27 +402,16 @@ class ECFolder(ATFolder):
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, }, 
                                            #sort_on = 'getObjPositionInParent', 
                                            review_state = 'published',
-                                           meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
+                                           #meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
+                                           isAssignmentBoxType = True,
                                            )
         else:
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), },
                                            #sort_on = 'getObjPositionInParent', 
-                                           meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
+                                           #meta_type = (ECAB_META, 'ECAutoAssignmentBox', ),
+                                           isAssignmentBoxType = True,
                                            )
         return len(brains)
-
-#        # default result
-#        result = 0
-#
-#        # we need to ask each item if it's type is assignment box
-#        # FIXME: better if we could ask the catalog for assignment box type
-#        for brain in brains:
-#            item = brain.getObject()
-#
-#            if self.ecab_utils.isAssignmentBoxType(item):
-#                result += 1            
-#
-#        return result
 
 
 registerATCT(ECFolder, PROJECTNAME)

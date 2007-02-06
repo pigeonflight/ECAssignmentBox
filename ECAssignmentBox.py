@@ -178,6 +178,8 @@ class ECAssignmentBox(ATFolder):
     typeDescMsgId   = 'description_edit_ecab'
 
     _at_rename_after_creation = True
+    
+    isAssignmentBoxType = True
 
     # -- actions --------------------------------------------------------------
     actions = updateActions(ATFolder, (
@@ -216,12 +218,12 @@ class ECAssignmentBox(ATFolder):
         })
 
     # -- methods --------------------------------------------------------------
-    security.declarePrivate('isAssignmentBoxType')
-    def isAssignmentBoxType(self):
-        """
-        Returns True
-        """
-        return 1
+#    security.declarePrivate('isAssignmentBoxType')
+#    def isAssignmentBoxType(self):
+#        """
+#        Returns True
+#        """
+#        return 1
 
 
     security.declarePrivate('manage_afterAdd')

@@ -63,11 +63,24 @@ def addCatalogIndex(self, out, catalog, index, type, extra=None):
     """
     if index not in catalog.indexes():
         catalog.addIndex(index, type, extra)
+        catalog.reindexIndex (index, self.REQUEST)
         print >> out, "Added index", index, "to catalog"
     else:
         print >> out, "Index", index, "already in catalog"
 
 
+def removeCatalogIndex(self, out, catalog, index):
+    """
+    Delete the given index
+    """
+    
+    if index in catalog.indexes():
+        catalog.delIndex(index)
+        print >> out, "Removed index", index
+    else:
+        print >> out, "Index", index, "not in catalog"
+
+        
 def addCatalogMetadata(self, out, catalog, column):
     """
     Add the given column to the catalog's metadata schema
@@ -86,6 +99,7 @@ def removeCatalogMetadata(self, out, catalog, column):
     # QueueCatalog work-around
     if catalog.meta_type == 'ZCatalog Queue':
          catalog = self.unrestrictedTraverse(catalog._location)
+
     if column in catalog.schema():
         catalog.delColumn(column)
         print >> out, "Removed column", column
@@ -95,18 +109,27 @@ def removeCatalogMetadata(self, out, catalog, column):
 
 def setupCatalog(self, out, reinstall):
     """
+    Add colums and indexes used by ECAssignmentBox and ECFolder 
+    to the catalog.
     """
     catalog = getToolByName(self, 'portal_catalog')
     addCatalogMetadata(self, out, catalog, 'isAssignmentBoxType')
+    addCatalogMetadata(self, out, catalog, 'isAssignmentType')
     addCatalogIndex(self, out, catalog, 'isAssignmentBoxType', 'FieldIndex')
+    addCatalogIndex(self, out, catalog, 'isAssignmentType', 'FieldIndex')
 
 
 def cleanCatalog(self, out, reinstall):
     """
+    Removes colums and indexes used by ECAssignmentBox and ECFolder 
+    from the catalog.
     """
     catalog = getToolByName(self, 'portal_catalog')
     if not reinstall:
         removeCatalogMetadata(self, out, catalog, 'isAssignmentBoxType')
+        removeCatalogMetadata(self, out, catalog, 'isAssignmentType')
+        removeCatalogIndex(self, out, catalog, 'isAssignmentBoxType')
+        removeCatalogIndex(self, out, catalog, 'isAssignmentType')
 
 
 def install(self, reinstall=False):

@@ -5,7 +5,7 @@
 ##bind script=script
 ##bind state=state
 ##bind subpath=traverse_subpath
-##parameters=submission_period_start=None, use_submission_period_start=False, submission_period_end=None, use_submission_period_end=False, sendNotificationEmail=None, use_sendNotificationEmail=False, *args
+##parameters=submission_period_start=None, use_submission_period_start=False, submission_period_end=None, use_submission_period_end=False, sendNotificationEmail=None, use_sendNotificationEmail=False, maxTries=None, use_maxTries=False, *args
 ##title=Set the submission period
 ##
 
@@ -36,6 +36,9 @@ if REQUEST.has_key('paths'):
                     obj.setSubmission_period_end(submission_period_end)
                 if use_sendNotificationEmail:
                     obj.setSendNotificationEmail(sendNotificationEmail)
+                if use_maxTries:
+                    obj.setMaxTries(maxTries
+                                    or obj.getField('maxTries').default)
                 
                 succeeded.append(obj.title_or_id())
                 titles_and_paths.append('%s (%s)' % (obj.title_or_id(), path))

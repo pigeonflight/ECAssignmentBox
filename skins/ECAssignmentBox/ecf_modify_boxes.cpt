@@ -159,7 +159,7 @@
 	      i18n:translate="label_sendNotificationEmail">Send notification e-mail messages</label>
 	  </legend>
 
-	  <div class="field formSingleCheckbox">
+	  <div class="field">
 	    <div class="formHelp" i18n:translate="help_sendNotificationEmail">
 	      If selected, the owner of this assignment box will receive an
 	      e-mail message each time an assignment is submitted.
@@ -172,6 +172,36 @@
 	      tabindex=""
 	      tal:attributes="tabindex tabindex/next;
 	      onchange string:window.document.edit_form.use_sendNotificationEmail.checked=true;"/>
+	  </div>
+	</fieldset>
+
+
+	<fieldset>
+	  <legend>
+	    <input type="checkbox"
+	      class="noborder"
+	      id="use_maxTries"
+	      name="use_maxTries"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;"/>
+	    <label for="use_maxTries"
+	      i18n:translate="label_max_tries">Maximum number of attempts</label>
+	  </legend>
+
+	  <div class="field">
+	    <div class="formHelp" i18n:translate="help_max_tries">
+	      Maximum number of attempts, 0 means unlimited
+	    </div>
+
+	    <input type="text"
+	      class="formElement"
+	      id="maxTries"
+	      name="maxTries"
+	      size="5"
+	      maxlength="255"
+	      tabindex=""
+	      tal:attributes="tabindex tabindex/next;
+	      onchange string:window.document.edit_form.use_maxTries.checked=true;"/>
 	  </div>
 	</fieldset>
 

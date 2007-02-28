@@ -787,3 +787,13 @@ msgstr "Ersetzte Einreichungen anzeigen"
 # Original: "Hide superseded"
 msgid "Hide superseded"
 msgstr "Ersetzte Einreichungen ausblenden"
+
+#: ./ECAssignmentBox.py
+# Original: "Maximum number of attempts"
+msgid "label_max_tries"
+msgstr "Maximale Anzahl von Versuchen"
+
+#: ./ECAssignmentBox.py
+# Original: "Maximum number of attempts, 0 means unlimited"
+msgid "help_max_tries"
+msgstr "Legt fest, wie viele Versuche ein Student für diese Aufgabe hat; 0 bedeutet unbegrenzt viele."

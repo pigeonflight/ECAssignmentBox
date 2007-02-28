@@ -65,7 +65,7 @@ License
  ECAssignmentBox is licensed under the
  "GPL":http://opensource.org/licenses/gpl-license.
 
- Copyright © 2006 Otto-von-Guericke-Universität Magdeburg
+ Copyright © 2007 Otto-von-Guericke-Universität Magdeburg
 
  ECAssignmentBox is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

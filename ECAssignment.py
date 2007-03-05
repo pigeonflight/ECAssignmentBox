@@ -351,7 +351,8 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
             box = self.aq_parent
             
-            if (mt == 'text/plain') and box.getWrapAnswer():
+            if ((mt == 'text/plain') or
+                (mt == 'text/x-web-intelligent')) and box.getWrapAnswer():
                 file = StringIO(self.getField('file').get(self))
                 wrap = TextWrapper()
                 result = ''

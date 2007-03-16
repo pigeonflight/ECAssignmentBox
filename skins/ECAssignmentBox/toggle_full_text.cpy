@@ -1,4 +1,4 @@
-## Script (Python) "toggle_superseded"
+## Script (Python) "toggle_full_text"
 ##bind container=container
 ##bind context=context
 ##bind namespace=
@@ -24,19 +24,17 @@ query = {}
 for k,v in oquery.items():
     query[k]=v[0]
 
-# Negate value of 'show_superseded'
-showSuperseded = query.get('show_superseded', None)
-if showSuperseded:
-    showSuperseded = ''
+# Negate value of 'fullText'
+showFullText = query.get('show_full_text', None)
+if showFullText:
+    showFullText = ''
 else:
-    showSuperseded = 1
-query['show_superseded'] = showSuperseded
+    showFullText = 1
 
-#query['portal_status_message'] = query.items()
+query['show_full_text'] = showFullText
 
 # in the following we use redirect to go back to the template
 # this overrides settings in toggle_superseded.cpy.metadata
-
 orig_template = 'all_assignments'
 
 if REQUEST.has_key('orig_template'):

@@ -596,7 +596,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
         if hasattr(self, 'feedback') and self.feedback:
             feedback = str(self.feedback)
-            title = re.sub('[\r\n]+', ' ', feedback)[0:76]
+            title = re.sub('[\r\n]+', ' ', feedback)
 
             result.append({'icon':'ec_comment.png', 
                            'alt':'Feedback',
@@ -606,7 +606,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         if isGrader and hasattr(self, 'remarks') and self.remarks:
             remarks = str(self.remarks)
-            title = re.sub('[\r\n]+', ' ', remarks)[0:76]
+            title = re.sub('[\r\n]+', ' ', remarks)
 
             result.append({'icon':'ecab_remarks.png', 
                            'alt':'Remarks',

@@ -45,6 +45,10 @@ Credits
   ECAssignmentBox was written by "Mario
   Amelung":http://wwwai.cs.uni-magdeburg.de/Members/amelung and
   "Michael Piotrowski":http://wwwai.cs.uni-magdeburg.de/Members/mxp.
+  
+  Additional implementations (e.g., extended analysis feature) and bug 
+  fixes are contributed by "Marcel Abou 
+  Khalil":mailto:aboukhal@cs.uni-magdeburg.de".
 
   ECAssignmentBox was inspired by
   "LTAssignmentBox":http://lawtec.net/projects/ltassignmentbox.  The

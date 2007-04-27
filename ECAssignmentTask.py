@@ -1,5 +1,5 @@
-#
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# -*- coding: utf-8 -*-
+# Copyright (c) 2007 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -18,15 +18,14 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 #
 from Products.Archetypes.atapi import *
-from Products.ATContentTypes.content.base import registerATCT,updateAliases
+from Products.ATContentTypes.content.base import registerATCT, updateActions, \
+     updateAliases
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema,ATFolder
 
 from Products.ECAssignmentBox import permissions
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox.PlainTextField import PlainTextField
-
-
 
 ECAssignmentTaskSchema = ATFolderSchema.copy() + Schema((
 #	TextField(
@@ -76,17 +75,14 @@ ECAssignmentTaskSchema = ATFolderSchema.copy() + Schema((
 
 finalizeATCTSchema(ECAssignmentTaskSchema)
 
-
-
 class ECAssignmentTask(ATFolder):
-	"""A folderish document type, which can contain other types.
-	"""
+	"""Defines the task for an assignment box"""
 
 	portal_type = meta_type = ECAT_META
 	archetype_name = ECAT_NAME
-	content_icon = 'ecab.png'
+	content_icon = 'ecat.png'
 	schema = ECAssignmentTaskSchema
-	typeDescription = 'Allows the creation of online assignments.'
+	typeDescription = 'Defines the task for an assignment box.'
 	typeDescMsgID = 'description_edit_ecat'
 
 	_at_rename_after_creation = True
@@ -97,7 +93,13 @@ class ECAssignmentTask(ATFolder):
 	immediate_view = 'ecat_view'
 	suppl_views = None
 
-	actions = ATFolder.actions
+	actions = updateActions(ATFolder, (
+                {'action':      'string:$object_url/ecat_backlinks',
+                 'category':    'object',
+                 'id':          'ecat_backlinks',
+                 'name':        'Backlinks',
+                 'permissions': (permissions.ManageProperties,),},
+                ))
 
 	aliases = updateAliases(ATFolder, {
 		'view'		: 'ecat_view',

@@ -25,14 +25,16 @@ catalog = getToolByName(context, 'portal_catalog')
 
 # get the amount of ECAssignmentBoxes
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
-                               meta_type = ('ECAssignmentBox', 'ECAutoAssignmentBox', ),
+                               #meta_type = ('ECAssignmentBox', 'ECAutoAssignmentBox', ),
+                               isAssignmentBoxType = True,
                                )
 result[2] = len(brains)
 
 # get all ECAssignments inside this ECFolder
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
                                sort_on = 'Creator', 
-                               meta_type = ('ECAssignment', 'ECAutoAssignment', ),
+                               #meta_type = ('ECAssignment', 'ECAutoAssignment', ),
+                               isAssignmentType = True,
                                )
 
 result[1] = len(brains)

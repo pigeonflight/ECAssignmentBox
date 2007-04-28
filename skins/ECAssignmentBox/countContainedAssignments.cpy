@@ -36,11 +36,8 @@ catalog = getToolByName(context, 'portal_catalog')
 
 # get all assignments
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()), 'depth':100,  }, 
-                               meta_type = ('ECAssignment', 'ECAutoAssignment', ),
-                               # FIXME: add an index to the catalog (e.g., isAssignmentType)
-                               #        and it is longer necessary to use hard coded strings
-                               #        like 'ECAssignment' and 'ECAutoAssignment' 
-                               #isAssignmentType = True,
+                               #meta_type = ('ECAssignment', 'ECAutoAssignment', ),
+                               isAssignmentType = True,
                                )
 
 # total number of assigments, including superseded

@@ -24,7 +24,8 @@ catalog = getToolByName(context, 'portal_catalog')
 # get all ECAssignments inside this ECFolder
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
                                sort_on = 'created', 
-                               meta_type = ('ECAssignment', 'ECAutoAssignment', ),
+                               #meta_type = ('ECAssignment', 'ECAutoAssignment', ),
+                               isAssignmentType = True,
                                )
 
 if len(brains) > 0:

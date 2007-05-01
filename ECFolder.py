@@ -289,7 +289,7 @@ class ECFolder(ATFolder):
             
             grades = item.getGradesByStudent()
             
-            log('xxx: %s: %s' % (item.title, grades, ))
+            #log('xxx: %s: %s' % (item.title, grades, ))
 
             # No grades were assigned--no problem.
             if grades == {}:

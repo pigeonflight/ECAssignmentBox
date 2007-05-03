@@ -101,11 +101,17 @@
     
               <tal:block tal:repeat="state python: states.keys()">
                 <th tal:attributes="class python: 'state-' + putils.normalizeString(state)">
+                <!-- 
                   <span tal:content="python: states.getValue(state, default=state)"
                     tal:omit-tag=""
                     i18n:domain="plone"
                     i18n:translate=""/> (%)
-                </th>
+                -->
+                  <span tal:content="python: states.getValue(state, default=state)"
+                    tal:omit-tag=""
+                    i18n:domain="plone"
+                    i18n:translate=""/>
+                 </th>
               </tal:block>
             </tr>
           </thead>
@@ -152,8 +158,10 @@
                 <tal:block tal:repeat="state python: student[2]">
                   <td>
                     <span tal:replace="state" />
+                    <!-- 
                     (<span tal:replace="python:
                         ecab_utils.localizeNumber('%d', round(float(state)/n_boxes * 100, 2))"/>)
+                    -->
 
                     <!-- 
                       add link to all_assignments 

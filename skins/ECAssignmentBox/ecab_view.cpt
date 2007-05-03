@@ -105,7 +105,7 @@
         <a href="" 
           tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
           i18n:translate="label_download_answer_template"
-		  tal:content="reference/getAnswerTemplate | here/getAnswerTemplate">
+		  tal:condition="reference/getAnswerTemplate | here/getAnswerTemplate">
           Download answer template
         </a>
       

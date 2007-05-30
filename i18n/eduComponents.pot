@@ -662,6 +662,12 @@ msgstr ""
 
 
 #: ./skins/ECAssignmentBox/ecab_view.cpt
+# Original: "Submission not permitted: You are not enrolled in this course."
+msgid "submission_cannot_participate"
+msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecab_view.cpt
 #. <i i18n:translate="submission_cannot_resubmit" tal:condition="python: (not canResubmit) and (not hasExpired)">
 #.             Submission not permitted: An earlier submission is under review
 #.             or has already been accepted.

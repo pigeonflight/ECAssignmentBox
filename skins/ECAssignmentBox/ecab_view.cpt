@@ -28,7 +28,9 @@
                       canSupersed   python: here.canSupersed();
                       canRetry      python: here.canRetry();
 					  tries_left    python: here.getMaxTries() - here.getTries();
-					  reference		python: here.getReference();">
+					  reference		python: here.getReference();
+                      needRegistration python: (hasattr(here, 'associatedGroup') and here.getAssociatedGroup()) or False;
+                      canParticipate python: (needRegistration and here.isParticipant(user_id)) or (not needRegistration);">
                       
         <!-- debug -->
         <!--
@@ -38,6 +40,8 @@
         <div tal:content="string:isOwner:$isOwner" />
         <div tal:content="string:canSupersed:$canSupersed" />
         <div tal:content="string:canRetry:$canRetry" />
+        <div tal:content="string:needRegistration:$needRegistration" />
+        <div tal:content="string:canParticipate:$canParticipate" />
         -->
  
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
@@ -117,8 +121,9 @@
             method="post"
             enctype="multipart/form-data"
             tal:attributes="action string:${here/absolute_url}/${template/getId}"
-            tal:condition="python: isOwner or (not hasExpired and isEffective and
-                           canSupersed and canRetry and isPublished)">
+            tal:condition="python: isOwner or (canParticipate and not hasExpired 
+                           and isEffective and canSupersed and canRetry and 
+                           isPublished)">
   
           <!-- text field -->
           <div class="field visualNoPrint">
@@ -177,6 +182,10 @@
         </form>
       
         <div class="field visualNoPrint">
+          <i tal:condition="python: not canParticipate"
+             i18n:translate="submission_cannot_participate">
+            Submission not permitted: You are not enrolled in this course.</i>
+
           <i tal:condition="python: not isPublished or not isEffective"
              i18n:translate="submission_period_not_effective">
             Submissions are not yet allowed.</i>

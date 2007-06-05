@@ -184,8 +184,11 @@
         <div class="field visualNoPrint">
           <i tal:condition="python: not canParticipate"
              i18n:translate="submission_cannot_participate">
-            Submission not permitted: You are not enrolled in this course.</i>
-
+            Submission not permitted: You are not enrolled in this course.
+          </i>
+        </div> 
+           
+        <div class="field visualNoPrint">
           <i tal:condition="python: not isPublished or not isEffective"
              i18n:translate="submission_period_not_effective">
             Submissions are not yet allowed.</i>

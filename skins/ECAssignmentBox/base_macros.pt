@@ -64,17 +64,16 @@
       </a>
 
       <!-- display assignmentbox text in a collapsible box-->
-      <dl class="collapsible collapsedBlockCollapsible">
+      <dl class="collapsible collapsedBlockCollapsible"
+	tal:define="reference python: here.aq_parent.getReference();">
         <dt class="collapsibleHeader"
-            i18n:translate="assignment_text">
-          Assignment text
-        </dt>
+	  i18n:translate="assignment_text">Assignment text</dt>
         <dd class="collapsibleContent">
           <div class="documentDescription"
-               tal:content="structure here/aq_parent/Description"
-               tal:condition="here/aq_parent/Description"/>
-
-          <div tal:replace="structure here/aq_parent/getAssignment_text"/>
+	    tal:content="structure here/aq_parent/Description"
+	    tal:condition="here/aq_parent/Description"/>
+	  <div tal:replace="structure reference/getAssignment_text
+	    | here/aq_parent/getAssignment_text"/>
         </dd>
       </dl>
 

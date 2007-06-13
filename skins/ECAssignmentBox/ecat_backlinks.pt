@@ -39,7 +39,7 @@
 	<ul>
 	  <tal:foreach repeat="brain brains">
 	  <li>
-	    <a tal:content="python: brain.getObject().Title()"
+	    <a tal:content="python: brain.Title"
 	      tal:attributes="href python: brain.getPath()"/>
 	    (<span tal:replace="python: brain.getPath()"/>)
 	  </li>

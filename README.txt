@@ -8,14 +8,14 @@ Overview
 
 Download
 
-  * "Project page":http://wwwai.cs.uni-magdeburg.de/software/ecab
+  * "Project page":http://wdok.cs.uni-magdeburg.de/software/
 
   * "plone.org products page":http://plone.org/products/ecassignmentbox
 
 Prerequisites
 
- To use ECAssignmentBox you need a Plone 2.1.x installation.  Check
- "plone.org":http://plone.org/products/plone for Plone's
+ To use ECAssignmentBox you need a Plone 2.1.x or 2.5 installation.
+ Check "plone.org":http://plone.org/products/plone for Plone's
  prerequisites.
 
 Installation
@@ -46,9 +46,7 @@ Credits
   Amelung":http://wwwai.cs.uni-magdeburg.de/Members/amelung and
   "Michael Piotrowski":http://wwwai.cs.uni-magdeburg.de/Members/mxp.
   
-  Additional implementations (e.g., extended analysis feature) and bug 
-  fixes are contributed by "Marcel Abou 
-  Khalil":mailto:aboukhal@cs.uni-magdeburg.de".
+  Additional programming by Marcel Abou Khalil and Sascha Peilicke.
 
   ECAssignmentBox was inspired by
   "LTAssignmentBox":http://lawtec.net/projects/ltassignmentbox.  The

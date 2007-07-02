@@ -31,16 +31,20 @@
     </metal:block>
 
     <div metal:fill-slot="main"
-         tal:define="errors options/state/getErrors;
-                     review_state wf_state;
-                     all_paths python:request.get('paths', []);
-                     all_objects python:here.getObjectsFromPathList(all_paths, batch=True);
-                     paths python:['/'.join(o.getPhysicalPath())
-                           for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
-                     batch python:here.getObjectsFromPathList(paths, batch=True);
-                     came_from python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
-                     dummy python:request.set('orig_template', came_from);
+         tal:define="errors 		options/state/getErrors;
+                     review_state 	wf_state;
+                     all_paths 		python:request.get('paths', []);
+                     all_objects 	python:here.getObjectsFromPathList(all_paths, batch=True);
+                     paths 			python:['/'.join(o.getPhysicalPath()) for o in all_objects];
+                     batch 			python:here.getObjectsFromPathList(paths, batch=True);
+                     came_from 		python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
+                     dummy 			python:request.set('orig_template', came_from);
                      ">
+
+	<!-- PlagDetector MODIFICATION 
+		TODO: Check this!
+					paths 		python:['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+	-->
 
       <metal:block tal:condition="python: paths and not batch"
                    tal:replace="python:here.redirectToReferrer('The item(s) you selected are no longer available.')"/>
@@ -51,13 +55,51 @@
 
       <h1 i18n:domain="plone" i18n:translate="">Compare Assignments</h1>
 
-      <form id="edit_form"
-            name="edit_form"
-            method="post"
-            action="modify_boxes"
-            tal:attributes="action string:$here_url/$template_id"
-            tal:condition="not:python:paths and not batch">
+	<!-- PlagDetector modifications -->
+	<form id="edit_form"
+		  name="edit_form"
+          method="post"
+          action="modify_boxes"
+          tal:attributes="action string:$here_url/$template_id"
+		  tal:condition="python: not(paths and not batch) and (len(paths) == 2)">
+			<!-- tal:condition="not:python:paths and not batch"> -->
 
+	<div>
+		<label i18n:translate="label_dotplot">Dotplot Overview:</label>
+	 	<div class="formHelp" i18n:translate="label_dotplot_help">
+			The Dotplot overview shows similarties between texts by plotting dots at the similar parts.<br/>One texts is horizontal (start:left, end:right) and the other vertical(start:top, end:bottom) aligned. Lines indicate longer similarities and therefore possible plagiarism. 
+	 	</div>
+		<img src=""
+			tal:define="obj1 python: here.restrictedTraverse(paths[0]).getFile(); obj2 python: here.restrictedTraverse(paths[1]).getFile();"
+			tal:attributes="src string: ${context/absolute_url}/createDotplot?assignment1=%22${obj1}%22&assignment2=%22${obj2}%22"/>
+	</div>
+	<div class="field" tal:condition="batch">
+		<label i18n:translate="label_choosen_assignments_for_inspectation">Choosen Assignments For Inspectation:</label>
+		<div class="formHelp" i18n:translate="label_choosen_assignments_for_inspectation2_help">
+			 			 The selected assignments used in the comparision.
+		</div>
+		<div tal:define="dummy python:request.set('ids_checked', 1);">
+			<table summary="Affected content" i18n:attributes="summary summary_affected_content;"
+		   metal:use-macro="here/folder_contents/macros/folder_listing">
+			</table>
+		</div>
+	</div>
+	<table summary="" width="100%"
+		tal:define="strList python: here.restrictedTraverse(paths[0]).diff(here.restrictedTraverse(paths[1]))"
+		tal:condition="python: strList"	>
+		<tr>
+			<td align="center" width="50%">
+				<label tal:content="python: here.restrictedTraverse(paths[0]).pretty_title_or_id()"/><br/>
+				<div style="height: 250px; width: auto; overflow: auto; border-width:1px; border-style:solid;  border-color:black;  padding:2.5em;  text-align:justify;" tal:content="structure python: strList[0]">Text1</div>
+			</td>
+			<td align="center" width="50%"> 
+				<label tal:content="python: here.restrictedTraverse(paths[1]).pretty_title_or_id()"/><br/>
+				<div style="height: 250px; width: auto; overflow: auto; border-width:1px; border-style:solid;  border-color:black;  padding:2.5em;  text-align:justify;" tal:content="structure python: strList[1]">Text2</div>
+			</td>
+		</tr>
+	</table>
+
+	<!-- before PlagDetector
 	<div class="field" tal:condition="batch">
 	  <label for="" i18n:domain="plone"
 		 i18n:translate="label_affected_content">Affected content</label>
@@ -66,7 +108,10 @@
 		   metal:use-macro="here/folder_contents/macros/folder_listing">
 	    </table>
 	  </div>
-	</div>
+    </div>
+  	-->
+
+	<!-- PlagDetector modification END-->
 
 	<pre
 	  tal:content="structure python: here.restrictedTraverse(paths[0]).diff(here.restrictedTraverse(paths[1]))"/>

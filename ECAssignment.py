@@ -27,15 +27,10 @@ import re
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from Products.CMFCore.utils import getToolByName
-
-from Products.ATContentTypes.content.base import registerATCT
-from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.content.base import updateActions, updateAliases
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.content.base import registerATCT, ATCTContent, updateActions, updateAliases
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema, finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
-
 # The following two imports are for getAsPlainText()
 #from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.PortalTransforms.utils import TransformException
@@ -44,19 +39,27 @@ from Products.PortalTransforms.utils import TransformException
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox import permissions
 
+# PlagDetector imports
+from PlagDetector.PlagChecker import PlagChecker
+from PlagDetector.PlagVisualizer import PlagVisualizer
+
+
+
+
+
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
 ECAssignmentSchema['title'].default_method = '_generateTitle'
-
 ECAssignmentSchema['title'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
 }
-
 ECAssignmentSchema['description'].widget.visible = {
     'view' : 'invisible',
     'edit' : 'invisible'
 }
+
+
 
 # define schema
 ECAssignmentSchema = ECAssignmentSchema + Schema((
@@ -124,6 +127,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 )
 
 finalizeATCTSchema(ECAssignmentSchema)
+
 
 
 class ECAssignment(ATCTContent, HistoryAwareMixin):
@@ -619,19 +623,47 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
     security.declarePublic('diff')
     def diff(self, other):
+        """Compare this assignment to another one.
         """
-        Compare this assignment to another one.
+        checker = PlagChecker()
+        result = checker.compare(str(self.getFile()),
+                        str(other.getFile()),
+                        self.pretty_title_or_id(),
+                        other.pretty_title_or_id())
+        vis = PlagVisualizer()
+        strList = vis.resultToHtml(result, 
+                   str(self.getFile()),
+                   str(other.getFile()))
+        return strList
+
+
+    security.declarePublic('diff2')
+    def diff2(self, other):
+        """Compare this assignment to another one.
         """
-        import difflib
+        checker = PlagChecker()
+        result = checker.compare(str(self.getFile()),
+                        str(other.getFile()),
+                        self.pretty_title_or_id(),
+                        other.pretty_title_or_id())
+        vis = PlagVisualizer()
+        strList = vis.resultToHtml(result, 
+                   str(self.getFile()),
+                   str(other.getFile()))
+        return strList
 
-        result = difflib.context_diff(
-            unicode((str(self.getFile()) +
-                     '\n').decode('utf8')).splitlines(True),
-            unicode((str(other.getFile()) +
-                     '\n').decode('utf8')).splitlines(True),
-            self.pretty_title_or_id().decode('utf8'),
-            other.pretty_title_or_id().decode('utf8'))
 
-        return "".join(result)
+    security.declarePublic('dotplot')
+    def dotplot(self, other):#, REQUEST=None):
+        """Compare this assignment to another one. Using a dotplot.
+        """
+        vis = PlagVisualizer()
+        image = vis.stringsToDotplot(str(self.getFile()),
+                             str(other.getFile()),
+                             id1=self.pretty_title_or_id(),
+                             id2=other.pretty_title_or_id(),
+                             showIdNums=True)
+        return image
+
 
 registerATCT(ECAssignment, PROJECTNAME)

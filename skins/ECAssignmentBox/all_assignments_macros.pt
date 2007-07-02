@@ -8,55 +8,44 @@
       xml:lang="en" lang="en"
       i18n:domain="eduComponents">
 
-  <body>
-    <!-- all_assignments macros ------------------------------------------- -->
+<body>
 
-    <!-- headline in all assignments templates -->
-    <metal:define define-macro="all_assignments_heading">
-      <h1 class="documentFirstHeading">
-        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
+	<!-- headline in all assignments templates -->
+	<metal:define define-macro="all_assignments_heading">
+		<h1 class="documentFirstHeading">
+			<span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
+			<span tal:define="userName request/userName | nothing;"
+				  tal:condition="userName" 
+				  tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
+				  tal:omit-tag="" />
+		</h1>
+	</metal:define>
 
-        <span tal:condition="userName" 
-          tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
-              tal:omit-tag="" />
-      </h1>
-    </metal:define>
-
-    <!-- table's head in all_assignments -->
-    <metal:define define-macro="all_assignments_thead">
-      <thead>
-        <tr>
-          <th class="nosort visualNoPrint">
-            <!-- item is the current assignment box -->
-            <input 
-                type="checkbox"
-                onclick="toggleSelect"
-                name="xxx_toggle"
-                value="#"
-                id="xxx_toggle"
-                class="noborder"
-                tabindex=""
-                tal:attributes="tabindex tabindex/next;
-                                name     string:${item/id}_toggle;
-                                id       string:${item/id}_toggle;
-                                onclick  string:javascript:toggleSelect(this, '${item/id}:list');"
-            />
-            <input type="hidden" 
-                   name="" 
-                   value="" 
-                   tal:attributes="name  string:ecabox:list;
-                                   value string:${item/id};"
-            />
-          </th>
-          <th class="nosort">&nbsp;</th>
-          <th i18n:translate="label_date">Date</th>
-          <th i18n:translate="label_user">User</th>
-          <th i18n:translate="label_state">State</th>
-          <th i18n:translate="label_mark">Grade</th>
-          <th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
-        </tr>
-      </thead>
-    </metal:define>
+	<!-- table's head in all_assignments -->
+	<metal:define define-macro="all_assignments_thead">
+		<thead>
+			<tr>
+				<th class="nosort visualNoPrint">
+					<!-- item is the current assignment box -->
+					<input type="checkbox" onclick="toggleSelect" name="xxx_toggle"
+						 value="#" id="xxx_toggle" class="noborder" tabindex=""
+						 tal:attributes="tabindex tabindex/next;
+								name     string:${item/id}_toggle;
+								id       string:${item/id}_toggle;
+								onclick  string:javascript:toggleSelect(this, '${item/id}:list');"/>
+					<input type="hidden" name="" value="" 
+						 tal:attributes="name  string:ecabox:list; 
+										 value string:${item/id};"/>
+				</th>
+				<th class="nosort">&nbsp;</th>
+				<th i18n:translate="label_date">Date</th>
+				<th i18n:translate="label_user">User</th>
+				<th i18n:translate="label_state">State</th>
+				<th i18n:translate="label_mark">Grade</th>
+				<th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
+			</tr>
+		</thead>
+	</metal:define>
 
     <!-- table's foot in all_assignments -->
     <metal:define define-macro="all_assignments_tfoot">
@@ -358,8 +347,9 @@
       </tbody>
     </metal:define>
 
-  </body>
+</body>
 </html>
+
 <!-- Keep this comment at the end of the file
 Local variables:
 mode:xml

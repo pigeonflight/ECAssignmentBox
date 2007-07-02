@@ -30,6 +30,8 @@ from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 # ECAssignmentBox
 from Products.ECAssignmentBox.config import *
 
+
+
 def addPrefsPanel(self, out):
     """
     """
@@ -49,12 +51,14 @@ def addPrefsPanel(self, out):
     out.write("Added '%s' to the preferences panel.\n" % TOOL_TITLE)
 
 
+
 def removePrefsPanel(self):
     """
     """
     cp = getToolByName(self, 'portal_controlpanel', None)
     if cp:
         cp.unregisterApplication(PROJECTNAME)
+
 
 
 def addCatalogIndex(self, out, catalog, index, type, extra=None):
@@ -69,6 +73,7 @@ def addCatalogIndex(self, out, catalog, index, type, extra=None):
         print >> out, "Index", index, "already in catalog"
 
 
+
 def removeCatalogIndex(self, out, catalog, index):
     """
     Delete the given index
@@ -80,7 +85,8 @@ def removeCatalogIndex(self, out, catalog, index):
     else:
         print >> out, "Index", index, "not in catalog"
 
-        
+
+
 def addCatalogMetadata(self, out, catalog, column):
     """
     Add the given column to the catalog's metadata schema
@@ -90,6 +96,7 @@ def addCatalogMetadata(self, out, catalog, column):
         print >> out, "Added", column, "to catalog metadata"
     else:
         print >> out, column, "already in catalog metadata"
+
 
 
 def removeCatalogMetadata(self, out, catalog, column):
@@ -107,6 +114,7 @@ def removeCatalogMetadata(self, out, catalog, column):
         print >> out, "Column", column, "not in catalog"
 
 
+
 def setupCatalog(self, out, reinstall):
     """
     Add colums and indexes used by ECAssignmentBox and ECFolder 
@@ -117,6 +125,7 @@ def setupCatalog(self, out, reinstall):
     addCatalogMetadata(self, out, catalog, 'isAssignmentType')
     addCatalogIndex(self, out, catalog, 'isAssignmentBoxType', 'FieldIndex')
     addCatalogIndex(self, out, catalog, 'isAssignmentType', 'FieldIndex')
+
 
 
 def cleanCatalog(self, out, reinstall):
@@ -130,6 +139,7 @@ def cleanCatalog(self, out, reinstall):
         removeCatalogMetadata(self, out, catalog, 'isAssignmentType')
         removeCatalogIndex(self, out, catalog, 'isAssignmentBoxType')
         removeCatalogIndex(self, out, catalog, 'isAssignmentType')
+
 
 
 def install(self, reinstall=False):
@@ -175,7 +185,22 @@ def install(self, reinstall=False):
         ] + factory_tool.getFactoryTypes().keys()
     factory_tool.manage_setPortalFactoryTypes(listOfTypeIds=factory_types)
 
+    # PlagDetector modifications START
+    em = self.manage_addProduct['ExternalMethod']
+
+    listOfExternalMethods = [
+        "getNormalizerNames","getAlgorithmNames","createDotplot","compareList","createTorc","createIntensityHeatmap",
+        "createClusterHeatmap","getSimilarity","getIdentifier","containsIdentifier","isSuspectPlagiarism",
+        "createDotplotDirectCompare","resultToHtml","stringsToCP","stringsToCPP","getPlagiarismGroups",]
+
+    for method in listOfExternalMethods:
+        if not hasattr(em,method):
+            em.manage_addExternalMethod(method,"","ECAssignmentBox.ecpd_utils",method)
+    # PlagDetector modification END
+
     return out.getvalue()
+
+
 
 def install_workflow(self, out):
     wf_tool = getToolByName(self, 'portal_workflow')
@@ -201,6 +226,8 @@ def install_workflow(self, out):
     
     print >> out, "Successfully installed ECAssignment workflow."
 
+
+
 def addWorkflowScripts(wf):
     """
     Adds workflow scripts to workflow.
@@ -210,6 +237,8 @@ def addWorkflowScripts(wf):
         if not key in wf.scripts.objectIds():
             wf.scripts.manage_addProduct['ExternalMethod'].\
                 manage_addExternalMethod(key, key, wf_scripts[key], key)
+
+
 
 def install_properties(self, out):
     """
@@ -231,6 +260,7 @@ def install_properties(self, out):
         props._setProperty('personal_title_attr', "", 'string')
 
     out.write("Installed site-wide ECAssignmentBox properties.\n")
+
 
 
 def uninstall(self, reinstall):

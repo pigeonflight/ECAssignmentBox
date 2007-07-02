@@ -40,8 +40,9 @@ from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox import permissions
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
 from Statistics import Statistics
+from PlainTextField import PlainTextField
 
-from Products.ECAssignmentBox.PlainTextField import PlainTextField
+
 
 ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
     ReferenceField(
@@ -174,6 +175,8 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
 
 finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
 
+
+
 class ECAssignmentBox(ATFolder):
     """Allows the creation, submission and grading of online assignments"""
 
@@ -222,10 +225,25 @@ class ECAssignmentBox(ATFolder):
         'permissions': (permissions.ManageProperties,),
         },
 
+        # PlagDetector modifications
         {
         'action':      'string:ecab_compare_assignments:method',
         'id':          'ecab_compare_assignments',
         'name':        'Compare Two Assignments',
+        'permissions': (permissions.View,),
+        'category':    'folder_buttons',
+        },
+        {
+        'action':      'string:ecpd_one_to_many:method',
+        'id':          'ecpd_one_to_many',
+        'name':        'Compare One Assignment With All',
+        'permissions': (permissions.View,),
+        'category':    'folder_buttons',
+        },
+        {
+        'action':      'string:ecpd_compare_assignments:method',
+        'id':          'ecpd_compare_assignments',
+        'name':        'Plagiarism Search',
         'permissions': (permissions.View,),
         'category':    'folder_buttons',
         },

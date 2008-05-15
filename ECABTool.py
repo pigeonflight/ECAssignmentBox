@@ -33,6 +33,7 @@ from email.Header import Header
 
 from Products.Archetypes.atapi import *
 from Products.CMFCore.utils import UniqueObject, getToolByName
+from Products.CMFPlone.utils import log_exc, log
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
 # local imports
@@ -367,9 +368,14 @@ class ECABTool(UniqueObject, Folder):
             log('Cannot send notification e-mail: E-mail sender address or name not set')
             return
         
-        message = MIMEText(text, 'plain', charset)
-        subjHeader = Header(subject, charset)
-        message['Subject'] = subjHeader
+        
+        try:
+            message = MIMEText(text, 'plain', charset)
+            subjHeader = Header(subject, charset)
+            message['Subject'] = subjHeader
+        except Exception, e:
+            log_exc('Cannot send notification e-mail: %s' % e)
+            return
 
         # This is a hack to suppress deprecation messages about send()
         # in SecureMailHost; the proposed alternative, secureSend(),
@@ -381,7 +387,8 @@ class ECABTool(UniqueObject, Folder):
                 mailHost.send(message = str(message),
                               mto = address,
                               mfrom = fromAddress,)
-            except ConflictError:
+            except ConflictError, ce:
+                log_exc('Cannot send notification e-mail: %s' % ce)
                 raise
             except:
                 log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))

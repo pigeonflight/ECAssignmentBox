@@ -369,24 +369,22 @@ class ECABTool(UniqueObject, Folder):
             return
         
         try:
-            message = MIMEText(text, 'plain', charset)
-        except UnicodeEncodeError, uee:
-            try:
-                # quick hack for Plone 2.5 to prevent unicode errors
+            if (type(text) == unicode):
                 message = MIMEText(text.encode(charset), 'plain', charset)
-            except Exception, e:
-                log_exc('Cannot send notification e-mail: %s' % e)
-                return
+            else:
+                message = MIMEText(text, 'plain', charset)
+        except Exception, e:
+            log_exc('Cannot send notification e-mail: %s' % e)
+            return
 
         try:
-            subjHeader = Header(subject, charset)
-        except UnicodeEncodeError, uee:
-            try:
-                # quick hack for Plone 2.5 to prevent unicode errors
+            if (type(subject) == unicode):
                 subjHeader = Header(subject.encode(charset), charset)  
-            except Exception, e:
-                log_exc('Cannot send notification e-mail: %s' % e)
-                return
+            else:
+                subjHeader = Header(subject, charset)
+        except Exception, e:
+            log_exc('Cannot send notification e-mail: %s' % e)
+            return
 
         message['Subject'] = subjHeader
 

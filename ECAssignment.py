@@ -307,22 +307,17 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
                            '<${url}>\n\n' \
                            '-- \n' \
                            '${product} ${version}'
-                           
-#        mailText = self.translate(domain=I18N_DOMAIN,
-#                                  msgid='email_submission_graded_content',
-#                                  target_language=prefLang,
-#                                  mapping={'box_title': box.Title(),
-#                                           'grade': self.mark,
-#                                           'feedback': self.feedback,
-#                                           'url': submissionURL,
-#                                           'product': PROJECTNAME,
-#                                           'version': productVersion},
-#                                  default=default_mailText)
+        mailText = self.translate(domain=I18N_DOMAIN,
+                                  msgid='email_submission_graded_content',
+                                  target_language=prefLang,
+                                  mapping={'box_title': box.Title(),
+                                           'grade': self.mark,
+                                           'feedback': self.feedback,
+                                           'url': submissionURL,
+                                           'product': PROJECTNAME,
+                                           'version': productVersion},
+                                  default=default_mailText)
 
-        # quick hack to prevent unicode errors 
-        # (caused by 'translate' method in Plone 2.5) 
-        mailText = default_mailText
-        
         self.ecab_utils.sendEmail(addresses, subject, mailText)
 
 

@@ -368,14 +368,27 @@ class ECABTool(UniqueObject, Folder):
             log('Cannot send notification e-mail: E-mail sender address or name not set')
             return
         
-        
         try:
             message = MIMEText(text, 'plain', charset)
+        except UnicodeEncodeError, uee:
+            try:
+                # quick hack for Plone 2.5 to prevent unicode errors
+                message = MIMEText(text.encode(charset), 'plain', charset)
+            except Exception, e:
+                log_exc('Cannot send notification e-mail: %s' % e)
+                return
+
+        try:
             subjHeader = Header(subject, charset)
-            message['Subject'] = subjHeader
-        except Exception, e:
-            log_exc('Cannot send notification e-mail: %s' % e)
-            return
+        except UnicodeEncodeError, uee:
+            try:
+                # quick hack for Plone 2.5 to prevent unicode errors
+                subjHeader = Header(subject.encode(charset), charset)  
+            except Exception, e:
+                log_exc('Cannot send notification e-mail: %s' % e)
+                return
+
+        message['Subject'] = subjHeader
 
         # This is a hack to suppress deprecation messages about send()
         # in SecureMailHost; the proposed alternative, secureSend(),

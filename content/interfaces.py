@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: ECAssignmentBox.py,v 1.1.2.9 2008/10/24 09:06:57 amelung Exp $
+# $Id$
 #
 # Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
@@ -22,18 +22,23 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.1 $'
+__version__   = '$Revision$'
 
-##code-section init-module-header #fill in your manual code here
-##/code-section init-module-header
+from zope.interface import Interface
 
+##code-section HEAD
+##/code-section HEAD
 
-# Subpackages
-# Additional
+class IECFolder(Interface):
+    """Marker interface for .ECFolder.ECFolder
+    """
 
-# Classes
-import ECABTool
+class IECAssignmentBox(Interface):
+    """Marker interface for .ECAssignmentBox.ECAssignmentBox
+    """
 
-##code-section init-module-footer #fill in your manual code here
-##/code-section init-module-footer
-
+class IECAssignment(Interface):
+    """Marker interface for .ECAssignment.ECAssignment
+    """
+##code-section FOOT
+##/code-section FOOT

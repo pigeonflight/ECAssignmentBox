@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
-# ECAssignmentBox is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
 # ECAssignmentBox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,65 +16,58 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
+__docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
-from Products.CMFCore.permissions import setDefaultRoles, AddPortalContent
-from Products.Archetypes.public import DisplayList
+# Product configuration.
+#
+# The contents of this module will be imported into __init__.py, the
+# workflow configuration and every content type module.
+#
+# If you wish to perform custom configuration, you may put a file
+# AppConfig.py in your product's root directory. The items in there
+# will be included (by importing) in this file if found.
 
-GLOBALS = globals()
+from Products.CMFCore.permissions import setDefaultRoles
+##code-section config-head #fill in your manual code here
+##/code-section config-head
 
-I18N_DOMAIN = 'eduComponents'
-
-# define product and tool names
 PROJECTNAME = "ECAssignmentBox"
 
-ECAB_META = "ECAssignmentBox"
-ECAB_NAME = "Assignment Box"
-
-ECA_META = "ECAssignment"
-ECA_NAME = "Assignment"
-
-ECAT_META = "ECAssignmentTask"
-ECAT_NAME = "Assignment Task"
-
-ECA_WORKFLOW_ID = 'ec_assignment_workflow'
-ECA_WORKFLOW_TITLE = 'Assignment workflow [EC]'
-WORKFLOW_SCRIPTS = ['notify_students',]
-
-SKINS_DIR = 'skins'
-
-DEPENDENCIES = ['Archetypes',]
-
-TOOL_NAME  = "ecab_utils"
-TOOL_META  = "ECAssignmentBox Utility Tool"
-TOOL_TITLE = "Assignment Box Settings"
-TOOL_ICON  = "ec_tool.png"
-
 # Permissions
-DEFAULT_ADD_CONTENT_PERMISSION = AddPortalContent
-setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner',))
-
+DEFAULT_ADD_CONTENT_PERMISSION = "Add portal content"
+setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner'))
 ADD_CONTENT_PERMISSIONS = {
-    'ECFolder':        'eduComponents: Add ECFolder',
-    'ECAssignmentBox': 'eduComponents: Add Assignment Box',
-	'ECAssignmentTask':'eduComponents: Add Assignment Task',
+    'ECFolder': 'ECAssignmentBox: Add ECFolder',
+    'ECAssignmentBox': 'ECAssignmentBox: Add ECAssignmentBox',
+    'ECAssignment': 'ECAssignmentBox: Add ECAssignment',
 }
 
-setDefaultRoles('eduComponents: Add ECFolder',       ('Manager', 'Owner',))
-setDefaultRoles('eduComponents: Add Assignment Box', ('Manager', 'Owner',))
-setDefaultRoles('eduComponents: Add Assignment Task',('Manager', 'Owner',))
+setDefaultRoles('ECAssignmentBox: Add ECFolder', ('Manager','Owner'))
+setDefaultRoles('ECAssignmentBox: Add ECAssignmentBox', ('Manager','Owner'))
+setDefaultRoles('ECAssignmentBox: Add ECAssignment', ('Manager','Owner'))
 
-# Supported formats in text areas
-TEXT_TYPES = (
-    'text/structured',
-    'text/x-rst',
-    'text/html',
-    'text/plain',
-    )
+product_globals = globals()
 
-# Some LOG levels
-BLATHER=-100
-DEBUG=-200
-TRACE=-300
-    
+# Dependencies of Products to be installed by quick-installer
+# override in custom configuration
+DEPENDENCIES = []
+
+# Dependend products - not quick-installed - used in testcase
+# override in custom configuration
+PRODUCT_DEPENDENCIES = []
+
+##code-section config-bottom #fill in your manual code here
+##/code-section config-bottom
+
+
+# Load custom configuration not managed by archgenxml
+try:
+    from Products.ECAssignmentBox.AppConfig import *
+except ImportError:
+    pass

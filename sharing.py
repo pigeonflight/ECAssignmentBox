@@ -24,16 +24,20 @@ __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.1 $'
 
-##code-section init-module-header #fill in your manual code here
-##/code-section init-module-header
+from zope.interface import implements
+from plone.app.workflow.interfaces import ISharingPageRole
+from plone.app.workflow import permissions
 
+from Products.CMFPlone import PloneMessageFactory as _
 
-# Subpackages
-# Additional
+class ECAssignmentGraderRole(object):
+    implements(ISharingPageRole)
+    
+    title = _(u"title_ecab_can_grade_assignments", default=u"Can grade assignments")
+    required_permission = permissions.DelegateRoles
 
-# Classes
-import ECABTool
-
-##code-section init-module-footer #fill in your manual code here
-##/code-section init-module-footer
-
+class ECAssignmentViewerRole(object):
+    implements(ISharingPageRole)
+    
+    title = _(u"title_ecab_can_view_assignments", default=u"Can view assignments")
+    required_permission = permissions.DelegateRoles

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-# $Id: ECABTool.py,v 1.25 2008/05/15 16:41:35 amelung Exp $
+# $Id: ECAssignmentBox.py,v 1.1.2.9 2008/10/24 09:06:57 amelung Exp $
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
-# ECAssignmentBox is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
 # ECAssignmentBox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,54 +16,45 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-import urllib, cgi
-from urlparse import urlsplit, urlunsplit
-from socket import gethostname, getfqdn
-from string import split, join
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
+__docformat__ = 'plaintext'
+__version__   = '$Revision: 1.1 $'
 
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
-from OFS.Folder import Folder
+from Products.Archetypes.atapi import *
+from Products.Archetypes.utils import shasattr
+from zope.interface import implements
+import interfaces
+from urlparse import *
+import urllib
+import cgi
+from string import *
+from socket import *
+
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from Products.CMFCore.utils import UniqueObject
+from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
+
+from Products.ECAssignmentBox.config import *
+    
+##code-section module-header #fill in your manual code here
 from ZODB.POSException import ConflictError
+from Products.CMFCore.utils import getToolByName
+
 from email.MIMEText import MIMEText
 from email.Header import Header
 
-from Products.Archetypes.atapi import *
-from Products.CMFCore.utils import UniqueObject, getToolByName
-from Products.CMFPlone.utils import log_exc, log
-from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
+from zLOG import LOG, INFO, ERROR
 
-# local imports
-from Products.ECAssignmentBox.content.Statistics import Statistics
-from Products.ECAssignmentBox.config import I18N_DOMAIN
-from Products.ECAssignmentBox.config import ECA_WORKFLOW_ID
-from Products.ECAssignmentBox.config import ECAB_META
-from Products.ECAssignmentBox.permissions import GradeAssignments
-
-__author__ = """unknown <unknown>"""
-__docformat__ = 'plaintext'
-
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import *
-from zope.interface import implements
-import interfaces
-
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-
-from Products.ECAssignmentBox.config import *
-
-
-from Products.CMFCore.utils import UniqueObject
-
-    
-##code-section module-header #fill in your manual code here
+import logging
+log = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
 
 schema = Schema((
-
 
 ),
 )
@@ -71,8 +62,7 @@ schema = Schema((
 ##code-section after-local-schema #fill in your manual code here
 ##/code-section after-local-schema
 
-ECABTool_schema = BaseSchema.copy() + \
-    schema.copy()
+ECABTool_schema = BaseSchema.copy() + schema.copy()
 
 ##code-section after-schema #fill in your manual code here
 ##/code-section after-schema
@@ -80,29 +70,21 @@ ECABTool_schema = BaseSchema.copy() + \
 class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     """
     """
-    id = 'ecab_utils'
-    portal_type = meta_type = 'ECAssignmentBox Utility Tool'
-
     security = ClassSecurityInfo()
-
     implements(interfaces.IECABTool)
-
-   # meta_type = 'ECABTool'
+    meta_type = 'ECABTool'
     _at_rename_after_creation = True
-
     schema = ECABTool_schema
 
     ##code-section class-header #fill in your manual code here
     ##/code-section class-header
 
-    manage_options = (
-        (Folder.manage_options[0],)
-        + Folder.manage_options[2:]
-        )
 
     # tool-constructors have no id argument, the id is fixed
     def __init__(self, id=None):
-        BaseContent.__init__(self,'portal_ecabtool')
+        """
+        """
+        BaseContent.__init__(self,'ecab_utils')
         self.setTitle('')
         
         ##code-section constructor-footer #fill in your manual code here
@@ -111,6 +93,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
     # tool should not appear in portal_catalog
     def at_post_edit_script(self):
+        """
+        """
         self.unindexObject()
         
         ##code-section post-edit-method-footer #fill in your manual code here
@@ -143,8 +127,52 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
         #return dl.sortedByValue()
         return dl
-		
-    security.declarePublic('localizeNumber')
+
+    #security.declarePrivate('getWfTransitions')
+    def getWfTransitions(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return all transitions for the given workflow
+        """
+        
+        result = {}
+        
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+
+        for tid in wf.transitions.keys():
+            tdef = wf.transitions.get(tid, None)
+            if tdef is not None and \
+               tdef.trigger_type == TRIGGER_USER_ACTION and \
+               tdef.actbox_name and \
+               not result.has_key(tdef.id):
+                result[tdef.id] = {
+                        'id': tdef.id,
+                        'title': tdef.title,
+                        'title_or_id': tdef.title_or_id(),
+                        'description': tdef.description,
+                        'name': tdef.actbox_name}
+        
+        return tuple(result.values())
+
+
+    #security.declarePrivate('getWfTransitionsDisplayList')
+    def getWfTransitionsDisplayList(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return a DisplayList containing all transition keys and titles in 
+                assignment's workflow
+        """
+        dl = DisplayList(())
+
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+
+        for transition in self.getWfTransitions():
+            # FIXME: not sure if this works with the result from getWfTransitions
+            dl.add(transition.id, transition.actbox_name)
+
+        return dl.sortedByValue()
+
+    #security.declarePublic('localizeNumber')
     def localizeNumber(self, format, value):
         """
         A simple method for localized formatting of decimal numbers,
@@ -166,11 +194,15 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return result
 
 
-    security.declarePublic('getFullNameById')
+    #security.declarePublic('getFullNameById')
     def getFullNameById(self, id):
         """
-        Returns the full name of a user by the given ID. 
+        Returns the full name of a user by the given ID.  If full name is
+        devided into given and last name, we return it in the format
+        Doo, John; otherwise we will return 'fullname' as provided by Plone. 
         """
+        #log.debug('Here we are in ECABTool#getFullNameById')
+    
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         error = False
@@ -181,6 +213,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             sn        = member.getProperty('sn')
             givenName = member.getProperty('givenName')
+
         except:
             error = True
 
@@ -189,42 +222,55 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
             if fullname == '':
                 return id
-
-            if fullname.find(' ') == -1:
+            else: 
                 return fullname
 
-            sn = fullname[fullname.rfind(' ') + 1:]
-            givenName = fullname[0:fullname.find(' ')]
-
-        #log('xxx_sn: %s' % str(sn))
-        #log('xxx_gn: %s' % str(givenName))
-
-        return sn + ', ' + givenName
+            #if fullname.find(' ') == -1:
+            #    return fullname
+            #
+            #sn = fullname[fullname.rfind(' ') + 1:]
+            #givenName = fullname[0:fullname.find(' ')]
+            
+        else:
+            #return sn + ', ' + givenName
+           # print 'givenName, sn: %s, %s' % (givenName, sn, )
+            return '%s, %s' % (sn, givenName)
 
 
     security.declarePublic('getUserPropertyById')
-    def getUserPropertyById(self, id, property=''):
+    def getUserPropertyById(self, userId, property, fallback=None):
         """
+        @return: Value for 'property' or None
         """
-        mtool = self.portal_membership
-        member = mtool.getMemberById(id)
+        
+        #log.debug('Here we are in ECABTool#getUserPropertyById')
+        
+        membership = getToolByName(self, 'portal_membership')
+        member = membership.getMemberById(userId)
 
         try:
             value = member.getProperty(property)
         except:
-            return None
+            return fallback
 
         return value
-
-
-    security.declarePublic('isAssignmentBoxType')
-    def isAssignmentBoxType(self, item):
+    
+    
+    #security.declarePublic('testAssignmentBoxType')
+    def testAssignmentBoxType(self, item=None):
         """
-        Returns True if item has a method 'isAssignmentBoxType' or - in case
-        item is a ctalog brain- index 'isAssignmentBoxType' is True
+        Returns True if item has an attribut 'isAssignmentBoxType' or - in case
+        item is a catalog brain- index 'isAssignmentBoxType' is True
         """
-        return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
+        
+        #log.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
+        
+        if (item and shasattr(item, 'isAssignmentBoxType')):
+            return item.isAssignmentBoxType
+        else:
+            return False
 
+    #security.declarePublic('isGrader')
     def isGrader(self, item, id=None):
         """
         Returns True if the user given by id has permission to grade the
@@ -245,7 +291,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return member.checkPermission(GradeAssignments, item)
 
 
-    security.declarePublic('getStatesToShow')
+    #security.declarePublic('getStatesToShow')
     def getStatesToShow(self, showSuperseded=False, state=None):
         """
         Returns a list of state names which will be used as a filter
@@ -265,7 +311,6 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             result += ('superseded',)
 
         return result
-
 
 
     #security.declarePublic('findAssignments')
@@ -315,6 +360,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
         return stats.median
 
+
+    #security.declarePublic('normalizeURL')
     def normalizeURL(self, url):
         """
         Takes a URL (as returned by absolute_url(), for example) and
@@ -343,16 +390,21 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return url
 
 
-    security.declarePublic('urlencode')
+    #security.declarePublic('urlencode')
     def urlencode(self, *args, **kwargs):
+        """
+        """
         return urllib.urlencode(*args, **kwargs)
 
-    security.declarePublic('parseQueryString')
+
+    #security.declarePublic('parseQueryString')
     def parseQueryString(self, *args, **kwargs):
+        """
+        """
         return cgi.parse_qs(*args, **kwargs)
 
 
-    security.declarePrivate('sendEmail')
+    #security.declarePrivate('sendEmail')
     def sendEmail(self, addresses, subject, text):
         """
         Send an e-mail message to the specified list of addresses.
@@ -370,7 +422,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         fromAddress = portal.getProperty('email_from_address', None)
 
         if fromAddress is None:
-            log('Cannot send notification e-mail: E-mail sender address or name not set')
+            log.error('Cannot send email: address or name is %s' % fromAddress)
             return
 
         try:
@@ -379,7 +431,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 message = MIMEText(text, 'plain', charset)
         except Exception, e:
-            log_exc('Cannot send notification e-mail: %s' % e)
+            log.error('Cannot send notification email: %s' % e)
             return
 
         try:
@@ -388,7 +440,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 subjHeader = Header(subject, charset)
         except Exception, e:
-            log_exc('Cannot send notification e-mail: %s' % e)
+            log.error('Cannot send notification email: %s' % e)
             return
 
         message['Subject'] = subjHeader
@@ -404,12 +456,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
                               mto = address,
                               mfrom = fromAddress,)
             except ConflictError, ce:
-                log_exc('Cannot send notification e-mail: %s' % ce)
+                log.error('Cannot send notification email: %s' % ce)
                 raise
-            except:
-                log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
+            except Exception, e:
+                log.error('Could not send email from %s to %s: %s' % 
+                          (fromAddress, address, e,))
 
 
+    #security.declarePrivate('pathQuote')
     def pathQuote(self, string=''):
         """
         Returns a string which is save to use as a filename.
@@ -428,13 +482,9 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
                 ret += SPACE_REPLACER
         return ret
 
+
 registerType(ECABTool, PROJECTNAME)
 # end of class ECABTool
 
 ##code-section module-footer #fill in your manual code here
-
-
 ##/code-section module-footer
-
-
-

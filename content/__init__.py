@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: ECAssignmentBox.py,v 1.1.2.9 2008/10/24 09:06:57 amelung Exp $
+# $Id$
 #
 # Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
@@ -22,7 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.1 $'
+__version__   = '$Revision$'
 
 ##code-section init-module-header #fill in your manual code here
 ##/code-section init-module-header
@@ -32,7 +32,9 @@ __version__   = '$Revision: 1.1 $'
 # Additional
 
 # Classes
-import ECABTool
+import ECFolder
+import ECAssignmentBox
+import ECAssignment
 
 ##code-section init-module-footer #fill in your manual code here
 ##/code-section init-module-footer

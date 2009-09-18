@@ -169,6 +169,7 @@
   <exit-transition transition_id="retract"/>
   <permission-map name="Access contents information"
                   acquired="False">
+   <permission-role>Owner</permission-role>
    <permission-role>Reviewer</permission-role>
    <permission-role>Manager</permission-role>
   </permission-map>

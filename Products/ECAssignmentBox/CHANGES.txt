@@ -5,7 +5,7 @@ History
 
 # Changes in release 1.5 (2009-09-25)
 
-- ECAssignmentBox is now eggified and uploaded to PyPoI.  An old-style 
+- ECAssignmentBox is now eggified and uploaded to PyPI.  An old-style 
   tarball distribution is still available at plone.org.
 
 - Fixed issue: Assignments in state superseded can not accessed by

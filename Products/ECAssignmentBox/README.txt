@@ -66,8 +66,9 @@ Support
 =======
 
 For questions and discussions about ECAssignmentBox, please join the
-"eduComponents mailing
-list":https://listserv.uni-magdeburg.de/mailman/listinfo/educomponents.
+`eduComponents mailing list`_.
+
+.. _eduComponents mailing list: https://listserv.uni-magdeburg.de/mailman/listinfo/educomponents.
 
 Credits
 =======

@@ -24,16 +24,13 @@ __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.2 $'
 
-import os
+#import os
 import transaction
 import logging
 log = logging.getLogger('ECAssignmentBox: setuphandlers')
 
-from Products.ECAssignmentBox.config import PROJECTNAME
-from Products.ECAssignmentBox.config import DEPENDENCIES
+from Products.ECAssignmentBox import config
 from Products.CMFCore.utils import getToolByName
-##code-section HEAD
-##/code-section HEAD
 
 def isNotECAssignmentBoxProfile(context):
     return context.readDataFile("ECAssignmentBox_marker.txt") is None
@@ -66,9 +63,9 @@ def fixTools(context):
     site = context.getSite()
     tool_ids=['ecab_utils']
     for tool_id in tool_ids:
-	    if hasattr(site, tool_id):
-	        tool=site[tool_id]
-	        tool.initializeArchetype()
+        if hasattr(site, tool_id):
+            tool=site[tool_id]
+            tool.initializeArchetype()
 
 
 def updateRoleMappings(context):
@@ -86,7 +83,6 @@ def postInstall(context):
 
     reindexIndexes(context)
 
-##code-section FOOT
 
 def installGSDependencies(context):
     """Install dependend profiles."""
@@ -106,7 +102,7 @@ def installQIDependencies(context):
 
     portal = getToolByName(site, 'portal_url').getPortalObject()
     quickinstaller = portal.portal_quickinstaller
-    for dependency in DEPENDENCIES:
+    for dependency in config.DEPENDENCIES:
         if quickinstaller.isProductInstalled(dependency):
             log.info('Reinstalling dependency %s:' % dependency)
             quickinstaller.reinstallProducts([dependency])
@@ -146,5 +142,3 @@ def reindexIndexes(context):
         pc.manage_reindexIndex(ids=ids)
     
     log.info('Reindexed %s' % indexes)
-
-##/code-section FOOT

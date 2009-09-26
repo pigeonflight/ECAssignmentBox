@@ -36,7 +36,7 @@ Installing with buildout
 ------------------------
 
 If you are using `buildout`_ to manage your instance installing 
-ECAssigmentBox is very simple.  You can install it by adding it to the 
+ECAssignmentBox is very simple.  You can install it by adding it to the 
 eggs line for your instance::
 
   [instance]
@@ -48,7 +48,7 @@ After updating the configuration you need to run ``bin/buildout``,
 which will take care of updating your system.
 
 Then restart your zope instance and use the Add/Remove products page
-in Site Setup to install ECAssigmentBox.
+in Site Setup to install ECAssignmentBox.
 
 .. _buildout: http://pypi.python.org/pypi/zc.buildout
 
@@ -57,10 +57,10 @@ Installing without buildout
 ---------------------------
 
 Move (or symlink) the ``ECAssigmentBox`` folder of this project
-(``Products.ECAssigmentBox/Products/ECAssigmentBox``) into the 
+(``Products.ECAssignmentBox/Products/ECAssignmentBox``) into the 
 ``Products`` directory of the Zope instance it has to be installed 
 for, and restart the server.  Use the Add/Remove products page in 
-Site Setup to install ECAssigmentBox.
+Site Setup to install ECAssignmentBox.
 
 Support
 =======

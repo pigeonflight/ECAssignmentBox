@@ -67,4 +67,5 @@ if failed:
                                           default = 'The settings of the following assignment boxes could not be changed: "${titles}".',
                                           mapping = {'titles': '", "'.join(failed)})
 
-return state.set(status=status, portal_status_message=message)
+context.plone_utils.addPortalMessage(message)
+return state.set(status=status)

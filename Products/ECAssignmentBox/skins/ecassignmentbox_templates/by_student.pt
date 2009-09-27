@@ -133,8 +133,7 @@
                           ecab_utils.calculateMean(grades.get(student[0], [])))">
                       3
                   </td>
-                  <td tal:condition="python: not grades.get(student[0], [])"
-                    >&mdash;</td>
+                  <td tal:condition="python: not grades.get(student[0], [])">&mdash;</td>
                 </tal:if>
                 <tal:block tal:condition="here/completedStates">
                   <tal:block tal:define="c python: completed[student[0]]">

@@ -1,71 +1,50 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
 #
 # This file is part of ECAssignmentBox.
-#
-# ECAssignmentBox is free software; you can redistribute it and/or 
-# modify it under the terms of the GNU General Public License as 
-# published by the Free Software Foundation; either version 2 of the 
-# License, or (at your option) any later version.
-#
-# ECAssignmentBox is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the 
-# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
-# MA  02110-1301  USA
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.1 $'
 
 from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import *
+from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, \
+    DisplayList, registerType 
 from Products.Archetypes.utils import shasattr
 from zope.interface import implements
 import interfaces
-from urlparse import *
+from urlparse import urlsplit, urlunsplit
 import urllib
 import cgi
-from string import *
-from socket import *
+from string import join, split
+from socket import getfqdn, gethostname
+#import sys
+#import traceback
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFCore.utils import UniqueObject
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
-
-from Products.ECAssignmentBox.config import *
     
-##code-section module-header #fill in your manual code here
 from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
 
 from email.MIMEText import MIMEText
 from email.Header import Header
 
-from zLOG import LOG, INFO, ERROR
+#from zLOG import LOG, INFO, ERROR
+from Products.ECAssignmentBox.tool.Statistics import Statistics
+from Products.ECAssignmentBox import config
 
 import logging
 log = logging.getLogger('ECAssignmentBox')
-##/code-section module-header
 
 schema = Schema((
-
 ),
 )
 
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
-
 ECABTool_schema = BaseSchema.copy() + schema.copy()
-
-##code-section after-schema #fill in your manual code here
-##/code-section after-schema
 
 class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     """
@@ -76,10 +55,6 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     _at_rename_after_creation = True
     schema = ECABTool_schema
 
-    ##code-section class-header #fill in your manual code here
-    ##/code-section class-header
-
-
     # tool-constructors have no id argument, the id is fixed
     def __init__(self, id=None):
         """
@@ -87,23 +62,16 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         BaseContent.__init__(self,'ecab_utils')
         self.setTitle('')
         
-        ##code-section constructor-footer #fill in your manual code here
-        ##/code-section constructor-footer
-
-
     # tool should not appear in portal_catalog
     def at_post_edit_script(self):
         """
         """
         self.unindexObject()
         
-        ##code-section post-edit-method-footer #fill in your manual code here
-        ##/code-section post-edit-method-footer
-
 
     # Methods
     #security.declarePrivate('getWfStates')
-    def getWfStates(self, wfName=ECA_WORKFLOW_ID):
+    def getWfStates(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return a list containing all state keys in assignment's workflow
         """
@@ -111,7 +79,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return wtool.getWorkflowById(wfName).states.keys()
 
     #security.declarePrivate('getWfStatesDisplayList')
-    def getWfStatesDisplayList(self, wfName=ECA_WORKFLOW_ID):
+    def getWfStatesDisplayList(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return a DisplayList containing all state keys and state titles in 
                 assignment's workflow
@@ -129,7 +97,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return dl
 
     #security.declarePrivate('getWfTransitions')
-    def getWfTransitions(self, wfName=ECA_WORKFLOW_ID):
+    def getWfTransitions(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return all transitions for the given workflow
         """
@@ -156,18 +124,19 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
 
     #security.declarePrivate('getWfTransitionsDisplayList')
-    def getWfTransitionsDisplayList(self, wfName=ECA_WORKFLOW_ID):
+    def getWfTransitionsDisplayList(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return a DisplayList containing all transition keys and titles in 
                 assignment's workflow
         """
         dl = DisplayList(())
 
-        wtool = self.portal_workflow
-        wf = wtool.getWorkflowById(wfName)
+        #wtool = self.portal_workflow
+        #wf = wtool.getWorkflowById(wfName)
 
         for transition in self.getWfTransitions():
-            # FIXME: not sure if this works with the result from getWfTransitions
+            # FIXME: not sure if this works with the result 
+            # from getWfTransitions
             dl.add(transition.id, transition.actbox_name)
 
         return dl.sortedByValue()
@@ -178,11 +147,16 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         A simple method for localized formatting of decimal numbers,
         similar to locale.format().
         """
+        
+        #log.info('format: %s' % format)
+        #log.info('value: %s' % value)
+        
+        if not value: return None
 
         result = format % value
         fields = result.split(".")
         decimalSeparator = self.translate(msgid = 'decimal_separator',
-                                          domain = I18N_DOMAIN,
+                                          domain = config.I18N_DOMAIN,
                                           default = '.')
         if len(fields) == 2:
             result = fields[0] + decimalSeparator + fields[1]
@@ -233,7 +207,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             
         else:
             #return sn + ', ' + givenName
-           # print 'givenName, sn: %s, %s' % (givenName, sn, )
+            # print 'givenName, sn: %s, %s' % (givenName, sn, )
             return '%s, %s' % (sn, givenName)
 
 
@@ -288,7 +262,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         else:
             member = mtool.getMemberById(id)
 
-        return member.checkPermission(GradeAssignments, item)
+        return member.checkPermission(config.GradeAssignments, item)
 
 
     #security.declarePublic('getStatesToShow')
@@ -343,7 +317,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         """
         try:
             stats = Statistics(map((float), list))
-        except:
+        except Exception, e:
+            #log.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
             return None
 
         return stats.mean
@@ -354,9 +329,10 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         """
         """
         try:
-                stats = Statistics(map((float), list))
-        except:
-                return None
+            stats = Statistics(map((float), list))
+        except Exception, e:
+            #log.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
+            return None
 
         return stats.median
 
@@ -483,8 +459,4 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return ret
 
 
-registerType(ECABTool, PROJECTNAME)
-# end of class ECABTool
-
-##code-section module-footer #fill in your manual code here
-##/code-section module-footer
+registerType(ECABTool, config.PROJECTNAME)

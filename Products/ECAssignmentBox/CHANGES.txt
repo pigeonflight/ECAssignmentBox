@@ -3,13 +3,21 @@
 History
 =======
 
-# Changes in release 1.5 (2009-09-25)
+# Changes in release 1.4.1 (2009-09-28)
 
 - ECAssignmentBox is now eggified and uploaded to PyPI.  An old-style 
   tarball distribution is still available at plone.org.
 
+- It's now possible to modify the submission period and other settings 
+  for more than one assignment box at a time by using the 'set 
+  assignment box options' action on ECFolder's content tab.
+
 - Fixed issue: Assignments in state superseded can not accessed by
   the owner.
+
+- Fixed issue: ECAssignmentBox int argument error.  After a students 
+  submission is graded and state changed to Graded an 'TypeError: 
+  int argument required' appears ion the statistics tab.
 
 
 # Changes in release 1.4 (2009-02-04)

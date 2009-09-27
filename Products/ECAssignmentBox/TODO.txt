@@ -1,5 +1,3 @@
-<!-- -*- coding: utf-8 -*- -->
-
 # Todos for release 1.5
 
 - Email notification on workflow transition 'grade' and notification

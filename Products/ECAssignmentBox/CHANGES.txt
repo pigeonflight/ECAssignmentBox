@@ -15,7 +15,7 @@ History
 
 - Fixed issue: ECAssignmentBox int argument error.  After a students 
   submission is graded and state changed to Graded an 'TypeError: 
-  int argument required' appears ion the statistics tab.
+  int argument required' appears on the statistics tab.
 
 
 # Changes in release 1.4 (2009-02-04)

@@ -1,42 +1,32 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
 #
 # This file is part of ECAssignmentBox.
-#
-# ECAssignmentBox is free software; you can redistribute it and/or 
-# modify it under the terms of the GNU General Public License as 
-# published by the Free Software Foundation; either version 2 of the 
-# License, or (at your option) any later version.
-#
-# ECAssignmentBox is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the 
-# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
-# MA  02110-1301  USA
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.2 $'
 
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import *
-from zope.interface import implements
 import interfaces
 
+from AccessControl import ClassSecurityInfo
+from zope.interface import implements
+
+from Products.Archetypes.atapi import Schema, registerType, DisplayList
+from Products.Archetypes.atapi import TextField, LinesField, IntegerField
+from Products.Archetypes.atapi import RichWidget, MultiSelectionWidget, \
+    IntegerWidget
+
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+#from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
-from Products.ECAssignmentBox.config import *
 
-##code-section module-header #fill in your manual code here
+from Products.ECAssignmentBox import config
+
 
 import logging
 log = logging.getLogger('ECAssignmentBox')
@@ -47,15 +37,15 @@ schema = Schema((
 
     TextField(
         'directions',
-        allowable_content_types = EC_MIME_TYPES, 
-        default_content_type = EC_DEFAULT_MIME_TYPE, 
-        default_output_type = EC_DEFAULT_FORMAT,
+        allowable_content_types = config.EC_MIME_TYPES, 
+        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
+        default_output_type = config.EC_DEFAULT_FORMAT,
         widget = RichWidget(
             label = 'Directions',
             label_msgid = 'label_directions',
             description = 'Instructions/directions that all assignment boxes in this folder refer to',
             description_msgid = 'help_directions',
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             allow_file_upload = False,
             rows = 8,
         ),
@@ -71,7 +61,7 @@ schema = Schema((
             label_msgid = "label_completed_states",
             description = "States considered as completed",
             description_msgid = "help_completed_states",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
         ),
     ),
 
@@ -86,20 +76,14 @@ schema = Schema((
             label_msgid = "label_projected_assignments",
             description = "Projected number of assignments, 0 means undefined",
             description_msgid = "help_projected_assignments",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
         ),
     ),
 
 ),
 )
 
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
-
 ECFolder_schema = ATFolderSchema.copy() + schema.copy()
-
-##code-section after-schema #fill in your manual code here
-##/code-section after-schema
 
 class ECFolder(ATFolder):
     """
@@ -112,9 +96,6 @@ class ECFolder(ATFolder):
     _at_rename_after_creation = True
 
     schema = ECFolder_schema
-
-    ##code-section class-header #fill in your manual code here
-    ##/code-section class-header
 
     # Methods
     #security.declarePrivate('getWfStatesDisplayList')
@@ -130,7 +111,7 @@ class ECFolder(ATFolder):
         ecab_utils = getToolByName(self, 'ecab_utils', None)
         
         if (ecab_utils != None):
-            return ecab_utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+            return ecab_utils.getWfStatesDisplayList(config.ECA_WORKFLOW_ID)
         else:
             return DisplayList(())
 
@@ -287,7 +268,7 @@ class ECFolder(ATFolder):
         @return an array
         """
         array = []
-        mtool = self.portal_membership
+        #mtool = self.portal_membership
 
         for key in dict:
             array.append((key, self.ecab_utils.getFullNameById(key),
@@ -334,7 +315,7 @@ class ECFolder(ATFolder):
         ecab_utils = getToolByName(self, 'ecab_utils', None)
         
         if (ecab_utils != None):
-            return ecab_utils.getWfStates(ECA_WORKFLOW_ID)
+            return ecab_utils.getWfStates(config.ECA_WORKFLOW_ID)
         else:
             return ()
 
@@ -347,7 +328,7 @@ class ECFolder(ATFolder):
         ecab_utils = getToolByName(self, 'ecab_utils', None)
         
         if (ecab_utils != None):
-            return ecab_utils.getWfTransitionsDisplayList(ECA_WORKFLOW_ID)
+            return ecab_utils.getWfTransitionsDisplayList(config.ECA_WORKFLOW_ID)
         else:
             return DisplayList(())
 
@@ -385,4 +366,4 @@ class ECFolder(ATFolder):
         return len(brains)
 
 
-registerType(ECFolder, PROJECTNAME)
+registerType(ECFolder, config.PROJECTNAME)

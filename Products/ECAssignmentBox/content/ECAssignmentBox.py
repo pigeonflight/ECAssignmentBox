@@ -1,53 +1,42 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
 #
 # This file is part of ECAssignmentBox.
-#
-# ECAssignmentBox is free software; you can redistribute it and/or 
-# modify it under the terms of the GNU General Public License as 
-# published by the Free Software Foundation; either version 2 of the 
-# License, or (at your option) any later version.
-#
-# ECAssignmentBox is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the 
-# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
-# MA  02110-1301  USA
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.2 $'
 
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import *
-from zope.interface import implements
 import interfaces
 
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from zope.interface import implements
+from DateTime import DateTime
+
+#from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
-from Products.ECAssignmentBox.config import *
+
+from Products.Archetypes.atapi import Schema, BaseFolder, OrderedBaseFolder, \
+    registerType
+from Products.Archetypes.atapi import ReferenceField, TextField, DateTimeField, \
+    IntegerField, BooleanField
+from Products.Archetypes.atapi import RichWidget, TextAreaWidget, \
+    CalendarWidget, IntegerWidget, BooleanWidget 
 
 from Products.CMFCore.utils import getToolByName
 
-from Products.ATContentTypes.content.base import registerATCT
-from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+#from Products.ATContentTypes.content.base import registerATCT
+#from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
-##code-section module-header #fill in your manual code here
-from DateTime import DateTime
-from Statistics import Statistics
+from Products.ECAssignmentBox import config
 
 import logging
 log = logging.getLogger('ECAssignmentBox')
-##/code-section module-header
 
 #ECAssignmentBox_schema = BaseBTreeFolderSchema.copy() + Schema((
 ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
@@ -63,7 +52,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         widget = ReferenceBrowserWidget(
 			description = 'Select an assignment task.  A reference to an assignment task supersedes the assignment text and answer template below.',
             description_msgid = 'help_assignment_reference',
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             label = 'Reference to assignment',
             label_msgid = 'label_assignment_reference',
             allow_search = True,
@@ -74,15 +63,15 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         'assignment_text',
         required = False,
         searchable = True,
-        allowable_content_types = EC_MIME_TYPES, 
-        default_content_type = EC_DEFAULT_MIME_TYPE, 
-        default_output_type = EC_DEFAULT_FORMAT,
+        allowable_content_types = config.EC_MIME_TYPES, 
+        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
+        default_output_type = config.EC_DEFAULT_FORMAT,
         widget=RichWidget(
             label = 'Assignment text',
             label_msgid = 'label_assignment_text',
             description = 'Enter text and hints for the assignment',
             description_msgid = 'help_assignment_text',
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             rows = 10,
             allow_file_upload = True,
         ),
@@ -101,7 +90,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
             label_msgid = 'label_answer_template',
             description = 'You can provide a template for the students\' answers',
             description_msgid = 'help_answer_template',
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             rows = 12,
             #format = 0,
         ),
@@ -118,7 +107,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
                            "submit their assignments"),
             label_msgid = "label_submission_period_start",
             description_msgid = "help_submission_period_start",
-            i18n_domain = I18N_DOMAIN
+            i18n_domain = config.I18N_DOMAIN
         ),
     ),
     
@@ -133,7 +122,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
                            "be submitted"),
             label_msgid = "label_submission_period_end",
             description_msgid = "help_submission_period_end",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
         ),
     ),
 
@@ -147,7 +136,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
             label_msgid = "label_max_tries",
             description = "Maximum number of attempts, 0 means unlimited",
             description_msgid = "help_max_tries",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
         ),
     ),
 
@@ -158,7 +147,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
             description="If selected, text entered in the Answer field will be word-wrapped.  Disable word wrap if students are supposed to enter program code or similar notations.",
             label_msgid='label_wrapAnswer',
             description_msgid='help_wrapAnswer',
-            i18n_domain=I18N_DOMAIN,
+            i18n_domain=config.I18N_DOMAIN,
         ),
     ),
 
@@ -169,7 +158,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
             description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
             label_msgid='label_sendNotificationEmail',
             description_msgid='help_sendNotificationEmail',
-            i18n_domain=I18N_DOMAIN,
+            i18n_domain=config.I18N_DOMAIN,
         ),
     ),
     
@@ -180,15 +169,12 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
             description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
             label_msgid='label_sendGradingNotificationEmail',
             description_msgid='help_sendGradingNotificationEmail',
-            i18n_domain=I18N_DOMAIN,
+            i18n_domain=config.I18N_DOMAIN,
         ),
     ),
                                                         
 ) # , marshall = PrimaryFieldMarshaller()
 )
-
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
 
 class ECAssignmentBox(ATFolder):
     """
@@ -347,7 +333,8 @@ class ECAssignmentBox(ATFolder):
             return False
         
         return True
-		
+
+
     def getGradeForStudent(self, student):
         """
         FIXME: currently unused!
@@ -435,8 +422,4 @@ class ECAssignmentBox(ATFolder):
 
 
 
-registerType(ECAssignmentBox, PROJECTNAME)
-# end of class ECAssignmentBox
-
-##code-section module-footer #fill in your manual code here
-##/code-section module-footer
+registerType(ECAssignmentBox, config.PROJECTNAME)

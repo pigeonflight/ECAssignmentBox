@@ -1,64 +1,45 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
 #
 # This file is part of ECAssignmentBox.
-#
-# ECAssignmentBox is free software; you can redistribute it and/or 
-# modify it under the terms of the GNU General Public License as 
-# published by the Free Software Foundation; either version 2 of the 
-# License, or (at your option) any later version.
-#
-# ECAssignmentBox is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the 
-# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
-# MA  02110-1301  USA
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.2 $'
 
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import *
-from zope.interface import implements
+import re
 import interfaces
-
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-
-
 from StringIO import StringIO
 from textwrap import TextWrapper
-import re
+
+from AccessControl import ClassSecurityInfo
+from zope.interface import implements
+
+from Products.Archetypes.atapi import Schema, BaseContent, registerType
+from Products.Archetypes.atapi import FileField, TextField, StringField
+from Products.Archetypes.atapi import FileWidget, RichWidget, StringWidget
+
+#from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema, finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.interfaces import IATDocument
+#from Products.ATContentTypes.interfaces import IATDocument
 
 # The following two imports are for getAsPlainText()
 #from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.PortalTransforms.utils import TransformException
 
-from Products.ECAssignmentBox.config import *
+from Products.ECAssignmentBox import config
 
 # PlagDetector imports
-#from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
-#from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
+from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
+from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
 
 import logging
 log = logging.getLogger('ECAssignmentBox')
-
-##code-section module-header #fill in your manual code here
-##/code-section module-header
-
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
@@ -87,23 +68,23 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             label_msgid = "label_answer",
             description = "The submission for this assignment",
             description_msgid = "help_answer",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             macro = 'answer_widget',
         ),
     ),
 
     TextField(
         'remarks',
-        allowable_content_types = ECA_MIME_TYPES, 
-        default_content_type = EC_DEFAULT_MIME_TYPE, 
-        default_output_type = EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ECA_MIME_TYPES, 
+        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
+        default_output_type = config.EC_DEFAULT_FORMAT,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Remarks",
             label_msgid = "label_remarks",
             description = "Your remarks for this assignment (they will not be shown to the student)",
             description_msgid = "help_remarks",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             rows = 7,
         ),
         read_permission = 'Modify Portal Content',
@@ -112,16 +93,16 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
     TextField(
         'feedback',
         searchable = True,
-        allowable_content_types = ECA_MIME_TYPES, 
-        default_content_type = EC_DEFAULT_MIME_TYPE, 
-        default_output_type = EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ECA_MIME_TYPES, 
+        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
+        default_output_type = config.EC_DEFAULT_FORMAT,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Feedback",
             label_msgid = "label_feedback",
             description = "The grader's feedback for this assignment",
             description_msgid = "help_feedback",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
             rows = 7,
         ),
     ),
@@ -137,16 +118,13 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             label_msgid = 'label_grade',
             description = "The grade awarded for this assignment",
             description_msgid = "help_grade",
-            i18n_domain = I18N_DOMAIN,
+            i18n_domain = config.I18N_DOMAIN,
         ),
     ),
   ) # , marshall = PrimaryFieldMarshaller()
 )
 
 finalizeATCTSchema(ECAssignmentSchema)
-
-##code-section after-schema #fill in your manual code here
-##/code-section after-schema
 
 class ECAssignment(BaseContent, HistoryAwareMixin):
     """A submission to an assignment box"""
@@ -169,8 +147,6 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     isAssignmentBoxType = False
     isAssignmentType = True
     
-    ##/code-section class-header
-
     # Methods
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
@@ -217,7 +193,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
 
         portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
-        productVersion = portal_qi.getProductVersion(PROJECTNAME)
+        productVersion = portal_qi.getProductVersion(config.PROJECTNAME)
         
         submitterId   = self.Creator()
         submitterName = ecab_utils.getFullNameById(submitterId)
@@ -229,10 +205,10 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         prefLang = ecab_utils.getUserPropertyById(box.Creator(), 'language', portal_language)
         
         default_subject = '[${id}] Submission to "${box_title}" by ${student}'
-        subject = self.translate(domain=I18N_DOMAIN,
+        subject = self.translate(domain=config.I18N_DOMAIN,
                                  msgid='email_new_submission_subject',
                                  target_language=prefLang,
-                                 mapping={'id': PROJECTNAME,
+                                 mapping={'id': config.PROJECTNAME,
                                           'box_title': box.Title(),
                                           'student': submitterName},
                                  default=default_subject)
@@ -242,13 +218,13 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                            '<${url}>\n\n' \
                            '-- \n' \
                            '${product} ${version}'
-        mailText = self.translate(domain=I18N_DOMAIN,
+        mailText = self.translate(domain=config.I18N_DOMAIN,
                                   msgid='email_new_submission_content',
                                   target_language=prefLang,
                                   mapping={'box_title': box.Title(),
                                            'student': submitterName,
                                            'url': submissionURL,
-                                           'product': PROJECTNAME,
+                                           'product': config.PROJECTNAME,
                                            'version': productVersion},
                                   default=default_mailText)
 
@@ -273,10 +249,10 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         # set; this shouldn't normally happen
         portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
-        productVersion = portal_qi.getProductVersion(PROJECTNAME)
+        productVersion = portal_qi.getProductVersion(config.PROJECTNAME)
         
         submitterId   = self.Creator()
-        submitterName = ecab_utils.getFullNameById(submitterId)
+        #submitterName = ecab_utils.getFullNameById(submitterId)
         submissionURL = ecab_utils.normalizeURL(self.absolute_url())
 
         addresses = []
@@ -285,7 +261,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         prefLang = ecab_utils.getUserPropertyById(submitterId, 'language', portal_language)
 
         default_subject = 'Your submission to "${box_title}" has been graded'
-        subject = self.translate(domain=I18N_DOMAIN,
+        subject = self.translate(domain=config.I18N_DOMAIN,
                                  msgid='email_submission_graded_subject',
                                  target_language=prefLang,
                                  mapping={'box_title': box.Title(),},
@@ -298,14 +274,14 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                            '<${url}>\n\n' \
                            '-- \n' \
                            '${product} ${version}'
-        mailText = self.translate(domain=I18N_DOMAIN,
+        mailText = self.translate(domain=config.I18N_DOMAIN,
                                   msgid='email_submission_graded_content',
                                   target_language=prefLang,
                                   mapping={'box_title': box.Title(),
                                            'grade': self.mark,
                                            'feedback': self.feedback,
                                            'url': submissionURL,
-                                           'product': PROJECTNAME,
+                                           'product': config.PROJECTNAME,
                                            'version': productVersion},
                                   default=default_mailText)
 
@@ -446,8 +422,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         #isOwner = currentUser.has_role(['Owner', 'Reviewer', 'Manager'], self)
         #isGrader = currentUser.has_role(['ECAssignment Grader', 'Manager'], self)
         #isGrader =  currentUser.checkPermission(permissions.GradeAssignments,self)
-        isGrader = currentUser.checkPermission(GradeAssignments,
-                                               self)
+        isGrader = currentUser.checkPermission(config.GradeAssignments, self)
 
         if self.mark:
             try:
@@ -515,7 +490,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         Mutator for the `mark' field.  Allows the input of localized numbers.
         """
         decimalSeparator = self.translate(msgid = 'decimal_separator',
-                                          domain = I18N_DOMAIN,
+                                          domain = config.I18N_DOMAIN,
                                           default = '.')
         value = value.strip()
         
@@ -592,8 +567,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
 
         user = self.portal_membership.getAuthenticatedMember()
         isOwner = user.has_role(['Owner', 'Reviewer', 'Manager'], self);
-        isGrader = self.portal_membership.checkPermission(
-                                          GradeAssignments, self)        
+        isGrader = self.portal_membership.checkPermission(config.GradeAssignments, self)        
 
         viewers = self.getViewerNames()
         
@@ -680,11 +654,5 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         return image
 
 
-registerType(ECAssignment, PROJECTNAME)
+registerType(ECAssignment, config.PROJECTNAME)
 # end of class ECAssignment
-
-##code-section module-footer #fill in your manual code here
-##/code-section module-footer
-
-
-

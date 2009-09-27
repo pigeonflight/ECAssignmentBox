@@ -213,8 +213,9 @@
                 </tal:if>
 
                 <!-- process all other published items inside this item -->
-                <tal:if condition="python: not ecab_utils.testAssignmentBoxType(item)
-                                           and item.is_folderish">
+                <tal:if define="is_folderish item/@@plone/isStructuralFolder;" 
+                    condition="python: not ecab_utils.testAssignmentBoxType(item)
+                                           and is_folderish">
 
                   <div tal:define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());

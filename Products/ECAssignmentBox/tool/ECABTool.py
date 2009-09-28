@@ -9,32 +9,37 @@ __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.1 $'
 
+#import sys
+import cgi
+import urllib
+#import interfaces
+from string import join, split
+from socket import getfqdn, gethostname
+from urlparse import urlsplit, urlunsplit
+
+from email.MIMEText import MIMEText
+from email.Header import Header
+
+#from Globals import InitializeClass
+from zope.interface import implements
+from ZODB.POSException import ConflictError
+from Products.CMFCore.utils import getToolByName
+
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, \
     DisplayList, registerType 
 from Products.Archetypes.utils import shasattr
-from zope.interface import implements
-import interfaces
-from urlparse import urlsplit, urlunsplit
-import urllib
-import cgi
-from string import join, split
-from socket import getfqdn, gethostname
 #import sys
 #import traceback
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFCore.utils import UniqueObject
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
-    
-from ZODB.POSException import ConflictError
-from Products.CMFCore.utils import getToolByName
 
-from email.MIMEText import MIMEText
-from email.Header import Header
 
 #from zLOG import LOG, INFO, ERROR
 from Products.ECAssignmentBox.tool.Statistics import Statistics
+from Products.ECAssignmentBox.tool.interfaces import IECABTool
 from Products.ECAssignmentBox import config
 
 import logging
@@ -50,26 +55,28 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     """
     """
     security = ClassSecurityInfo()
-    implements(interfaces.IECABTool)
+    implements(IECABTool)
     meta_type = 'ECABTool'
+    plone_tool = True
     _at_rename_after_creation = True
+
     schema = ECABTool_schema
 
-    # tool-constructors have no id argument, the id is fixed
     def __init__(self, id=None):
         """
+        Tool-constructors have no id argument, the id is fixed
         """
-        BaseContent.__init__(self,'ecab_utils')
+        BaseContent.__init__(self, 'ecab_utils')
         self.setTitle('')
         
-    # tool should not appear in portal_catalog
     def at_post_edit_script(self):
         """
+        Tool should not appear in portal_catalog
         """
         self.unindexObject()
         
 
-    # Methods
+    # -- Methods --------------------------------------------------------------
     #security.declarePrivate('getWfStates')
     def getWfStates(self, wfName=config.ECA_WORKFLOW_ID):
         """
@@ -317,8 +324,9 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         """
         try:
             stats = Statistics(map((float), list))
-        except Exception, e:
-            #log.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
+        #except Exception, e:
+        #    log.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
+        except:
             return None
 
         return stats.mean
@@ -330,8 +338,9 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         """
         try:
             stats = Statistics(map((float), list))
-        except Exception, e:
-            #log.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
+        #except Exception, e:
+        #    log.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
+        except:
             return None
 
         return stats.median

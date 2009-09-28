@@ -9,7 +9,6 @@ __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 __version__   = '$Revision: 1.2 $'
 
-#import os
 import transaction
 import logging
 log = logging.getLogger('ECAssignmentBox: setuphandlers')
@@ -17,36 +16,49 @@ log = logging.getLogger('ECAssignmentBox: setuphandlers')
 from Products.ECAssignmentBox import config
 from Products.CMFCore.utils import getToolByName
 
+
 def isNotECAssignmentBoxProfile(context):
+    """
+    """
     return context.readDataFile("ECAssignmentBox_marker.txt") is None
 
 
 def setupHideToolsFromNavigation(context):
     """hide tools"""
     if isNotECAssignmentBoxProfile(context): return 
+    
     # uncatalog tools
-    site = context.getSite()
     toolnames = ['ecab_utils']
+
+    site = context.getSite()
+    portal = getToolByName(site, 'portal_url').getPortalObject()
+
     portalProperties = getToolByName(site, 'portal_properties')
     navtreeProperties = getattr(portalProperties, 'navtree_properties')
+    
     if navtreeProperties.hasProperty('idsNotToList'):
+        current = list(navtreeProperties.getProperty('idsNotToList') or [])
+        # add all ids 
         for toolname in toolnames:
-            try:
-                portal[toolname].unindexObject()
-            except:
-                pass
-            current = list(navtreeProperties.getProperty('idsNotToList') or [])
             if toolname not in current:
                 current.append(toolname)
                 kwargs = {'idsNotToList': current}
                 navtreeProperties.manage_changeProperties(**kwargs)
 
+        for item in current:
+            try:
+                portal[item].unindexObject()
+            except:
+                log.warn('Could not unindex object: %s' % item)
+
 
 def fixTools(context):
     """do post-processing on auto-installed tool instances"""
     if isNotECAssignmentBoxProfile(context): return 
+    
     site = context.getSite()
     tool_ids=['ecab_utils']
+    
     for tool_id in tool_ids:
         if hasattr(site, tool_id):
             tool=site[tool_id]
@@ -120,10 +132,24 @@ def reindexIndexes(context):
         'getRawRelatedItems',
         'review_state',
         ]
+
     # Don't reindex an index if it isn't actually in the catalog.
     # Should not happen, but cannot do any harm.
     ids = [id for id in indexes if id in pc.indexes()]
     if ids:
         pc.manage_reindexIndex(ids=ids)
+
+#    # uncatalog tools
+#    portalProperties = getToolByName(site, 'portal_properties')
+#    navtreeProperties = getattr(portalProperties, 'navtree_properties')
+#
+#    if navtreeProperties.hasProperty('idsNotToList'):
+#        portal = getToolByName(site, 'portal_url').getPortalObject()
+#        ids = list(navtreeProperties.getProperty('idsNotToList') or [])
+#        for id in ids:
+#            try:
+#                portal[id].unindexObject()
+#            except:
+#                log.warn('Could not unindex object: %s' % id)
     
     log.info('Reindexed %s' % indexes)

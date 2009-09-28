@@ -128,6 +128,7 @@ class ECFolder(ATFolder):
         @return a dictionary containing user-id as key and summarized states
                 as value
         """
+        result = {}
         
         # get current uses's id
         currentUser = self.portal_membership.getAuthenticatedMember()
@@ -138,28 +139,34 @@ class ECFolder(ATFolder):
 
         if isOwner:
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
-                                   #meta_type = (ECA_META, 'ECAutoAssignment', ),
                                    isAssignmentType = True,
                                    )
         else:
             brains = catalog.searchResults(path = {'query':'/'.join(self.getPhysicalPath()), 'depth':100, },
                                    Creator = currentUser.getId(), 
-                                   #meta_type = (ECA_META, 'ECAutoAssignment', ),
                                    isAssignmentType = True,
                                    )
 
         wf_states = self.getWfStates()
+        
+        #log.debug('wf_states: %s' % wf_states)
+        
         n_states = len(wf_states)
     
-        result = {}
-
         for brain in brains:
             key = brain.Creator
-
-            if not result.has_key(key):
-                result[key] = [0 for i in range(n_states)]
+            reviewState = brain.review_state
             
-            result[key][wf_states.index(brain.review_state)] += 1
+            if key and reviewState: 
+                #log.debug('key: %s' % key)
+                #log.debug('reviewState: %s' % reviewState)
+                
+                if not result.has_key(key):
+                    result[key] = [0 for i in range(n_states)]
+                    
+                log.debug('result: %s' % result)
+                
+                result[key][wf_states.index(brain.review_state)] += 1
 
         return result
 
@@ -317,6 +324,7 @@ class ECFolder(ATFolder):
         if (ecab_utils != None):
             return ecab_utils.getWfStates(config.ECA_WORKFLOW_ID)
         else:
+            log.warn("Could not get tool by name: '%s'" % 'ecab_utils')
             return ()
 
 

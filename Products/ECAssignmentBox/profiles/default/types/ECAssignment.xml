@@ -27,6 +27,7 @@
  <alias from="view" to="(selected layout)"/>
  <alias from="edit" to="base_edit"/>
  <alias from="properties" to="base_metadata"/>
+
  <action title="View" 
          action_id="view"
          category="object" 
@@ -61,6 +62,7 @@
          visible="True">
   <permission value="Modify portal content"/>
  </action>
+<!--
  <action title="Properties" 
          action_id="metadata"
          category="object" 
@@ -69,4 +71,5 @@
          visible="True">
   <permission value="Modify portal content"/>
  </action>
+-->
 </object>

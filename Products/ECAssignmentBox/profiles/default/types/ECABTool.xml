@@ -34,7 +34,7 @@
          visible="True">
   <permission value="View"/>
  </action>
- <!-- 
+<!-- 
  <action title="Edit" 
          action_id="edit"
          category="object" 
@@ -51,5 +51,5 @@
          visible="True">
   <permission value="Modify portal content"/>
  </action>
- -->
- </object>
+-->
+</object>

@@ -59,6 +59,7 @@
          visible="True">
   <permission value="Manage Properties"/>
  </action>
+<!--
  <action title="Properties" 
          action_id="metadata"
          category="object" 
@@ -67,4 +68,5 @@
          visible="True">
   <permission value="Modify portal content"/>
  </action>
+-->
 </object>

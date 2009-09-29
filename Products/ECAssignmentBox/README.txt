@@ -54,7 +54,7 @@ in Site Setup to install ECAssignmentBox.
 Installing without buildout
 ---------------------------
 
-Move (or symlink) the ``ECAssigmentBox`` folder of this project
+Move (or symlink) the ``ECAssignmentBox`` folder of this project
 (``Products.ECAssignmentBox/Products/ECAssignmentBox``) into the 
 ``Products`` directory of the Zope instance it has to be installed 
 for, and restart the server.  Use the Add/Remove products page in 

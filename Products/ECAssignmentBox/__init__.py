@@ -23,12 +23,12 @@ log.debug('Installing Product')
 
 import sys
 import os
-import os.path
+#import os.path
 from Globals import package_home
-import Products.CMFPlone.interfaces
+#import Products.CMFPlone.interfaces
 from Products.CMFPlone.utils import ToolInit
 from Products.Archetypes import listTypes
-from Products.Archetypes.atapi import *
+from Products.Archetypes.atapi import process_types
 from Products.Archetypes.utils import capitalize
 from Products.CMFCore import DirectoryView
 from Products.CMFCore import permissions as cmfpermissions
@@ -54,16 +54,16 @@ def initialize(context):
     initialize product (called by zope)
     """
 
-    # imports packages and types for registration
-    import content
-    import tool
+    # imports packages and types for registration (see above)
+    #import content
+    #import tool
 
     # Initialize portal tools
     tools = [tool.ECABTool.ECABTool]
-    ToolInit( PROJECTNAME +' Tools',
-                tools = tools,
-                icon='ec_tool.png'
-                ).initialize( context )
+    ToolInit(PROJECTNAME +' Tools', 
+             tools = tools, 
+             icon='ec_tool.png'
+             ).initialize( context )
 
     # Initialize portal content
     all_content_types, all_constructors, all_ftis = process_types(

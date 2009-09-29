@@ -46,8 +46,14 @@
  
         <div metal:use-macro="here/document_actions/macros/document_actions"/>
       
-        <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
-  
+        <h1 class="documentFirstHeading">
+          <metal:field use-macro="python:here.widget('title', mode='view')" />
+        </h1>
+
+        <!--   
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+        -->
+ 
         <div class="documentByLine"
             tal:condition="python: here.submission_period_end and isEffective and not hasExpired">
   
@@ -72,7 +78,7 @@
             You have <b i18n:name="count" tal:content="tries_left"/> attempts left.
           </span>
         </div>
-  
+    
         <a class="link-parent visualNoPrint"
            href=""
            tal:define="parent_url python:here.navigationParent(here, template_id)"
@@ -86,21 +92,29 @@
         <!-- show a collapsible box with the directions text from ecfolder -->
         <dl class="collapsible inline collapsedOnLoad"
             tal:define="parent nocall:here/aq_parent;"
-            tal:condition="python: hasattr(parent, 'directions') and parent.directions"
-        >
+            tal:condition="python: hasattr(parent, 'directions') and parent.directions">
+
           <dt class="collapsibleHeader"
               i18n:translate="label_directions">
             Directions
           </dt>
+
           <dd class="collapsibleContent">
             <div tal:replace="structure parent/getDirections" />
           </dd>
+
         </dl>
   
         <p/>
     
-        <div class="documentDescription"
-             tal:content="structure reference/Description | here/Description"/>
+        <div class="documentDescription" tal:condition="reference"
+             tal:content="structure reference/Description" />
+
+        <div class="documentDescription" tal:condition="not:reference">
+            <metal:field use-macro="python:here.widget('description', mode='view')">
+            Description
+            </metal:field>
+        </div>
 
         <div class="field" tal:condition="reference">
 			<div tal:replace="structure reference/getAssignment_text" />

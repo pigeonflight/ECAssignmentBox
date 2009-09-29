@@ -40,7 +40,7 @@ eggs line for your instance::
   [instance]
   eggs =
       ... 
-      Products.ECQuiz
+      Products.ECAssignmentBox
 
 After updating the configuration you need to run ``bin/buildout``, 
 which will take care of updating your system.

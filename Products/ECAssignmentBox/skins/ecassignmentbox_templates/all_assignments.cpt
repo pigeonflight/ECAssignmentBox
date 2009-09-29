@@ -121,7 +121,7 @@
               <div tal:content="string:states:$statesToShow" />
               <div tal:content="string:userId:$userName" />
               -->
-            
+                          
               <!-- start searching all child folders -->
 			  <div metal:use-macro="template/macros/list" /> 
   
@@ -140,7 +140,7 @@
                 <!--  debug 
                 <div tal:content="nocall:item" />
                 -->
-              
+                              
                 <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
                 <tal:if condition="python: ecab_utils.testAssignmentBoxType(item)">
 
@@ -212,10 +212,16 @@
                   </tal:define>
                 </tal:if>
 
+                <!--  
+                <div tal:content="item/@@plone/isStructuralFolder" />
+                <div tal:content="item/is_folderish" />
+                <div tal:content="item/@@plone/isStructuralFolder | item/is_folderish" />
+                -->
+                
                 <!-- process all other published items inside this item -->
-                <tal:if define="is_folderish item/@@plone/isStructuralFolder;" 
-                    condition="python: not ecab_utils.testAssignmentBoxType(item)
-                                           and is_folderish">
+                <!--<tal:if define="is_folderish item/@@plone/isStructuralFolder | item/is_folderish;" -->
+                <tal:if define="is_folderish item/is_folderish;" 
+                    condition="python: not ecab_utils.testAssignmentBoxType(item) and is_folderish">
 
                   <div tal:define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());

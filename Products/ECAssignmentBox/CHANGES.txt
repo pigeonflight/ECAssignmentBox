@@ -10,7 +10,7 @@ History
   for more than one assignment box at a time by using the 'set 
   assignment box options' action on ECFolder's content tab.
 
-- Fixed issue: Assignments in state superseded can not accessed by
+- Fixed issue: Assignments in state superseded can not be accessed by
   the owner.
 
 - Fixed issue: ECAssignmentBox int argument error.  After a students 

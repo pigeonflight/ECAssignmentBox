@@ -19,7 +19,7 @@ To use ECAssignmentBox you need a current Plone installation,
 specifically Plone 3.x.  Check `plone.org`_ for Plone's 
 prerequisites.
 
-.. _plone.org :http://plone.org/products/plone
+.. _plone.org: http://plone.org/products/plone
 
 Installation
 ============
@@ -28,7 +28,6 @@ See the `Installing an Add-on Product`_ tutorial for more detailed
 product installation instructions.
         
 .. _Installing an Add-on Product: http://plone.org/documentation/tutorial/third-party-products/installing
-
 
 Installing with buildout
 ------------------------
@@ -49,7 +48,6 @@ Then restart your zope instance and use the Add/Remove products page
 in Site Setup to install ECAssignmentBox.
 
 .. _buildout: http://pypi.python.org/pypi/zc.buildout
-
 
 Installing without buildout
 ---------------------------

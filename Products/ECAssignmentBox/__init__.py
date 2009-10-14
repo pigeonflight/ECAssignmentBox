@@ -25,6 +25,9 @@ import sys
 import os
 #import os.path
 from Globals import package_home
+
+from zope.i18nmessageid import MessageFactory
+
 #import Products.CMFPlone.interfaces
 from Products.CMFPlone.utils import ToolInit
 from Products.Archetypes import listTypes
@@ -38,6 +41,8 @@ from Products.CMFCore import utils as cmfutils
 from Products.ECAssignmentBox import content
 from Products.ECAssignmentBox import tool
 from Products.ECAssignmentBox.config import * 
+
+ECMessageFactory = MessageFactory('eduComponents')
 
 DirectoryView.registerDirectory('skins', product_globals)
 

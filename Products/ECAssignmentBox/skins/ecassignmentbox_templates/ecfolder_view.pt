@@ -64,8 +64,7 @@
                 item_description item/Description | nothing;
                 item_type        item/portal_type;
                 item_type_class  python: 'contenttype-' + normalizeString(item_type);
-                item_ref         item/getReference | nothing;
-                assignments_url  python:item.getTypeInfo().getActionInfo(['object/all_assignments'])['url'];"
+                item_ref         item/getReference | nothing;"
               >
               
                 <dt>
@@ -118,7 +117,7 @@
                     <tal:block tal:condition="python: is_published and item.hasExpired()">
                       <p class="visualNoPrint">&#x25B6;
                         <a href="#/all_assignments"
-                            tal:attributes="href string:$item_url$assignments_url"
+                            tal:attributes="href string:$item_url/all_assignments"
                             i18n:translate="label_view_submissions">
                           View submissions
                         </a>

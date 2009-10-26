@@ -332,14 +332,17 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
 
         @return file content
         """
+        result = None
+        
         mt = self.getContentType('file')
         
         if re.match("(text/.+)|(application/(.+\+)?xml)", mt):
         
             box = self.aq_parent
             
-            if ((mt == 'text/plain') or
-                (mt == 'text/x-web-intelligent')) and box.getWrapAnswer():
+            if (box.getWrapAnswer() and 
+                ((mt == 'text/plain') or (mt == 'text/x-web-intelligent'))): 
+                
                 file = StringIO(self.getField('file').get(self))
                 wrap = TextWrapper()
                 result = ''
@@ -347,12 +350,14 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                 for line in file:
                     result += wrap.fill(line) + '\n'
     
-                return result
             else:
-                return str(self.getField('file').get(self))
-        else:
-            return None
+                result = str(self.getField('file').get(self))
+        # end if
+
+        # take care of hexadecimal Unicode escape sequences
+        #if result: result = result.decode('unicode_escape')
         
+        return result
     
     #security.declarePublic('getAsPlainText')
     def getAsPlainText(self):
@@ -367,10 +372,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         
         @return file content as plain text or None
         """
-        ptTool = getToolByName(self, 'portal_transforms')
         f = self.getField('file')
-        #source = ''
-
         mt = self.getContentType('file')
         
         if re.match('text/|application/(.+\+)?xml', mt):
@@ -378,7 +380,9 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         else:
             return None
         
+        """
         try:
+            ptTool = getToolByName(self, 'portal_transforms')
             result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
                                       mimetype=mt)
         except TransformException:
@@ -388,6 +392,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
             return result.getData()
         else:
             return None
+        """
     
     
     security.declarePublic('evaluate')

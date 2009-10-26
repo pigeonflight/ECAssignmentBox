@@ -349,7 +349,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     
                 return result
             else:
-                return self.getField('file').get(self)
+                return str(self.getField('file').get(self))
         else:
             return None
         

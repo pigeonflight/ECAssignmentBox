@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke University Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -658,6 +658,12 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                              showIdNums=True)
         return image
 
+ 
+    security.declarePublic('getLayout')
+    def getLayout(self):
+        """This exists to please the discussion form."""
+        return 'eca_view'
 
+ 
 registerType(ECAssignment, config.PROJECTNAME)
 # end of class ECAssignment

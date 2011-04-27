@@ -33,6 +33,7 @@ from Products.CMFCore.utils import getToolByName
 #from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
+from Products.ECAssignmentBox.content import validators 
 from Products.ECAssignmentBox import config
 
 import logging
@@ -130,7 +131,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         searchable = False,
         required = True,
         default = 0,
-        validators = ('isInt', 'isPositive'),
+        validators = ('isInt', validators.POSITIVE_NUMBER_VALIDATOR_NAME),
         widget = IntegerWidget(
             label = "Maximum number of attempts",
             label_msgid = "label_max_tries",

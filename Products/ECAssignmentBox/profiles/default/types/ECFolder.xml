@@ -3,7 +3,7 @@
         meta_type="Factory-based Type Information with dynamic views"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
    
- <property name="title">ECFolder</property>
+ <property name="title">Assignment Folder</property>
  <property name="description"></property>
  <property name="content_icon">ecfolder.png</property>
  <property name="content_meta_type">ECFolder</property>
@@ -24,8 +24,10 @@
  <alias from="(Default)" to="(dynamic view)"/>
  <alias from="view" to="(selected layout)"/>
  <alias from="edit" to="base_edit"/>
+ <!-- 
  <alias from="properties" to="base_metadata"/>
  <alias from="sharing" to="folder_localrole_form"/>
+ -->
  <action title="View" 
          action_id="view"
          category="object" 
@@ -74,14 +76,4 @@
          visible="True">
   <permission value="Manage Properties"/>
  </action>
-<!-- 
- <action title="Properties" 
-         action_id="metadata"
-         category="object" 
-         condition_expr=""
-         url_expr="string:${object_url}/properties" 
-         visible="True">
-  <permission value="Modify portal content"/>
- </action>
--->
 </object>

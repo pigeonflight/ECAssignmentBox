@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 # Product configuration.
 #
@@ -17,42 +16,56 @@ __version__   = '$Revision: 1.2 $'
 # If you wish to perform custom configuration, you may put a file
 # AppConfig.py in your product's root directory. The items in there
 # will be included (by importing) in this file if found.
-
-from Products.CMFCore.permissions import setDefaultRoles
-##code-section config-head #fill in your manual code here
-##/code-section config-head
+from Products.CMFCore import permissions
+from Products.ATContentTypes.config import zconf
 
 PROJECTNAME = "ECAssignmentBox"
+# i18n 
+I18N_DOMAIN = 'eduComponents'
+
+product_globals = globals()
+
+# Dependencies of products to be installed by quick-installer
+DEPENDENCIES = []
+
+# Dependend products - not quick-installed - used in testcase
+PRODUCT_DEPENDENCIES = []
+
+# names and titles
+ECA_WORKFLOW_ID = 'ec_assignment_workflow'
+
+# supported mime types for textfields
+#EC_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', 'text/html', )
+ALLOWED_CONTENT_TYPES = zconf.ATDocument.allowed_content_types
+
+# default mime type for textfields
+#EC_DEFAULT_MIME_TYPE = 'text/plain'
+DEFAULT_CONTENT_TYPE = zconf.ATDocument.default_content_type
+
+# default output format of textfields
+DEFAULT_OUTPUT_TYPE = 'text/x-html-safe'
+#DEFAULT_OUTPUT_TYPE = zconf.ATDocument.default_content_type
+
+ALLOW_DOCUMENT_UPLOAD = zconf.ATDocument.allow_document_upload
+
+
+# extra permissions
+GradeAssignments = 'eduComponents: Grade Assignments'
+permissions.setDefaultRoles(GradeAssignments,  ('Manager',))
+
+ViewAssignments = 'eduComponents: View Assignments'
+permissions.setDefaultRoles(ViewAssignments,  ('Manager',))
+
 
 # Permissions
 DEFAULT_ADD_CONTENT_PERMISSION = "Add portal content"
-setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner'))
+permissions.setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner'))
 ADD_CONTENT_PERMISSIONS = {
     'ECFolder': 'ECAssignmentBox: Add ECFolder',
     'ECAssignmentBox': 'ECAssignmentBox: Add ECAssignmentBox',
     'ECAssignment': 'ECAssignmentBox: Add ECAssignment',
 }
 
-setDefaultRoles('ECAssignmentBox: Add ECFolder', ('Manager','Owner'))
-setDefaultRoles('ECAssignmentBox: Add ECAssignmentBox', ('Manager','Owner'))
-setDefaultRoles('ECAssignmentBox: Add ECAssignment', ('Manager','Owner'))
-
-product_globals = globals()
-
-# Dependencies of Products to be installed by quick-installer
-# override in custom configuration
-DEPENDENCIES = []
-
-# Dependend products - not quick-installed - used in testcase
-# override in custom configuration
-PRODUCT_DEPENDENCIES = []
-
-##code-section config-bottom #fill in your manual code here
-##/code-section config-bottom
-
-
-# Load custom configuration not managed by archgenxml
-try:
-    from Products.ECAssignmentBox.AppConfig import *
-except ImportError:
-    pass
+permissions.setDefaultRoles('ECAssignmentBox: Add ECFolder', ('Manager','Owner'))
+permissions.setDefaultRoles('ECAssignmentBox: Add ECAssignmentBox', ('Manager','Owner'))
+permissions.setDefaultRoles('ECAssignmentBox: Add ECAssignment', ('Manager','Owner'))

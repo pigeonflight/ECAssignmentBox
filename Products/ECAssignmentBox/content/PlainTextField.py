@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
-from Products.Archetypes.atapi import TextField, TextFieldException
-from Products.Archetypes.atapi import guess_content_type
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.exceptions import TextFieldException
+from zope.contenttype import guess_content_type
 from AccessControl import ClassSecurityInfo
 #from Products.Archetypes.utils import mapply
 #from Products.Archetypes.Field import encode, decode, CHUNK

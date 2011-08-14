@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 import transaction
-import logging
-log = logging.getLogger('ECAssignmentBox: setuphandlers')
 
-from Products.ECAssignmentBox import config
 from Products.CMFCore.utils import getToolByName
 
+from Products.ECAssignmentBox import config
+from Products.ECAssignmentBox import LOG
 
 def isNotECAssignmentBoxProfile(context):
     """
@@ -23,12 +21,13 @@ def isNotECAssignmentBoxProfile(context):
     return context.readDataFile("ECAssignmentBox_marker.txt") is None
 
 
-def setupHideToolsFromNavigation(context):
-    """hide tools"""
+def hideToolsFromNavigation(context):
+    """Hide auto-installed tool instances from navigation
+    """
     if isNotECAssignmentBoxProfile(context): return 
     
-    # uncatalog tools
-    toolnames = ['ecab_utils']
+    # this tools will be uncataloged
+    tool_id = 'ecab_utils'
 
     site = context.getSite()
     portal = getToolByName(site, 'portal_url').getPortalObject()
@@ -37,37 +36,39 @@ def setupHideToolsFromNavigation(context):
     navtreeProperties = getattr(portalProperties, 'navtree_properties')
     
     if navtreeProperties.hasProperty('idsNotToList'):
+        # get IDs of all unlisted items
         current = list(navtreeProperties.getProperty('idsNotToList') or [])
-        # add all ids 
-        for toolname in toolnames:
-            if toolname not in current:
-                current.append(toolname)
-                kwargs = {'idsNotToList': current}
-                navtreeProperties.manage_changeProperties(**kwargs)
+        
+        # add our tools to list of unlisted items
+        if tool_id not in current:
+            current.append(tool_id)
+            kwargs = {'idsNotToList': current}
+            navtreeProperties.manage_changeProperties(**kwargs)
 
-        for item in current:
-            try:
-                portal[item].unindexObject()
-            except:
-                log.warn('Could not unindex object: %s' % item)
+        # unindex our tools        
+        try:
+            portal[tool_id].unindexObject()
+        except:
+            LOG.warn('Could not unindex object: %s' % tool_id)
 
 
 def fixTools(context):
-    """do post-processing on auto-installed tool instances"""
+    """Do post-processing on auto-installed tool instances
+    """
     if isNotECAssignmentBoxProfile(context): return 
     
     site = context.getSite()
-    tool_ids=['ecab_utils']
+    tool_id = 'ecab_utils'
     
-    for tool_id in tool_ids:
-        if hasattr(site, tool_id):
-            tool=site[tool_id]
-            tool.initializeArchetype()
+    if hasattr(site, tool_id):
+        tool = site[tool_id]
+        tool.initializeArchetype()
 
 
 def updateRoleMappings(context):
-    """after workflow changed update the roles mapping. this is like pressing
-    the button 'Update Security Setting' and portal_workflow"""
+    """After workflow changed update the roles mapping.  This is like 
+    pressing the button 'Update Security Setting' and portal_workflow
+    """
     if isNotECAssignmentBoxProfile(context): return 
     wft = getToolByName(context.getSite(), 'portal_workflow')
     wft.updateRoleMappings()
@@ -85,9 +86,9 @@ def installGSDependencies(context):
     """Install dependend profiles."""
     
     if isNotECAssignmentBoxProfile(context): return 
+    
     # Has to be refactored as soon as generic setup allows a more 
     # flexible way to handle dependencies.
-    
     return
 
 
@@ -101,11 +102,11 @@ def installQIDependencies(context):
     quickinstaller = portal.portal_quickinstaller
     for dependency in config.DEPENDENCIES:
         if quickinstaller.isProductInstalled(dependency):
-            log.info('Reinstalling dependency %s:' % dependency)
+            LOG.info('Reinstalling dependency %s:' % dependency)
             quickinstaller.reinstallProducts([dependency])
             transaction.savepoint()
         else:
-            log.info('Installing dependency %s:' % dependency)
+            LOG.info('Installing dependency %s:' % dependency)
             quickinstaller.installProduct(dependency)
             transaction.savepoint()
 
@@ -139,17 +140,4 @@ def reindexIndexes(context):
     if ids:
         pc.manage_reindexIndex(ids=ids)
 
-#    # uncatalog tools
-#    portalProperties = getToolByName(site, 'portal_properties')
-#    navtreeProperties = getattr(portalProperties, 'navtree_properties')
-#
-#    if navtreeProperties.hasProperty('idsNotToList'):
-#        portal = getToolByName(site, 'portal_url').getPortalObject()
-#        ids = list(navtreeProperties.getProperty('idsNotToList') or [])
-#        for id in ids:
-#            try:
-#                portal[id].unindexObject()
-#            except:
-#                log.warn('Could not unindex object: %s' % id)
-    
-    log.info('Reindexed %s' % indexes)
+    LOG.info('Indexes %s re-indexed.' % indexes)

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2011 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 import re
 import interfaces
@@ -30,16 +29,17 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 # The following two imports are for getAsPlainText()
 #from Products.ATContentTypes.content.base import translateMimetypeAlias
-from Products.PortalTransforms.utils import TransformException
+#from Products.PortalTransforms.utils import TransformException
 
 from Products.ECAssignmentBox import config
+from Products.ECAssignmentBox import LOG
 
 # PlagDetector imports
 from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
 from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
 
-import logging
-log = logging.getLogger('ECAssignmentBox')
+#import logging
+#log = logging.getLogger('ECAssignmentBox')
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
@@ -75,9 +75,9 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 
     TextField(
         'remarks',
-        allowable_content_types = config.ECA_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Remarks",
@@ -93,9 +93,9 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
     TextField(
         'feedback',
         searchable = True,
-        allowable_content_types = config.ECA_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Feedback",
@@ -174,7 +174,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         When this assignment is created, send a notification email to
         the owner of the assignment box, unless emailing is turned off.
         """
-        #log.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
+        #LOG.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
 
         box = self.aq_parent
         
@@ -228,7 +228,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        log.info('Sending notification email to: %s' % addresses)
+        LOG.info('Sending notification email to: %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
     #security.declarePrivate('sendGradingNotificationEmail')
@@ -285,7 +285,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        log.info('Sending grading notification email to %s' % addresses)
+        LOG.info('Sending grading notification email to %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
 
@@ -304,8 +304,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     def _generateTitle(self):
         """
         """
-        #log("Title changed from '%s' to '%s'" % \
-        #        (self.title, self.getCreatorFullName(),), severity=DEBUG)
+        #LOG.info("xdebug: Title changed from '%s' to '%s'" % (self.title, self.getCreatorFullName(),))
         return self.getCreatorFullName()
 
 

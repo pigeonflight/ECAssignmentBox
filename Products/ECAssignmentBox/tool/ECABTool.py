@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.1 $'
 
 #import sys
+#import traceback
 import cgi
 import urllib
-#import interfaces
+
 from string import join, split
 from socket import getfqdn, gethostname
 from urlparse import urlsplit, urlunsplit
@@ -20,30 +20,23 @@ from urlparse import urlsplit, urlunsplit
 from email.MIMEText import MIMEText
 from email.Header import Header
 
-#from Globals import InitializeClass
 from zope.interface import implements
 from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
 
 from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, \
-    DisplayList, registerType 
-from Products.Archetypes.utils import shasattr
-#import sys
-#import traceback
+from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, DisplayList, registerType 
+#from Products.Archetypes.utils import shasattr
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFCore.utils import UniqueObject
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
-
 #from zLOG import LOG, INFO, ERROR
 from Products.ECAssignmentBox.tool.Statistics import Statistics
 from Products.ECAssignmentBox.tool.interfaces import IECABTool
 from Products.ECAssignmentBox import config
-
-import logging
-log = logging.getLogger('ECAssignmentBox')
+from Products.ECAssignmentBox import LOG
 
 schema = Schema((
 ),
@@ -85,12 +78,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         wtool = self.portal_workflow
         return wtool.getWorkflowById(wfName).states.keys()
 
-    #security.declarePrivate('getWfStatesDisplayList')
+    #security.declarePublic('getWfStatesDisplayList')
     def getWfStatesDisplayList(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return a DisplayList containing all state keys and state titles in 
                 assignment's workflow
         """
+        #LOG.info('xxx: getWfStatesDisplayList')
+        
         dl = DisplayList(())
 
         wtool = self.portal_workflow
@@ -155,8 +150,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         similar to locale.format().
         """
         
-        #log.info('format: %s' % format)
-        #log.info('value: %s' % value)
+        #LOG.info('format: %s' % format)
+        #LOG.info('value: %s' % value)
         
         if not value: return None
 
@@ -182,7 +177,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         devided into given and last name, we return it in the format
         Doo, John; otherwise we will return 'fullname' as provided by Plone. 
         """
-        #log.debug('Here we are in ECABTool#getFullNameById')
+        #LOG.debug('Here we are in ECABTool#getFullNameById')
     
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
@@ -192,11 +187,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             return id
 
         try:
-            sn        = member.getProperty('sn')
-            givenName = member.getProperty('givenName')
+            sn        = member.getProperty('sn', None)
+            givenName = member.getProperty('givenName', None)
 
         except:
             error = True
+            
+        #LOG.info('xdebug: sn, givenName: %s, %s' % (type(sn), type(givenName)))
+        #LOG.info('xdebug: sn, givenName: %s, %s' % (sn, givenName))
 
         if error or (not sn) or (not givenName):
             fullname = member.getProperty('fullname', '')
@@ -224,17 +222,15 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         @return: Value for 'property' or None
         """
         
-        #log.debug('Here we are in ECABTool#getUserPropertyById')
+        #LOG.info('xdebug: %s, %s, %s' % (userId, property, fallback, ))
         
         membership = getToolByName(self, 'portal_membership')
         member = membership.getMemberById(userId)
-
+        
         try:
-            value = member.getProperty(property)
+            return member.getProperty(property, fallback)
         except:
             return fallback
-
-        return value
     
     
     #security.declarePublic('testAssignmentBoxType')
@@ -244,12 +240,23 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         item is a catalog brain- index 'isAssignmentBoxType' is True
         """
         
-        #log.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
+        #LOG.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
         
-        if (item and shasattr(item, 'isAssignmentBoxType')):
-            return item.isAssignmentBoxType
+        result = None
+        
+        if (item and hasattr(item, 'isAssignmentBoxType')):
+            result = item.isAssignmentBoxType
+            
+            # dirty hack
+            if repr(result) == 'Missing.Value': 
+                result = False
+
         else:
-            return False
+            result = False
+        
+        #LOG.info('result: %s' % repr(result))
+        
+        return result
 
     #security.declarePublic('isGrader')
     def isGrader(self, item, id=None):
@@ -325,7 +332,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             stats = Statistics(map((float), list))
         #except Exception, e:
-        #    log.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
+        #    LOG.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
         except:
             return None
 
@@ -339,7 +346,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             stats = Statistics(map((float), list))
         #except Exception, e:
-        #    log.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
+        #    LOG.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
         except:
             return None
 
@@ -407,7 +414,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         fromAddress = portal.getProperty('email_from_address', None)
 
         if fromAddress is None:
-            log.error('Cannot send email: address or name is %s' % fromAddress)
+            LOG.error('Cannot send email: address or name is %s' % fromAddress)
             return
 
         try:
@@ -416,7 +423,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 message = MIMEText(text, 'plain', charset)
         except Exception, e:
-            log.error('Cannot send notification email: %s' % e)
+            LOG.error('Cannot send notification email: %s' % e)
             return
 
         try:
@@ -425,7 +432,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 subjHeader = Header(subject, charset)
         except Exception, e:
-            log.error('Cannot send notification email: %s' % e)
+            LOG.error('Cannot send notification email: %s' % e)
             return
 
         message['Subject'] = subjHeader
@@ -441,10 +448,10 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
                               mto = address,
                               mfrom = fromAddress,)
             except ConflictError, ce:
-                log.error('Cannot send notification email: %s' % ce)
+                LOG.error('Cannot send notification email: %s' % ce)
                 raise
             except Exception, e:
-                log.error('Could not send email from %s to %s: %s' % 
+                LOG.error('Could not send email from %s to %s: %s' % 
                           (fromAddress, address, e,))
 
 

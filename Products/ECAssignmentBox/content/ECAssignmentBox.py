@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 import interfaces
 
@@ -17,28 +16,37 @@ from DateTime import DateTime
 #from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from AccessControl import ClassSecurityInfo
 
+#from Products.ATContentTypes.configuration.config import zconf
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 
-from Products.Archetypes.atapi import Schema, BaseFolder, OrderedBaseFolder, \
-    registerType
-from Products.Archetypes.atapi import ReferenceField, TextField, DateTimeField, \
-    IntegerField, BooleanField
-from Products.Archetypes.atapi import RichWidget, TextAreaWidget, \
-    CalendarWidget, IntegerWidget, BooleanWidget 
+from Products.Archetypes.atapi import Schema
+#from Products.Archetypes.atapi import BaseFolder
+#from Products.Archetypes.atapi import OrderedBaseFolder
+from Products.Archetypes.atapi import registerType
+from Products.Archetypes.atapi import ReferenceField
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import DateTimeField
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import TextAreaWidget
+from Products.Archetypes.atapi import CalendarWidget
+from Products.Archetypes.atapi import IntegerWidget
+from Products.Archetypes.atapi import BooleanWidget 
 
 from Products.CMFCore.utils import getToolByName
 
 #from Products.ATContentTypes.content.base import registerATCT
 #from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+#from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 
+from Products.ECAssignmentBox.content import validators 
 from Products.ECAssignmentBox import config
+#from Products.ECAssignmentBox import LOG
 
-import logging
-log = logging.getLogger('ECAssignmentBox')
 
-#ECAssignmentBox_schema = BaseBTreeFolderSchema.copy() + Schema((
 ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
     ReferenceField(
         'assignment_reference',
@@ -63,9 +71,9 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         'assignment_text',
         required = False,
         searchable = True,
-        allowable_content_types = config.EC_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget=RichWidget(
             label = 'Assignment text',
             label_msgid = 'label_assignment_text',
@@ -82,9 +90,8 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         'answerTemplate',
         searchable = True,
         allowable_content_types = ('text/plain',), #('text/x-web-intelligent',), 
-        #default_content_type = EC_DEFAULT_MIME_TYPE, 
-        #default_output_type = EC_DEFAULT_FORMAT,
-        #widget=RichWidget(
+        default_content_type = 'text/plain', 
+        default_output_type = 'text/plain',
         widget = TextAreaWidget(
             label = 'Answer template',
             label_msgid = 'label_answer_template',
@@ -130,7 +137,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         searchable = False,
         required = True,
         default = 0,
-        validators = ('isInt', 'isPositive'),
+        validators = (validators.POSITIVE_NUMBER_VALIDATOR_NAME, ),
         widget = IntegerWidget(
             label = "Maximum number of attempts",
             label_msgid = "label_max_tries",
@@ -204,8 +211,9 @@ class ECAssignmentBox(ATFolder):
     # Methods
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
-        BaseFolder.manage_afterAdd(self, item, container)
-        OrderedBaseFolder.manage_afterAdd(self, item, container)
+        #BaseFolder.manage_afterAdd(self, item, container)
+        #OrderedBaseFolder.manage_afterAdd(self, item, container)
+        ATFolder.manage_afterAdd(self, item, container)
 
         # Create a user-defined role "ECAssignment Viewer".  This role
         # has the View permission in certain states (defined in

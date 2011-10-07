@@ -44,6 +44,6 @@ class PositiveNumberValidator:
         return ("Validation failed: '%(value)s' is not a positive number." %
                 { 'value': value, })
 
-# register time period validator 
+# register validator 
 isPositive = PositiveNumberValidator(POSITIVE_NUMBER_VALIDATOR_NAME)
 validation.register(isPositive)

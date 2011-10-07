@@ -174,8 +174,6 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         When this assignment is created, send a notification email to
         the owner of the assignment box, unless emailing is turned off.
         """
-        #LOG.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
-
         box = self.aq_parent
         
         # emailing is turned off by assignment box
@@ -228,7 +226,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        LOG.info('Sending notification email to: %s' % addresses)
+        #LOG.info('Sending notification email to: %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
     #security.declarePrivate('sendGradingNotificationEmail')
@@ -285,7 +283,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        LOG.info('Sending grading notification email to %s' % addresses)
+        #LOG.info('Sending grading notification email to %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
 
@@ -304,7 +302,6 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     def _generateTitle(self):
         """
         """
-        #LOG.info("xdebug: Title changed from '%s' to '%s'" % (self.title, self.getCreatorFullName(),))
         return self.getCreatorFullName()
 
 

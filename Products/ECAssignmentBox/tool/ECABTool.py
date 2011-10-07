@@ -17,7 +17,7 @@ from string import join, split
 from socket import getfqdn, gethostname
 from urlparse import urlsplit, urlunsplit
 
-from email.MIMEText import MIMEText
+from email.MIMEText import MIMEText 
 from email.Header import Header
 
 from zope.interface import implements
@@ -406,12 +406,16 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             return
 
         portal_url  = getToolByName(self, 'portal_url')
-        plone_utils = getToolByName(self, 'plone_utils')
+        #plone_utils = getToolByName(self, 'plone_utils')
 
         portal      = portal_url.getPortalObject()
-        mailHost    = plone_utils.getMailHost()
-        charset     = plone_utils.getSiteEncoding()
         fromAddress = portal.getProperty('email_from_address', None)
+
+        #mailHost    = plone_utils.getMailHost()
+        #charset     = plone_utils.getSiteEncoding()
+        mailHost = getToolByName(portal, 'MailHost') #self.MailHost
+        charset = portal.getProperty('email_charset', 'UTF-8')
+
 
         if fromAddress is None:
             LOG.error('Cannot send email: address or name is %s' % fromAddress)
@@ -419,9 +423,9 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
         try:
             if (type(text) == unicode):
-                message = MIMEText(text.encode(charset), 'plain', charset)
+                msg = MIMEText(text.encode(charset), 'plain', charset)
             else:
-                message = MIMEText(text, 'plain', charset)
+                msg = MIMEText(text, 'plain', charset)
         except Exception, e:
             LOG.error('Cannot send notification email: %s' % e)
             return
@@ -435,24 +439,33 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             LOG.error('Cannot send notification email: %s' % e)
             return
 
-        message['Subject'] = subjHeader
+        msg['Subject'] = subjHeader
+        msg['From'] = fromAddress
+        msg['Subject'] = subject
 
         # This is a hack to suppress deprecation messages about send()
         # in SecureMailHost; the proposed alternative, secureSend(),
         # sucks.
         mailHost._v_send = 1
-
+        
         for address in addresses:
-            try:
-                mailHost.send(message = str(message),
-                              mto = address,
-                              mfrom = fromAddress,)
-            except ConflictError, ce:
-                LOG.error('Cannot send notification email: %s' % ce)
-                raise
-            except Exception, e:
-                LOG.error('Could not send email from %s to %s: %s' % 
-                          (fromAddress, address, e,))
+            if address:
+                try:
+                    LOG.info("Sending email to %r" % address)
+
+                    msg['To'] = address
+                    
+                    mailHost.send(msg.as_string())
+                    
+                except ConflictError, ce:
+                    LOG.error('Failed sending email: %s' % ce)
+                    raise
+                except Exception, e:
+                    LOG.error('Failed sending email from %s to %s' % 
+                              (fromAddress, address))
+                    LOG.error("Reason: %s: %r" % (e.__class__.__name__, str(e)))
+            # end if
+        # end for
 
 
     #security.declarePrivate('pathQuote')

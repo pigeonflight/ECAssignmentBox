@@ -3,15 +3,18 @@
              title="Assignment Workflow"
              state_variable="review_state"
              initial_state="submitted">
+
  <permission>Access contents information</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>List folder contents</permission>
+
  <state state_id="accepted"
         title="Accepted">
   <exit-transition transition_id="grade"/>
   <exit-transition transition_id="retract"/>
+  <exit-transition transition_id="supersede"/>
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Owner</permission-role>
@@ -67,9 +70,7 @@
   <exit-transition transition_id="grade"/>
   <exit-transition transition_id="reject"/>
   <exit-transition transition_id="retract"/>
-  <!-- 
   <exit-transition transition_id="supersede"/>
-  -->
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Owner</permission-role>

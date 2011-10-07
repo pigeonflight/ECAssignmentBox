@@ -13,6 +13,7 @@
   <property name="filter_content_types">False</property>
   <property name="allowed_content_types" />
   <property name="allow_discussion">False</property>
+  
   <property name="view_methods">
     <element value="eca_view" />
   </property>

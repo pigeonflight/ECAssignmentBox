@@ -32,7 +32,7 @@
                   resFlt2      python:dict([(k,v) for k,v in resFlt.items() if v is not None]);
                   userName     python:resFlt['user_id'];
                   statesToShow python:ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
-                  mkUrl        python:lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));
+                  mkUrl        python:lambda d : '%s/%s?%s' % (here.absolute_url(), template_id, ecab_utils.urlencode(dict(resFlt2.items() + d.items())));
                   n_boxes      here/aq_explicit/countContainedBoxes|nothing;"
         >
 

@@ -1,6 +1,11 @@
 History
 =======
 
+# Changes in release 1.5.1 (unreleased)
+
+- Added Spanish translation.
+  [macagua]
+
 # Changes in release 1.5.1 (2011-10-07)
 
 - ``Assignment Box Settings`` are back at Plone's control panel.
